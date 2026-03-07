@@ -19,6 +19,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "App.tsx", "index.ts"],
+  "include": ["src", "app", "index.tsx"],
   "exclude": ["node_modules", "babel.config.js"]
 }
