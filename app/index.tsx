@@ -1,9 +1,12 @@
+import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text } from "react-native";
 
-export default function Home() {
+export default function HomeScreen() {
   return (
-    <View>
-      <Text>Hello Expo</Text>
-    </View>
+    <SafeAreaView>
+      <View className="flex justify-center items-center">
+        <Text className="text-5xl font-bold">Hello Expo</Text>
+      </View>
+    </SafeAreaView>
   );
 }

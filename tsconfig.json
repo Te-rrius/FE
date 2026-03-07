@@ -19,6 +19,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "app", "index.tsx"],
+  "include": ["src", "app", "index.tsx", "nativewind-env.d.ts"],
   "exclude": ["node_modules", "babel.config.js"]
 }
