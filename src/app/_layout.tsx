@@ -1,5 +1,4 @@
 import { Stack } from "expo-router";
-import "./global.css";
 import { useFonts } from "expo-font";
 
 export default function Layout() {
@@ -10,5 +9,5 @@ export default function Layout() {
 
   if (!loaded) return null;
 
-  return <Stack />;
+  return <Stack screenOptions={{ headerShown: false }} />;
 }

@@ -1,13 +1,23 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 export default function HomeScreen() {
   return (
     <SafeAreaView>
-      <View className="flex justify-center items-center">
-        <Text className="text-5xl font-jumpCondensed">condensed</Text>
-        <Text className="text-5xl font-jumpExtended">extended</Text>
+      <View>
+        <Text style={styles.condensed}>condensed</Text>
+        <Text style={styles.extended}>extended</Text>
       </View>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  condensed: {
+    fontFamily: "KBLJump-EB-Condensed",
+  },
+
+  extended: {
+    fontFamily: "KBLJump-EB-Extended",
+  },
+});
