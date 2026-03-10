@@ -5,7 +5,8 @@ export default function HomeScreen() {
   return (
     <SafeAreaView>
       <View className="flex justify-center items-center">
-        <Text className="text-5xl font-bold">Hello Expo</Text>
+        <Text className="text-5xl font-jumpCondensed">condensed</Text>
+        <Text className="text-5xl font-jumpExtended">extended</Text>
       </View>
     </SafeAreaView>
   );
