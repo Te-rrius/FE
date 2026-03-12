@@ -1,16 +1,17 @@
 import { useEffect } from "react";
-import { useRouter } from "expo-router";
+import { usePathname } from "expo-router";
 import useAuthStore from "@/stores/authStore";
 
 export default function AuthCheck({ children }: any) {
-  const token = useAuthStore((state) => state.token);
-  const router = useRouter();
+  const { token, openLoginModal } = useAuthStore();
+
+  const pathname = usePathname(); // 현재 경로 자동으로 가져옴
 
   useEffect(() => {
     if (!token) {
-      router.push("/main");
+      openLoginModal(pathname); // 경로 자동 전달
     }
-  }, [token]);
+  }, [[token, pathname, openLoginModal]]);
 
   if (!token) return null;
 

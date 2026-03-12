@@ -4,14 +4,17 @@ import { hp, wp } from "@/utils/dimension";
 import MainLogoIcon from "@/assets/images/mainLogoIcon.svg";
 import LoginModalCloseIcon from "@/assets/images/modal/loginModalCloseIcon.svg";
 import KakaoIcon from "@/assets/images/modal/kakaoIcon.svg";
+import useAuthStore from "@/stores/authStore";
 
-export default function LoginModal() {
+const LoginModal = () => {
+  const { closeLoginModal, openKakaoWebView } = useAuthStore();
+
   return (
     <View style={styles.modalContainer}>
       <View style={styles.topWrapper}>
         <View style={styles.modalHeader}>
           <MainLogoIcon />
-          <Pressable style={styles.closeIcon}>
+          <Pressable style={styles.closeIcon} onPress={closeLoginModal}>
             <LoginModalCloseIcon />
           </Pressable>
         </View>
@@ -25,14 +28,16 @@ export default function LoginModal() {
         <Text style={styles.subText}>
           지금 로그인하고, 내 운동 영상을 확인해 보세요!
         </Text>
-        <Pressable style={styles.loginButton}>
+        <Pressable style={styles.loginButton} onPress={openKakaoWebView}>
           <KakaoIcon />
           <Text style={styles.buttonText}>카카오톡으로 시작하기</Text>
         </Pressable>
       </View>
     </View>
   );
-}
+};
+
+export default LoginModal;
 
 const styles = StyleSheet.create({
   modalContainer: {
