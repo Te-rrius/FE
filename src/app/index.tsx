@@ -1,23 +1,5 @@
-import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, StyleSheet } from "react-native";
+import { Redirect } from "expo-router";
 
-export default function HomeScreen() {
-  return (
-    <SafeAreaView>
-      <View>
-        <Text style={styles.condensed}>condensed</Text>
-        <Text style={styles.extended}>extended</Text>
-      </View>
-    </SafeAreaView>
-  );
+export default function Index() {
+  return <Redirect href="/main" />;
 }
-
-const styles = StyleSheet.create({
-  condensed: {
-    fontFamily: "KBLJump-EB-Condensed",
-  },
-
-  extended: {
-    fontFamily: "KBLJump-EB-Extended",
-  },
-});
