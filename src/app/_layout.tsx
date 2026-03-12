@@ -1,8 +1,13 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
+import { Modal, StyleSheet } from "react-native";
+import useAuthStore from "@/stores/authStore";
+import LoginModal from "@/components/modal/LoginModal";
 
-export default function Layout() {
-  useFonts({
+const Layout = () => {
+  const { showLoginModal } = useAuthStore();
+
+  const [fontsLoaded] = useFonts({
     "KBLJump-EB-Condensed": require("../assets/fonts/KBLJump_EB_Condensed.ttf"),
     "KBLJump-EB-Extended": require("../assets/fonts/KBLJump_EB_Extended.ttf"),
     Pretendard400: require("../assets/fonts/Pretendard-Regular.ttf"),
@@ -11,5 +16,26 @@ export default function Layout() {
     Pretendard700: require("../assets/fonts/Pretendard-Bold.ttf"),
   });
 
-  return <Stack screenOptions={{ headerShown: false }} />;
-}
+  if (!fontsLoaded) return null;
+
+  return (
+    <>
+      <Stack screenOptions={{ headerShown: false }} />
+
+      <Modal visible={showLoginModal} style={styles.overlay}>
+        <LoginModal />
+      </Modal>
+    </>
+  );
+};
+
+export default Layout;
+
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

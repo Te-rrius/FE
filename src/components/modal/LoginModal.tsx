@@ -5,6 +5,7 @@ import MainLogoIcon from "@/assets/images/mainLogoIcon.svg";
 import LoginModalCloseIcon from "@/assets/images/modal/loginModalCloseIcon.svg";
 import KakaoIcon from "@/assets/images/modal/kakaoIcon.svg";
 import useAuthStore from "@/stores/authStore";
+import LoginWebView from "@/screens/login/LoginWebView";
 
 const LoginModal = () => {
   const { closeLoginModal, openLoginWebView } = useAuthStore();
@@ -33,6 +34,8 @@ const LoginModal = () => {
           <Text style={styles.buttonText}>카카오톡으로 시작하기</Text>
         </Pressable>
       </View>
+
+      <LoginWebView />
     </View>
   );
 };
@@ -105,8 +108,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: "#000000",
-    opacity: 8.5,
+    color: "rgba(0, 0, 0, 0.85)",
     fontSize: wp(15),
     fontFamily: "Pretendard600",
   },
