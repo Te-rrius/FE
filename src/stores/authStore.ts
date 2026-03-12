@@ -5,14 +5,14 @@ import { persist, createJSONStorage } from "zustand/middleware";
 interface AuthStore {
   token: string | null;
   showLoginModal: boolean;
-  showKakaoWebView: boolean;
+  showLoginWebView: boolean;
   login: () => void;
   logout: () => void;
   returnPath: string;
   openLoginModal: (returnPath?: string) => void;
   closeLoginModal: () => void;
-  openKakaoWebView: () => void;
-  closeKakaoWebView: () => void;
+  openLoginWebView: () => void;
+  closeLoginWebView: () => void;
 }
 
 const useAuthStore = create<AuthStore>()(
@@ -20,20 +20,20 @@ const useAuthStore = create<AuthStore>()(
     (set) => ({
       token: null,
       showLoginModal: false,
-      showKakaoWebView: false,
+      showLoginWebView: false,
       returnPath: "/",
       login: () =>
         set({
           token: "tempToken",
-          showKakaoWebView: false,
+          showLoginWebView: false,
           showLoginModal: false,
         }),
       logout: () => set({ token: null }),
       openLoginModal: (returnPath = "/") =>
         set({ showLoginModal: true, returnPath }),
       closeLoginModal: () => set({ showLoginModal: false }),
-      openKakaoWebView: () => set({ showKakaoWebView: true }),
-      closeKakaoWebView: () => set({ showKakaoWebView: false }),
+      openLoginWebView: () => set({ showLoginWebView: true }),
+      closeLoginWebView: () => set({ showLoginWebView: false }),
     }),
     {
       name: "authToken",

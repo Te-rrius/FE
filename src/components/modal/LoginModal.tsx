@@ -7,7 +7,7 @@ import KakaoIcon from "@/assets/images/modal/kakaoIcon.svg";
 import useAuthStore from "@/stores/authStore";
 
 const LoginModal = () => {
-  const { closeLoginModal, openKakaoWebView } = useAuthStore();
+  const { closeLoginModal, openLoginWebView } = useAuthStore();
 
   return (
     <View style={styles.modalContainer}>
@@ -28,7 +28,7 @@ const LoginModal = () => {
         <Text style={styles.subText}>
           지금 로그인하고, 내 운동 영상을 확인해 보세요!
         </Text>
-        <Pressable style={styles.loginButton} onPress={openKakaoWebView}>
+        <Pressable style={styles.loginButton} onPress={openLoginWebView}>
           <KakaoIcon />
           <Text style={styles.buttonText}>카카오톡으로 시작하기</Text>
         </Pressable>
