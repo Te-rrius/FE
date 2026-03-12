@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
-import { Modal, StyleSheet } from "react-native";
+import { Modal, StyleSheet, View } from "react-native";
 import useAuthStore from "@/stores/authStore";
 import LoginModal from "@/components/modal/LoginModal";
 
@@ -22,8 +22,10 @@ const Layout = () => {
     <>
       <Stack screenOptions={{ headerShown: false }} />
 
-      <Modal visible={showLoginModal} style={styles.overlay}>
-        <LoginModal />
+      <Modal visible={showLoginModal} transparent animationType="fade">
+        <View style={styles.overlay}>
+          <LoginModal />
+        </View>
       </Modal>
     </>
   );
