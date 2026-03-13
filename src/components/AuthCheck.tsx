@@ -11,7 +11,7 @@ export default function AuthCheck({ children }: any) {
     if (!token) {
       openLoginModal(pathname); // 경로 자동 전달
     }
-  }, [[token, pathname, openLoginModal]]);
+  }, [token, pathname, openLoginModal]);
 
   if (!token) return null;
 
