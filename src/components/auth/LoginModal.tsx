@@ -16,11 +16,10 @@ const LoginModal = () => {
     try {
       const { accessToken } = await login();
       authLogin();
+      closeLoginModal();
       router.replace(returnPath);
     } catch (e) {
       console.error("카카오 로그인 실패", e);
-    } finally {
-      closeLoginModal();
     }
   };
 
