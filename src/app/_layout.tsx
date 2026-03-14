@@ -3,8 +3,16 @@ import { useFonts } from "expo-font";
 import { Modal, StyleSheet, View } from "react-native";
 import useAuthStore from "@/store/authStore";
 import LoginModal from "@/components/auth/LoginModal";
+import { useEffect } from "react";
+import { initializeKakaoSDK } from "@react-native-kakao/core";
 
-const Layout = () => {
+const KAKAOKEY = process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY || "";
+
+const RootLayout = () => {
+  useEffect(() => {
+    initializeKakaoSDK(KAKAOKEY);
+  }, []);
+
   const { showLoginModal } = useAuthStore();
 
   const [fontsLoaded] = useFonts({
@@ -22,7 +30,7 @@ const Layout = () => {
     <>
       <Stack screenOptions={{ headerShown: false }} />
 
-      <Modal visible={showLoginModal} transparent animationType="fade">
+      <Modal visible={showLoginModal} transparent>
         <View style={styles.overlay}>
           <LoginModal />
         </View>
@@ -31,7 +39,7 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default RootLayout;
 
 const styles = StyleSheet.create({
   overlay: {

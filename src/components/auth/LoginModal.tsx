@@ -1,14 +1,28 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useRouter } from "expo-router";
 import { hp, wp } from "@/utils/dimension";
+import { login } from "@react-native-kakao/user";
+import useAuthStore from "@/store/authStore";
 
 import MainLogoIcon from "@/assets/images/mainLogoIcon.svg";
 import LoginModalCloseIcon from "@/assets/images/modal/loginModalCloseIcon.svg";
 import KakaoIcon from "@/assets/images/modal/kakaoIcon.svg";
-import useAuthStore from "@/store/authStore";
-import LoginWebView from "@/screens/login/LoginWebView";
 
 const LoginModal = () => {
-  const { closeLoginModal, openLoginWebView } = useAuthStore();
+  const { closeLoginModal, login: authLogin, returnPath } = useAuthStore();
+  const router = useRouter();
+
+  const handleKakaoLogin = async () => {
+    try {
+      const { accessToken } = await login();
+      authLogin();
+      router.replace(returnPath);
+    } catch (e) {
+      console.error("카카오 로그인 실패", e);
+    } finally {
+      closeLoginModal();
+    }
+  };
 
   return (
     <View style={styles.modalContainer}>
@@ -29,13 +43,11 @@ const LoginModal = () => {
         <Text style={styles.subText}>
           지금 로그인하고, 내 운동 영상을 확인해 보세요!
         </Text>
-        <Pressable style={styles.loginButton} onPress={openLoginWebView}>
+        <Pressable style={styles.loginButton} onPress={handleKakaoLogin}>
           <KakaoIcon />
           <Text style={styles.buttonText}>카카오톡으로 시작하기</Text>
         </Pressable>
       </View>
-
-      <LoginWebView />
     </View>
   );
 };
