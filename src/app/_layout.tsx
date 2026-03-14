@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { Modal, StyleSheet, View } from "react-native";
-import useAuthStore from "@/stores/authStore";
+import useAuthStore from "@/store/authStore";
 import LoginModal from "@/components/modal/LoginModal";
 
 const Layout = () => {

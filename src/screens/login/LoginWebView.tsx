@@ -1,7 +1,7 @@
 import { Modal } from "react-native";
 import { WebView, WebViewNavigation } from "react-native-webview";
 import { useRouter } from "expo-router";
-import useAuthStore from "@/stores/authStore";
+import useAuthStore from "@/store/authStore";
 
 const KAKAO_CLIENT_ID = process.env.EXPO_PUBLIC_KAKAO_CLIENT_ID!;
 const KAKAO_REDIRECT_URI = process.env.EXPO_PUBLIC_KAKAO_REDIRECT_URI!;

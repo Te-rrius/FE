@@ -4,7 +4,7 @@ import { hp, wp } from "@/utils/dimension";
 import MainLogoIcon from "@/assets/images/mainLogoIcon.svg";
 import LoginModalCloseIcon from "@/assets/images/modal/loginModalCloseIcon.svg";
 import KakaoIcon from "@/assets/images/modal/kakaoIcon.svg";
-import useAuthStore from "@/stores/authStore";
+import useAuthStore from "@/store/authStore";
 import LoginWebView from "@/screens/login/LoginWebView";
 
 const LoginModal = () => {

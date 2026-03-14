@@ -1,6 +1,6 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, Pressable } from "react-native";
-import useAuthStore from "@/stores/authStore";
+import useAuthStore from "@/store/authStore";
 
 export default function PublicRoute() {
   const { openLoginModal } = useAuthStore();
