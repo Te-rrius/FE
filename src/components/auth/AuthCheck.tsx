@@ -11,7 +11,7 @@ const AuthCheck = ({ children }: any) => {
     if (!token) {
       openLoginModal(pathname); // 경로 자동 전달
     }
-  }, [token]);
+  }, [token, pathname, openLoginModal]);
 
   if (!token) return null;
 

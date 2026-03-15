@@ -6,7 +6,7 @@ import LoginModal from "@/components/auth/LoginModal";
 import { useEffect } from "react";
 import { initializeKakaoSDK } from "@react-native-kakao/core";
 
-const KAKAOKEY = process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY || "";
+const KAKAOKEY = process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY;
 
 const RootLayout = () => {
   useEffect(() => {
