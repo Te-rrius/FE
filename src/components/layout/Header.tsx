@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: wp(20),
+    paddingVertical: hp(12),
     backgroundColor: '#FCFCFC',
   },
 
