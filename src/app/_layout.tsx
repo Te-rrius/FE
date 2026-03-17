@@ -28,7 +28,7 @@ const RootLayout = () => {
 
   return (
     <>
-      <Stack screenOptions={{ headerShown: false }} />
+      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: "#FCFCFC" } }} />
 
       <Modal visible={showLoginModal} transparent>
         <View style={styles.overlay}>
