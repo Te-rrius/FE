@@ -3,6 +3,8 @@ import { hp, wp } from '@/utils/dimension';
 import { StyleSheet, Text, View, Pressable } from 'react-native';
 import { useState } from 'react';
 
+import MainBanner from '@/assets/images/banner/mainBanner.svg';
+
 const tabs = [
   { key: 'GENERAL', label: '구장' },
   { key: 'ACADEMY', label: '아카데미' },
@@ -27,8 +29,11 @@ const MainScreen = () => {
           </Pressable>
         ))}
       </View>
-
       <View style={styles.navLine} />
+
+      <View style={styles.contentWrapper}>
+        <MainBanner />
+      </View>
     </>
   );
 };
@@ -67,5 +72,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 1,
     backgroundColor: '#E8E8E8',
+  },
+
+  contentWrapper: {
+    alignItems: 'center',
+    paddingTop: hp(16),
+    paddingHorizontal: wp(20),
+    gap: hp(20),
   },
 });
