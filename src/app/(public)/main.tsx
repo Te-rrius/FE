@@ -1,13 +1,10 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-import useAuthStore from '@/store/authStore';
-import Header from '@/components/layout/Header';
+import MainScreen from '@/screens/main/MainScreen';
 
 export default function PublicRoute() {
-  const { openLoginModal } = useAuthStore();
-
   return (
     <SafeAreaView>
-      <Header />
+      <MainScreen />
     </SafeAreaView>
   );
 }
