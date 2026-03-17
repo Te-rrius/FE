@@ -27,7 +27,7 @@ const LoginModal = () => {
     <View style={styles.modalContainer}>
       <View style={styles.topWrapper}>
         <View style={styles.modalHeader}>
-          <MainLogoIcon />
+          <MainLogoIcon style={styles.logoIcon}/>
           <Pressable style={styles.closeIcon} onPress={closeLoginModal}>
             <LoginModalCloseIcon />
           </Pressable>
@@ -75,6 +75,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  logoIcon: {
+    width: wp(55),
+    height: hp(20)
   },
 
   closeIcon: {
