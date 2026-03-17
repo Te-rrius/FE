@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { usePathname } from "expo-router";
-import useAuthStore from "@/store/authStore";
+import { useEffect } from 'react';
+import { usePathname } from 'expo-router';
+import useAuthStore from '@/store/authStore';
 
 const AuthCheck = ({ children }: any) => {
   const { token, openLoginModal } = useAuthStore();
