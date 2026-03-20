@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import MainBanner from '@/assets/images/banner/mainBanner.svg';
 import Divider from '@/components/common/Divider';
+import SearchBar from '@/components/common/SearchBar';
 
 const tabs = [
   { key: 'GENERAL', label: '구장' },
@@ -34,9 +35,9 @@ const MainScreen = () => {
 
       <View style={styles.contentWrapper}>
         <MainBanner />
-      </View>
 
-      <View></View>
+        <SearchBar />
+      </View>
     </>
   );
 };
