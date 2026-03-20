@@ -5,19 +5,23 @@ import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import SearchIcon from '@/assets/images/common/searchIcon.svg';
 import SearchingIcon from '@/assets/images/common/searchingIcon.svg';
 
-const SearchBar = () => {
+interface SearchBarProps {
+  value: string;
+  onChangeText: (text: string) => void;
+}
+
+const SearchBar = ({ value, onChangeText }: SearchBarProps) => {
   const [isFocused, setIsFocused] = useState(false);
-  const [value, setValue] = useState('');
 
   const handleClear = () => {
-    setValue('');
+    onChangeText('');
   };
 
   return (
     <View style={styles.container}>
       <TextInput
         value={value}
-        onChangeText={setValue}
+        onChangeText={onChangeText}
         placeholder="구장명을 검색해 보세요"
         placeholderTextColor="#999999"
         onFocus={() => setIsFocused(true)}

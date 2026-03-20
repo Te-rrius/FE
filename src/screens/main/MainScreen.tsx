@@ -6,6 +6,8 @@ import { useState } from 'react';
 import MainBanner from '@/assets/images/banner/mainBanner.svg';
 import Divider from '@/components/common/Divider';
 import SearchBar from '@/components/common/SearchBar';
+import Dropdown from '@/components/common/Dropdown';
+import { cityList, regionList } from '@/constants/dropdownList';
 
 const tabs = [
   { key: 'GENERAL', label: '구장' },
@@ -15,6 +17,11 @@ const tabs = [
 
 const MainScreen = () => {
   const [activeTab, setActiveTab] = useState('GENERAL');
+  const [searchValue, setSearchValue] = useState('');
+  const [cityDropdownOpen, setCityDropdownOpen] = useState<boolean>(false);
+  const [regionDropdownOpen, setRegionDropdownOpen] = useState<boolean>(false);
+  const [selectedCityDropdown, setSelectedCityDropdown] = useState<string>('도시');
+  const [selectedRegionDropdown, setSelectedRegionDropdown] = useState<string>('지역');
 
   return (
     <>
@@ -36,7 +43,35 @@ const MainScreen = () => {
       <View style={styles.contentWrapper}>
         <MainBanner />
 
-        <SearchBar />
+        <View style={styles.searchWrapper}>
+          <SearchBar value={searchValue} onChangeText={setSearchValue} />
+
+          <View style={styles.placeWrapper}>
+            <Dropdown
+              selectedText={selectedCityDropdown}
+              dropdownList={['전체 보기', ...cityList]}
+              isDropdownOpen={cityDropdownOpen}
+              setIsDropdownOpen={setCityDropdownOpen}
+              selectDropdownHandler={(option) => {
+                setSelectedCityDropdown(option === '전체 보기' ? '도시' : option);
+                setCityDropdownOpen(false);
+                setSelectedRegionDropdown('지역');
+                setSearchValue('');
+              }}
+            />
+            <Dropdown
+              selectedText={selectedRegionDropdown}
+              dropdownList={selectedCityDropdown ? regionList[selectedCityDropdown] : []}
+              isDropdownOpen={regionDropdownOpen}
+              setIsDropdownOpen={setRegionDropdownOpen}
+              selectDropdownHandler={(option) => {
+                setSelectedRegionDropdown(option);
+                setRegionDropdownOpen(false);
+                setSearchValue('');
+              }}
+            />
+          </View>
+        </View>
       </View>
     </>
   );
@@ -77,5 +112,14 @@ const styles = StyleSheet.create({
     paddingTop: hp(16),
     paddingHorizontal: wp(20),
     gap: hp(20),
+  },
+
+  searchWrapper: {
+    gap: hp(9),
+  },
+
+  placeWrapper: {
+    flexDirection: 'row',
+    gap: wp(8),
   },
 });
