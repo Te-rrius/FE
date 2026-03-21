@@ -1,5 +1,6 @@
 import { CourtDto } from '@/constants/dummyCourt';
 import { wp } from '@/utils/dimension';
+import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 
@@ -54,7 +55,10 @@ const CourtList = ({ courtList, searchValue, selectedCity, selectedRegion }: Cou
           <View key={String(court.courtId)} style={styles.cardWrapper}>
             <Pressable style={styles.cardContainer}>
               <Image source={{ uri: court.image }} style={styles.courtImg} resizeMode="cover" />
-              <View style={styles.imgCover} />
+              <LinearGradient
+                colors={['transparent', 'rgba(17, 17, 17, 0.80)']}
+                style={styles.imgCover}
+              />
               <View style={styles.infoContainer}>
                 <View style={styles.badgeRow}>
                   <View style={styles.badgeContainer}>
@@ -111,7 +115,6 @@ const styles = StyleSheet.create({
     height: '66.66%',
     borderBottomLeftRadius: 4,
     borderBottomRightRadius: 4,
-    backgroundColor: 'rgba(17, 17, 17, 0.55)',
   },
 
   infoContainer: {
