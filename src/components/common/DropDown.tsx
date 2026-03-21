@@ -8,7 +8,7 @@ interface DropdownProps {
   selectedText: string;
   dropdownList: string[];
   isDropdownOpen: boolean;
-  setIsDropdownOpen: (value: boolean) => void;
+  setIsDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
   selectDropdownHandler: (option: string) => void;
   disabled?: boolean;
 }
@@ -31,7 +31,7 @@ const Dropdown = ({
   return (
     <View style={styles.wrapper}>
       <Pressable style={styles.container} onPress={toggleDropdownHandler}>
-        <Text style={styles.dropdownText}>{selectedText}</Text>
+        <Text style={styles.selectedOptionText}>{selectedText}</Text>
 
         {isDropdownOpen ? <DropupIcon /> : <DropdownIcon />}
       </Pressable>
@@ -44,7 +44,11 @@ const Dropdown = ({
               style={styles.optionItem}
               onPress={() => selectDropdownHandler(option)}
             >
-              <Text>{option}</Text>
+              <Text
+                style={[styles.optionText, selectedText === option && styles.selectedOptionText]}
+              >
+                {option}
+              </Text>
             </Pressable>
           ))}
         </ScrollView>
@@ -88,9 +92,19 @@ const styles = StyleSheet.create({
   optionItem: {
     paddingVertical: hp(10),
     paddingHorizontal: wp(12),
+
+    // &:hover: {
+    //   backgroundColor: '#F5F5F5'
+    // }
   },
 
-  dropdownText: {
+  optionText: {
+    fontFamily: 'Pretendard400',
+    fontSize: 14,
+    color: '#303030',
+  },
+
+  selectedOptionText: {
     fontFamily: 'Pretendard600',
   },
 });
