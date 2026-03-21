@@ -1,6 +1,6 @@
 import Header from '@/components/layout/Header';
 import { hp, wp } from '@/utils/dimension';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native';
 import { useState } from 'react';
 
 import MainBanner from '@/assets/images/banner/mainBanner.svg';
@@ -8,6 +8,8 @@ import Divider from '@/components/common/Divider';
 import SearchBar from '@/components/common/SearchBar';
 import Dropdown from '@/components/common/Dropdown';
 import { cityList, regionList } from '@/constants/dropdownList';
+import CourtList from './components/CourtList';
+import { DUMMY_COURTS } from '@/constants/dummyCourt';
 
 const tabs = [
   { key: 'GENERAL', label: '구장' },
@@ -20,8 +22,17 @@ const MainScreen = () => {
   const [searchValue, setSearchValue] = useState('');
   const [cityDropdownOpen, setCityDropdownOpen] = useState<boolean>(false);
   const [regionDropdownOpen, setRegionDropdownOpen] = useState<boolean>(false);
-  const [selectedCityDropdown, setSelectedCityDropdown] = useState<string>('도시');
-  const [selectedRegionDropdown, setSelectedRegionDropdown] = useState<string>('지역');
+  const [city, setCity] = useState('도시');
+  const [region, setRegion] = useState('지역');
+
+  const switchTab = (key: string) => {
+    setActiveTab(key);
+    setSearchValue('');
+    setCity('도시');
+    setRegion('지역');
+    setCityDropdownOpen(false);
+    setRegionDropdownOpen(false);
+  };
 
   return (
     <>
@@ -29,7 +40,7 @@ const MainScreen = () => {
 
       <View style={styles.navContainer}>
         {tabs.map((tab) => (
-          <Pressable key={tab.key} style={styles.navBox} onPress={() => setActiveTab(tab.key)}>
+          <Pressable key={tab.key} style={styles.navBox} onPress={() => switchTab(tab.key)}>
             <Text style={[styles.navText, activeTab === tab.key && styles.activeText]}>
               {tab.label}
             </Text>
@@ -40,39 +51,50 @@ const MainScreen = () => {
       </View>
       <Divider />
 
-      <View style={styles.contentWrapper}>
-        <MainBanner />
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <View style={styles.contentWrapper}>
+          <MainBanner />
 
-        <View style={styles.searchWrapper}>
-          <SearchBar value={searchValue} onChangeText={setSearchValue} />
+          <View style={styles.searchWrapper}>
+            <SearchBar value={searchValue} onChangeText={setSearchValue} />
 
-          <View style={styles.placeWrapper}>
-            <Dropdown
-              selectedText={selectedCityDropdown}
-              dropdownList={['전체 보기', ...cityList]}
-              isDropdownOpen={cityDropdownOpen}
-              setIsDropdownOpen={setCityDropdownOpen}
-              selectDropdownHandler={(option) => {
-                setSelectedCityDropdown(option === '전체 보기' ? '도시' : option);
-                setCityDropdownOpen(false);
-                setSelectedRegionDropdown('지역');
-                setSearchValue('');
-              }}
-            />
-            <Dropdown
-              selectedText={selectedRegionDropdown}
-              dropdownList={selectedCityDropdown ? regionList[selectedCityDropdown] : []}
-              isDropdownOpen={regionDropdownOpen}
-              setIsDropdownOpen={setRegionDropdownOpen}
-              selectDropdownHandler={(option) => {
-                setSelectedRegionDropdown(option);
-                setRegionDropdownOpen(false);
-                setSearchValue('');
-              }}
-            />
+            <View style={styles.placeWrapper}>
+              <Dropdown
+                selectedText={city}
+                dropdownList={['전체 보기', ...cityList]}
+                isDropdownOpen={cityDropdownOpen}
+                setIsDropdownOpen={setCityDropdownOpen}
+                selectDropdownHandler={(option) => {
+                  setCity(option === '전체 보기' ? '도시' : option);
+                  setCityDropdownOpen(false);
+                  setRegion('지역');
+                  setSearchValue('');
+                }}
+              />
+              <Dropdown
+                selectedText={region}
+                dropdownList={regionList[city] ?? []}
+                isDropdownOpen={regionDropdownOpen}
+                setIsDropdownOpen={setRegionDropdownOpen}
+                selectDropdownHandler={(option) => {
+                  setRegion(option);
+                  setRegionDropdownOpen(false);
+                }}
+                disabled={city === '도시'}
+              />
+            </View>
+
+            <View style={styles.courtListWrapper}>
+              <CourtList
+                courtList={DUMMY_COURTS}
+                searchValue={searchValue}
+                selectedCity={city}
+                selectedRegion={region}
+              />
+            </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 };
@@ -107,6 +129,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#212121',
   },
 
+  scrollContent: {
+    paddingBottom: hp(100),
+  },
+
   contentWrapper: {
     alignItems: 'center',
     paddingTop: hp(16),
@@ -121,5 +147,10 @@ const styles = StyleSheet.create({
   placeWrapper: {
     flexDirection: 'row',
     gap: wp(8),
+  },
+
+  courtListWrapper: {
+    paddingTop: hp(11),
+    gap: hp(4),
   },
 });
