@@ -1,7 +1,6 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import DropdownIcon from '@/assets/images/common/dropdownIcon.svg';
-import DropupIcon from '@/assets/images/common/dropupIcon.svg';
 import { hp, wp } from '@/utils/dimension';
 
 interface DropdownProps {
@@ -33,7 +32,15 @@ const Dropdown = ({
       <Pressable style={styles.container} onPress={toggleDropdownHandler}>
         <Text style={styles.selectedOptionText}>{selectedText}</Text>
 
-        {isDropdownOpen ? <DropupIcon /> : <DropdownIcon />}
+        {isDropdownOpen ? (
+          <DropdownIcon
+            style={{
+              transform: [{ rotate: isDropdownOpen ? '180deg' : '0deg' }],
+            }}
+          />
+        ) : (
+          <DropdownIcon />
+        )}
       </Pressable>
 
       {isDropdownOpen && (
