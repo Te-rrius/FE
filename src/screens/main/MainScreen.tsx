@@ -1,6 +1,6 @@
 import Header from '@/components/layout/Header';
 import { hp, wp } from '@/utils/dimension';
-import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Pressable, ScrollView, useWindowDimensions } from 'react-native';
 import { useState } from 'react';
 
 import MainBanner from '@/assets/images/banner/mainBanner.svg';
@@ -23,6 +23,8 @@ const MainScreen = () => {
   const [regionDropdownOpen, setRegionDropdownOpen] = useState<boolean>(false);
   const [city, setCity] = useState('도시');
   const [region, setRegion] = useState('지역');
+  const { width } = useWindowDimensions();
+  const height = (width * 160) / 350;
 
   const switchTab = (key: string) => {
     setActiveTab(key);
@@ -33,12 +35,32 @@ const MainScreen = () => {
     setRegionDropdownOpen(false);
   };
 
+  // 도시 선택
+  const selectCity = (option: string) => {
+    if (option === '전체 보기') {
+      setCity('도시');
+    } else {
+      setCity(option);
+    }
+
+    if (region !== '지역') {
+      setRegion('지역');
+    }
+
+    setSearchValue('');
+    setCityDropdownOpen(false);
+  };
+
+  // 지역 선택
+  const selectRegion = (option: string) => {
+    if (city === '도시') return;
+    setRegion(option);
+    setRegionDropdownOpen(false);
+  };
+
   const filteredType = DUMMY_COURTS.filter((court) => court.type === activeTab);
 
-  const cityDropdownList = [
-    '전체 보기',
-    ...new Set(filteredType.map((court) => court.location.split(' ')[0])),
-  ];
+  const cityDropdownList = ['전체 보기', ...new Set(filteredType.map((court) => court.location.split(' ')[0]))];
 
   const regionDropdownList = filteredType.reduce<Record<string, string[]>>((acc, court) => {
     const parts = court.location.split(' ');
@@ -56,9 +78,7 @@ const MainScreen = () => {
       <View style={styles.navContainer}>
         {tabs.map((tab) => (
           <Pressable key={tab.key} style={styles.navBox} onPress={() => switchTab(tab.key)}>
-            <Text style={[styles.navText, activeTab === tab.key && styles.activeText]}>
-              {tab.label}
-            </Text>
+            <Text style={[styles.navText, activeTab === tab.key && styles.activeText]}>{tab.label}</Text>
 
             {activeTab === tab.key && <View style={styles.boxLine} />}
           </Pressable>
@@ -68,8 +88,7 @@ const MainScreen = () => {
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.contentWrapper}>
-          <MainBanner />
-
+          <MainBanner width={width} height={height} />
           <View style={styles.searchWrapper}>
             <SearchBar value={searchValue} onChangeText={setSearchValue} />
 
@@ -79,22 +98,14 @@ const MainScreen = () => {
                 dropdownList={cityDropdownList}
                 isDropdownOpen={cityDropdownOpen}
                 setIsDropdownOpen={setCityDropdownOpen}
-                selectDropdownHandler={(option) => {
-                  setCity(option === '전체 보기' ? '도시' : option);
-                  setCityDropdownOpen(false);
-                  setRegion('지역');
-                  setSearchValue('');
-                }}
+                selectDropdownHandler={selectCity}
               />
               <Dropdown
                 selectedText={region}
                 dropdownList={regionDropdownList[city] ?? []}
                 isDropdownOpen={regionDropdownOpen}
                 setIsDropdownOpen={setRegionDropdownOpen}
-                selectDropdownHandler={(option) => {
-                  setRegion(option);
-                  setRegionDropdownOpen(false);
-                }}
+                selectDropdownHandler={selectRegion}
                 disabled={city === '도시'}
               />
             </View>
@@ -130,7 +141,7 @@ const styles = StyleSheet.create({
 
   navText: {
     fontFamily: 'KBLJump-B',
-    fontSize: 20,
+    fontSize: wp(20),
     color: '#999999',
   },
 
