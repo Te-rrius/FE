@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
   tennisText: {
     color: '#FCF6F5',
     fontFamily: 'Pretendard700',
+    fontSize: wp(14),
   },
 
   authButton: {
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
 
   authText: {
     color: '#303030',
-    fontSize: 14,
+    fontSize: wp(14),
     fontFamily: 'Pretendard600',
   },
 });

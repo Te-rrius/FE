@@ -1,5 +1,5 @@
 import { CourtDto } from '@/constants/dummyCourt';
-import { wp } from '@/utils/dimension';
+import { hp, wp } from '@/utils/dimension';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
@@ -14,9 +14,9 @@ interface CourtListProps {
 const CourtList = ({ courtList, searchValue, selectedCity, selectedRegion }: CourtListProps) => {
   const getDisplayLocation = (location: string) => {
     if (location.startsWith('서울시') || location.startsWith('인천광역시')) {
-      return { city: location.split(' ')[0], district: location.split(' ')[1] };
+      return { city: location.split(' ')[0], region: location.split(' ')[1] };
     }
-    return { city: location.split(' ')[1], district: location.split(' ')[2] };
+    return { city: location.split(' ')[1], region: location.split(' ')[2] };
   };
 
   const getFilterLocation = (location: string) => ({
@@ -47,25 +47,22 @@ const CourtList = ({ courtList, searchValue, selectedCity, selectedRegion }: Cou
   }
 
   return (
-    <View style={styles.cardGrid}>
+    <View style={styles.listGridContainer}>
       {filteredList.map((court) => {
-        const { city, district } = getDisplayLocation(court.location);
+        const { city, region } = getDisplayLocation(court.location);
 
         return (
           <View key={String(court.courtId)} style={styles.cardWrapper}>
             <Pressable style={styles.cardContainer}>
               <Image source={{ uri: court.image }} style={styles.courtImg} resizeMode="cover" />
-              <LinearGradient
-                colors={['transparent', 'rgba(17, 17, 17, 0.80)']}
-                style={styles.imgCover}
-              />
+              <LinearGradient colors={['transparent', 'rgba(17, 17, 17, 0.80)']} style={styles.imgCover} />
               <View style={styles.infoContainer}>
                 <View style={styles.badgeRow}>
                   <View style={styles.badgeContainer}>
                     <Text style={styles.badgeText}>{city}</Text>
                   </View>
                   <View style={styles.badgeContainer}>
-                    <Text style={styles.badgeText}>{district}</Text>
+                    <Text style={styles.badgeText}>{region}</Text>
                   </View>
                 </View>
                 <View>
@@ -82,7 +79,7 @@ const CourtList = ({ courtList, searchValue, selectedCity, selectedRegion }: Cou
 };
 
 const styles = StyleSheet.create({
-  cardGrid: {
+  listGridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: wp(4),
@@ -119,28 +116,29 @@ const styles = StyleSheet.create({
 
   infoContainer: {
     position: 'absolute',
-    bottom: 12,
-    left: 12,
-    right: 12,
-    gap: 4,
+    bottom: hp(12),
+    left: wp(12),
+    right: wp(12),
+    gap: hp(4),
   },
 
   badgeRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: wp(4),
   },
 
   badgeContainer: {
-    paddingHorizontal: 4,
-    paddingVertical: 2,
+    paddingHorizontal: wp(4),
+    paddingVertical: hp(2),
+    textAlign: 'center',
     backgroundColor: '#4048F7',
     borderRadius: 2,
   },
 
   badgeText: {
     color: '#FFFFFF',
-    fontSize: 8,
+    fontSize: wp(8),
     fontFamily: 'Pretendard700',
     lineHeight: 10,
   },
@@ -148,47 +146,48 @@ const styles = StyleSheet.create({
   courtNameText: {
     color: '#FFFFFF',
     fontFamily: 'Pretendard600',
+    fontSize: wp(14),
     lineHeight: 20,
     letterSpacing: -0.35,
   },
 
   courtLocationText: {
     color: '#CACACA',
-    fontSize: 8,
+    fontSize: wp(8),
     fontFamily: 'Pretendard400',
     lineHeight: 12,
     letterSpacing: -0.5,
   },
 
   emptyContainer: {
-    marginTop: 64,
+    marginTop: hp(64),
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 12,
+    gap: hp(12),
   },
 
   emptyText: {
     alignItems: 'center',
-    gap: 4,
+    gap: hp(4),
   },
 
   searchedName: {
     color: '#4048F7',
-    fontSize: 16,
+    fontSize: wp(16),
     fontFamily: 'Pretendard600',
     lineHeight: 24,
   },
 
   noResultText: {
     color: '#303030',
-    fontSize: 16,
+    fontSize: wp(16),
     fontFamily: 'Pretendard400',
     lineHeight: 24,
   },
 
   hintText: {
     color: '#767676',
-    fontSize: 14,
+    fontSize: wp(14),
     fontFamily: 'Pretendard400',
     lineHeight: 20,
   },

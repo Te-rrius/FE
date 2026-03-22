@@ -1,6 +1,6 @@
 import Header from '@/components/layout/Header';
 import { hp, wp } from '@/utils/dimension';
-import { StyleSheet, Text, View, Pressable, ScrollView, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native';
 import { useState } from 'react';
 
 import MainBanner from '@/assets/images/banner/mainBanner.svg';
@@ -23,8 +23,6 @@ const MainScreen = () => {
   const [regionDropdownOpen, setRegionDropdownOpen] = useState<boolean>(false);
   const [city, setCity] = useState('도시');
   const [region, setRegion] = useState('지역');
-  const { width } = useWindowDimensions();
-  const height = (width * 160) / 350;
 
   const switchTab = (key: string) => {
     setActiveTab(key);
@@ -88,7 +86,7 @@ const MainScreen = () => {
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.contentWrapper}>
-          <MainBanner width={width} height={height} />
+          <MainBanner />
           <View style={styles.searchWrapper}>
             <SearchBar value={searchValue} onChangeText={setSearchValue} />
 

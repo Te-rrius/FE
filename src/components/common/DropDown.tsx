@@ -32,30 +32,14 @@ const Dropdown = ({
       <Pressable style={styles.container} onPress={toggleDropdownHandler}>
         <Text style={styles.selectedOptionText}>{selectedText}</Text>
 
-        {isDropdownOpen ? (
-          <DropdownIcon
-            style={{
-              transform: [{ rotate: isDropdownOpen ? '180deg' : '0deg' }],
-            }}
-          />
-        ) : (
-          <DropdownIcon />
-        )}
+        <DropdownIcon style={{ transform: [{ rotate: isDropdownOpen ? '180deg' : '0deg' }] }} />
       </Pressable>
 
       {isDropdownOpen && (
         <ScrollView style={styles.optionList}>
           {dropdownList.map((option) => (
-            <Pressable
-              key={option}
-              style={styles.optionItem}
-              onPress={() => selectDropdownHandler(option)}
-            >
-              <Text
-                style={[styles.optionText, selectedText === option && styles.selectedOptionText]}
-              >
-                {option}
-              </Text>
+            <Pressable key={option} style={styles.optionItem} onPress={() => selectDropdownHandler(option)}>
+              <Text style={[styles.optionText, selectedText === option && styles.selectedOptionText]}>{option}</Text>
             </Pressable>
           ))}
         </ScrollView>
@@ -80,6 +64,7 @@ const styles = StyleSheet.create({
     paddingVertical: hp(10),
     borderWidth: 1,
     borderColor: '#E8E8E8',
+    borderRadius: 4,
     backgroundColor: '#FFFFFF',
   },
 
@@ -107,11 +92,13 @@ const styles = StyleSheet.create({
 
   optionText: {
     fontFamily: 'Pretendard400',
-    fontSize: 14,
+    fontSize: wp(14),
     color: '#303030',
   },
 
   selectedOptionText: {
     fontFamily: 'Pretendard600',
+    fontSize: wp(14),
+    color: '#303030',
   },
 });
