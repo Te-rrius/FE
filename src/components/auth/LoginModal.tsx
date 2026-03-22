@@ -91,6 +91,8 @@ const styles = StyleSheet.create({
     fontSize: wp(40),
     textAlign: 'center',
     color: '#303030',
+    lineHeight: hp(48),
+    letterSpacing: -0.4,
   },
 
   textHighlight: {
@@ -108,6 +110,8 @@ const styles = StyleSheet.create({
     fontSize: wp(14),
     textAlign: 'center',
     fontFamily: 'Pretendard500',
+    lineHeight: hp(20),
+    letterSpacing: -0.35,
   },
 
   loginButton: {
@@ -125,5 +129,6 @@ const styles = StyleSheet.create({
     color: 'rgba(0, 0, 0, 0.85)',
     fontSize: wp(15),
     fontFamily: 'Pretendard600',
+    lineHeight: hp(23),
   },
 });

@@ -144,6 +144,8 @@ const styles = StyleSheet.create({
     fontFamily: 'KBLJump-B',
     fontSize: wp(20),
     color: '#999999',
+    lineHeight: hp(28),
+    letterSpacing: -0.5,
   },
 
   activeText: {

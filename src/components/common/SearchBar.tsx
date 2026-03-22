@@ -54,5 +54,7 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     fontSize: wp(14),
+    lineHeight: hp(20),
+    letterSpacing: -0.35,
   },
 });

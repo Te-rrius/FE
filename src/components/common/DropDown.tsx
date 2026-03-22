@@ -94,11 +94,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard400',
     fontSize: wp(14),
     color: '#303030',
+    lineHeight: hp(20),
+    letterSpacing: -0.35,
   },
 
   selectedOptionText: {
     fontFamily: 'Pretendard600',
-    fontSize: wp(14),
-    color: '#303030',
   },
 });

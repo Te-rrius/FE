@@ -62,6 +62,8 @@ const styles = StyleSheet.create({
     color: '#FCF6F5',
     fontFamily: 'Pretendard700',
     fontSize: wp(14),
+    lineHeight: hp(20),
+    letterSpacing: -0.35,
   },
 
   authButton: {
@@ -76,5 +78,7 @@ const styles = StyleSheet.create({
     color: '#303030',
     fontSize: wp(14),
     fontFamily: 'Pretendard600',
+    lineHeight: hp(20),
+    letterSpacing: -0.35,
   },
 });

@@ -140,22 +140,22 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: wp(8),
     fontFamily: 'Pretendard700',
-    lineHeight: 10,
+    lineHeight: hp(10),
   },
 
   courtNameText: {
     color: '#FFFFFF',
     fontFamily: 'Pretendard600',
     fontSize: wp(14),
-    lineHeight: 20,
-    letterSpacing: -0.35,
+    lineHeight: hp(20),
+    letterSpacing: -0.5,
   },
 
   courtLocationText: {
     color: '#CACACA',
     fontSize: wp(8),
     fontFamily: 'Pretendard400',
-    lineHeight: 12,
+    lineHeight: hp(12),
     letterSpacing: -0.5,
   },
 
@@ -175,21 +175,21 @@ const styles = StyleSheet.create({
     color: '#4048F7',
     fontSize: wp(16),
     fontFamily: 'Pretendard600',
-    lineHeight: 24,
+    lineHeight: hp(24),
   },
 
   noResultText: {
     color: '#303030',
     fontSize: wp(16),
     fontFamily: 'Pretendard400',
-    lineHeight: 24,
+    lineHeight: hp(24),
   },
 
   hintText: {
     color: '#767676',
     fontSize: wp(14),
     fontFamily: 'Pretendard400',
-    lineHeight: 20,
+    lineHeight: hp(20),
   },
 });
 
