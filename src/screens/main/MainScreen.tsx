@@ -1,6 +1,6 @@
 import Header from '@/components/layout/Header';
 import { hp, wp } from '@/utils/dimension';
-import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Pressable, ScrollView, useWindowDimensions } from 'react-native';
 import { useState } from 'react';
 
 import MainBanner from '@/assets/images/banner/mainBanner.svg';
@@ -9,6 +9,7 @@ import SearchBar from '@/components/common/SearchBar';
 import Dropdown from '@/components/common/Dropdown';
 import CourtList from './components/CourtList';
 import { DUMMY_COURTS } from '@/constants/dummyCourt';
+import useBannerSize from '@/utils/bannerSize';
 
 const tabs = [
   { key: 'GENERAL', label: '구장' },
@@ -23,6 +24,8 @@ const MainScreen = () => {
   const [regionDropdownOpen, setRegionDropdownOpen] = useState<boolean>(false);
   const [city, setCity] = useState('도시');
   const [region, setRegion] = useState('지역');
+
+  const bannerSize = useBannerSize(350, 160);
 
   const switchTab = (key: string) => {
     setActiveTab(key);
@@ -86,7 +89,7 @@ const MainScreen = () => {
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.contentWrapper}>
-          <MainBanner />
+          <MainBanner width={bannerSize.width} height={bannerSize.height} />
           <View style={styles.searchWrapper}>
             <SearchBar value={searchValue} onChangeText={setSearchValue} />
 
