@@ -7,7 +7,6 @@ import MainBanner from '@/assets/images/banner/mainBanner.svg';
 import Divider from '@/components/common/Divider';
 import SearchBar from '@/components/common/SearchBar';
 import Dropdown from '@/components/common/Dropdown';
-import { cityList, regionList } from '@/constants/dropdownList';
 import CourtList from './components/CourtList';
 import { DUMMY_COURTS } from '@/constants/dummyCourt';
 
@@ -33,6 +32,22 @@ const MainScreen = () => {
     setCityDropdownOpen(false);
     setRegionDropdownOpen(false);
   };
+
+  const filteredType = DUMMY_COURTS.filter((court) => court.type === activeTab);
+
+  const cityDropdownList = [
+    '전체 보기',
+    ...new Set(filteredType.map((court) => court.location.split(' ')[0])),
+  ];
+
+  const regionDropdownList = filteredType.reduce<Record<string, string[]>>((acc, court) => {
+    const parts = court.location.split(' ');
+    const city = parts[0];
+    const region = parts[1];
+    if (!acc[city]) acc[city] = [];
+    if (!acc[city].includes(region)) acc[city].push(region);
+    return acc;
+  }, {});
 
   return (
     <>
@@ -61,7 +76,7 @@ const MainScreen = () => {
             <View style={styles.placeWrapper}>
               <Dropdown
                 selectedText={city}
-                dropdownList={['전체 보기', ...cityList]}
+                dropdownList={cityDropdownList}
                 isDropdownOpen={cityDropdownOpen}
                 setIsDropdownOpen={setCityDropdownOpen}
                 selectDropdownHandler={(option) => {
@@ -73,7 +88,7 @@ const MainScreen = () => {
               />
               <Dropdown
                 selectedText={region}
-                dropdownList={regionList[city] ?? []}
+                dropdownList={regionDropdownList[city] ?? []}
                 isDropdownOpen={regionDropdownOpen}
                 setIsDropdownOpen={setRegionDropdownOpen}
                 selectDropdownHandler={(option) => {
@@ -86,7 +101,7 @@ const MainScreen = () => {
 
             <View style={styles.courtListWrapper}>
               <CourtList
-                courtList={DUMMY_COURTS}
+                courtList={filteredType}
                 searchValue={searchValue}
                 selectedCity={city}
                 selectedRegion={region}
