@@ -10,6 +10,9 @@ interface DropdownProps {
   setIsDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
   selectDropdownHandler: (option: string) => void;
   disabled?: boolean;
+  width?: number;
+  paddingHorizontal?: number;
+  paddingVertical?: number;
 }
 
 const Dropdown = ({
@@ -19,6 +22,9 @@ const Dropdown = ({
   setIsDropdownOpen,
   selectDropdownHandler,
   disabled,
+  width,
+  paddingHorizontal,
+  paddingVertical,
 }: DropdownProps) => {
   const toggleDropdownHandler = () => {
     if (disabled) {
@@ -28,13 +34,21 @@ const Dropdown = ({
   };
 
   return (
-    <View style={styles.wrapper}>
-      <Pressable style={styles.container} onPress={toggleDropdownHandler}>
+    <View style={[styles.wrapper, width ? { width } : { width: wp(171) }]}>
+      <Pressable
+        style={[
+          styles.container,
+          paddingHorizontal
+            ? { paddingLeft: paddingHorizontal, paddingRight: paddingHorizontal }
+            : { paddingLeft: wp(12), paddingRight: wp(10) },
+          paddingVertical ? { paddingVertical } : { paddingVertical: hp(10) },
+        ]}
+        onPress={toggleDropdownHandler}
+      >
         <Text style={styles.selectedOptionText}>{selectedText}</Text>
 
         <DropdownIcon style={{ transform: [{ rotate: isDropdownOpen ? '180deg' : '0deg' }] }} />
       </Pressable>
-
       {isDropdownOpen && (
         <ScrollView style={styles.optionList}>
           {dropdownList.map((option) => (
@@ -52,16 +66,12 @@ export default Dropdown;
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1,
     zIndex: 1,
   },
 
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: wp(12),
-    paddingRight: wp(10),
-    paddingVertical: hp(10),
     borderWidth: 1,
     borderColor: '#E8E8E8',
     borderRadius: 4,
