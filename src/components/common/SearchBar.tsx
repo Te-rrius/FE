@@ -1,6 +1,6 @@
 import { hp, wp } from '@/utils/dimension';
 import { useState } from 'react';
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Keyboard, Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import SearchIcon from '@/assets/images/common/searchIcon.svg';
 import SearchingIcon from '@/assets/images/common/searchingIcon.svg';
@@ -15,6 +15,8 @@ const SearchBar = ({ value, onChangeText }: SearchBarProps) => {
 
   const handleClear = () => {
     onChangeText('');
+    setIsFocused(false);
+    Keyboard.dismiss();
   };
 
   return (

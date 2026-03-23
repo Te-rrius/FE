@@ -1,6 +1,6 @@
 import Header from '@/components/layout/Header';
 import { hp, wp } from '@/utils/dimension';
-import { StyleSheet, Text, View, Pressable, ScrollView, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native';
 import { useState } from 'react';
 
 import MainBanner from '@/assets/images/banner/mainBanner.svg';
