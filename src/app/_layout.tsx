@@ -1,10 +1,10 @@
-import { Stack } from "expo-router";
-import { useFonts } from "expo-font";
-import { Modal, StyleSheet, View } from "react-native";
-import useAuthStore from "@/store/authStore";
-import LoginModal from "@/components/auth/LoginModal";
-import { useEffect } from "react";
-import { initializeKakaoSDK } from "@react-native-kakao/core";
+import { Stack } from 'expo-router';
+import { useFonts } from 'expo-font';
+import { Modal, StyleSheet, View } from 'react-native';
+import useAuthStore from '@/store/authStore';
+import LoginModal from '@/components/auth/LoginModal';
+import { useEffect } from 'react';
+import { initializeKakaoSDK } from '@react-native-kakao/core';
 
 const KAKAOKEY = process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY;
 
@@ -16,19 +16,25 @@ const RootLayout = () => {
   const { showLoginModal } = useAuthStore();
 
   const [fontsLoaded] = useFonts({
-    "KBLJump-EB-Condensed": require("../assets/fonts/KBLJump_EB_Condensed.ttf"),
-    "KBLJump-EB-Extended": require("../assets/fonts/KBLJump_EB_Extended.ttf"),
-    Pretendard400: require("../assets/fonts/Pretendard-Regular.ttf"),
-    Pretendard500: require("../assets/fonts/Pretendard-Medium.ttf"),
-    Pretendard600: require("../assets/fonts/Pretendard-SemiBold.ttf"),
-    Pretendard700: require("../assets/fonts/Pretendard-Bold.ttf"),
+    'KBLJump-B': require('../assets/fonts/KBLJump_B.ttf'),
+    'KBLJump-EB-Condensed': require('../assets/fonts/KBLJump_EB_Condensed.ttf'),
+    'KBLJump-EB-Extended': require('../assets/fonts/KBLJump_EB_Extended.ttf'),
+    Pretendard400: require('../assets/fonts/Pretendard-Regular.ttf'),
+    Pretendard500: require('../assets/fonts/Pretendard-Medium.ttf'),
+    Pretendard600: require('../assets/fonts/Pretendard-SemiBold.ttf'),
+    Pretendard700: require('../assets/fonts/Pretendard-Bold.ttf'),
   });
 
   if (!fontsLoaded) return null;
 
   return (
     <>
-      <Stack screenOptions={{ headerShown: false }} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: '#FCFCFC' },
+        }}
+      />
 
       <Modal visible={showLoginModal} transparent>
         <View style={styles.overlay}>
@@ -44,8 +50,8 @@ export default RootLayout;
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

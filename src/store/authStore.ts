@@ -1,6 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface AuthStore {
   token: string | null;
@@ -17,19 +17,18 @@ const useAuthStore = create<AuthStore>()(
     (set) => ({
       token: null,
       showLoginModal: false,
-      returnPath: "/",
+      returnPath: '/',
       login: () =>
         set({
-          token: "tempToken",
+          token: 'tempToken',
           showLoginModal: false,
         }),
       logout: () => set({ token: null }),
-      openLoginModal: (returnPath = "/") =>
-        set({ showLoginModal: true, returnPath }),
+      openLoginModal: (returnPath = '/') => set({ showLoginModal: true, returnPath }),
       closeLoginModal: () => set({ showLoginModal: false }),
     }),
     {
-      name: "authToken",
+      name: 'authToken',
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (state) => ({ token: state.token }),
     },

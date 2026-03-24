@@ -1,5 +1,5 @@
-import AuthCheck from "@/components/auth/AuthCheck";
-import { Stack } from "expo-router";
+import AuthCheck from '@/components/auth/AuthCheck';
+import { Stack } from 'expo-router';
 
 const PrivateRoute = () => {
   return (

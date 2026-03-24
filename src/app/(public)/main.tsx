@@ -1,17 +1,10 @@
-import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, Pressable } from "react-native";
-import useAuthStore from "@/store/authStore";
+import { SafeAreaView } from 'react-native-safe-area-context';
+import MainScreen from '@/screens/main/MainScreen';
 
 export default function PublicRoute() {
-  const { openLoginModal } = useAuthStore();
-
   return (
     <SafeAreaView>
-      <View>
-        <Pressable onPress={() => openLoginModal("/main")}>
-          <Text>로그인</Text>
-        </Pressable>
-      </View>
+      <MainScreen />
     </SafeAreaView>
   );
 }
