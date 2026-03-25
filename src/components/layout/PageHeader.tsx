@@ -16,7 +16,7 @@ const PageHeader = ({ title, rightContent }: PageHeaderProps) => {
         <BackIcon />
       </Pressable>
       <View>{title && <Text style={styles.titleText}>{title}</Text>}</View>
-      {rightContent ? <View>{rightContent}</View> : <View style={styles.fakeRight} />}
+      {rightContent ? <Pressable>{rightContent}</Pressable> : <View style={styles.fakeRight} />}
     </View>
   );
 };

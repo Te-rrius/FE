@@ -1,16 +1,92 @@
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { hp, wp } from '@/utils/dimension';
+import PageHeader from '@/components/layout/PageHeader';
 
 import SettingIcon from '@/assets/images/header/settingIcon.svg';
-import PageHeader from '@/components/layout/PageHeader';
+import ProfileIcon from '@/assets/images/account/profileIcon.svg';
+import ReportIcon from '@/assets/images/account/reportIcon.svg';
 
 const MyPageScreen = () => {
   return (
     <>
       <PageHeader title="내 정보" rightContent={<SettingIcon />} />
+      <View style={styles.profileContainer}>
+        <View style={styles.userInfo}>
+          <ProfileIcon />
+          <Text style={styles.nameText}>홍길동</Text>
+        </View>
+        <View style={styles.userTag}>
+          <Text style={styles.tagText}>일반 회원</Text>
+        </View>
+      </View>
+      <View style={styles.menuContainer}>
+        <Text style={styles.nameText}>내 활동</Text>
+        <Pressable style={styles.reportSection}>
+          <ReportIcon />
+          <Text style={styles.reportText}>내 리포트</Text>
+        </Pressable>
+      </View>
     </>
   );
 };
 
 export default MyPageScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  profileContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: wp(20),
+    paddingVertical: hp(20),
+    gap: wp(6),
+  },
+
+  userInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp(12),
+  },
+
+  nameText: {
+    fontSize: wp(20),
+    fontFamily: 'Pretendard600',
+    lineHeight: hp(28),
+    letterSpacing: wp(-0.5),
+    color: '#171717',
+  },
+
+  userTag: {
+    backgroundColor: '#EDEEEF',
+    paddingHorizontal: wp(6),
+    paddingVertical: hp(4),
+    borderRadius: 4,
+  },
+
+  tagText: {
+    fontSize: wp(10),
+    fontFamily: 'Pretendard600',
+    lineHeight: hp(14),
+    letterSpacing: wp(-0.25),
+    color: '#171717',
+  },
+
+  menuContainer: {
+    paddingTop: hp(20),
+    paddingHorizontal: wp(20),
+    gap: hp(20),
+  },
+
+  reportSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp(6),
+  },
+
+  reportText: {
+    fontSize: wp(18),
+    fontFamily: 'Pretendard500',
+    lineHeight: hp(28),
+    letterSpacing: wp(-0.45),
+    color: '#212121',
+  },
+});
