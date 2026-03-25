@@ -5,6 +5,7 @@ import TennisIcon from '@/assets/images/header/tennisIcon.svg';
 import AuthIcon from '@/assets/images/header/authIcon.svg';
 import { hp, wp } from '@/utils/dimension';
 import useAuthStore from '@/store/authStore';
+import { router } from 'expo-router';
 
 const Header = () => {
   const { openLoginModal, token } = useAuthStore();
@@ -21,7 +22,9 @@ const Header = () => {
       </View>
 
       {isLogin ? (
-        <AuthIcon />
+        <Pressable onPress={() => router.push('/(private)/mypage')}>
+          <AuthIcon />
+        </Pressable>
       ) : (
         <Pressable style={styles.authButton} onPress={() => openLoginModal()}>
           <Text style={styles.authText}>로그인 / 회원가입</Text>
