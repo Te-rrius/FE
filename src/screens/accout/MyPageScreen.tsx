@@ -6,17 +6,27 @@ import SettingIcon from '@/assets/images/header/settingIcon.svg';
 import ProfileIcon from '@/assets/images/account/profileIcon.svg';
 import ReportIcon from '@/assets/images/account/reportIcon.svg';
 
+const ROLE_LABEL: Record<string, string> = {
+  BASIC: '일반 회원',
+  MANAGER: '매니저',
+};
+
 const MyPageScreen = () => {
+  const user = {
+    name: '홍길동',
+    role: 'BASIC',
+  };
+
   return (
     <>
       <PageHeader title="내 정보" rightContent={<SettingIcon />} />
       <View style={styles.profileContainer}>
         <View style={styles.userInfo}>
           <ProfileIcon />
-          <Text style={styles.nameText}>홍길동</Text>
+          <Text style={styles.nameText}>{user.name}</Text>
         </View>
         <View style={styles.userTag}>
-          <Text style={styles.tagText}>일반 회원</Text>
+          <Text style={styles.tagText}>{ROLE_LABEL[user.role]}</Text>
         </View>
       </View>
       <View style={styles.menuContainer}>
