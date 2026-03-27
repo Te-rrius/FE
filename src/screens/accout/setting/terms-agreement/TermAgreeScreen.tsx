@@ -6,6 +6,7 @@ import Divider from '@/components/common/Divider';
 import { StyleSheet, View } from 'react-native';
 import { hp } from '@/utils/dimension';
 import { useState } from 'react';
+import { router } from 'expo-router';
 
 const TermAgreeScreen = () => {
   const [isPersonalInfoAgreed, setIsPersonalInfoAgreed] = useState(false);
@@ -34,6 +35,7 @@ const TermAgreeScreen = () => {
             isCheckbox={true}
             isChecked={isMarketingAgreed}
             onToggleCheckHandler={() => setIsMarketingAgreed((prev) => !prev)}
+            onClickHandler={() => router.push('/marketingDetail')}
           />
         </SettingOptionContainer>
       </View>
