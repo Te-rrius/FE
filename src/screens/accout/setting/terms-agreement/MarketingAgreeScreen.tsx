@@ -22,7 +22,11 @@ const MarketingAgreeScreen = () => {
           </View>
           <View style={styles.optionRow}>
             <CircleIcon style={styles.circleIcon} />
-            <Text style={styles.subAgreeText}>광고성정보수신의 변경은 "마이페이지 > 설정 (서비스 이용 동의) > 개인정보 수집 및 마케팅 수신 동의"에서 언제든지 변경할 수 있습니다.</Text>
+            <Text style={styles.subAgreeText}>
+              {
+                '광고성정보수신의 변경은 "마이페이지 > 설정 (서비스 이용 동의) > 개인정보 수집 및 마케팅 수신 동의" 에서 언제든지 변경할 수 있습니다.'
+              }
+            </Text>
           </View>
         </View>
       </View>
@@ -44,11 +48,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard400',
     fontSize: wp(14),
     lineHeight: hp(20),
-    letterSpacing: wp(-0.35)
+    letterSpacing: wp(-0.35),
   },
 
   agreeContent: {
-    gap: hp(8)
+    gap: hp(8),
   },
 
   optionRow: {
@@ -61,10 +65,10 @@ const styles = StyleSheet.create({
   },
 
   subAgreeText: {
-        color: '#767676',
+    color: '#767676',
     fontFamily: 'Pretendard400',
     fontSize: wp(13),
     lineHeight: hp(18),
-    letterSpacing: wp(-0.325)
-  }
+    letterSpacing: wp(-0.325),
+  },
 });
