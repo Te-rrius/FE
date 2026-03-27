@@ -5,6 +5,7 @@ import SettingOption from '@/screens/accout/setting/components/SettingOption';
 import Divider from '@/components/common/Divider';
 import { StyleSheet, View } from 'react-native';
 import { hp } from '@/utils/dimension';
+import { router } from 'expo-router';
 
 const SettingScreen = () => {
   return (
@@ -14,13 +15,12 @@ const SettingScreen = () => {
       <View style={styles.optionContainer}>
         <SettingOptionContainer>
           <SettingCategoryText title="약관 및 정책" />
-          <SettingOption content="스캡쳐 이용약관" />
+          <SettingOption content="서비스 이용 동의" onClickHandler={() => router.push('/terms')} />
         </SettingOptionContainer>
         <Divider />
         <SettingOptionContainer>
-          <SettingCategoryText title="개인정보 수집 및 마케팅 동의" />
-          <SettingOption content="(선택) 개인 정보 수집 및 이용 동의" isCheckbox={true} />
-          <SettingOption content="(선택) 마케팅 정보 수집 동의" isCheckbox={true} />
+          <SettingCategoryText title="서비스 이용" />
+          <SettingOption content="로그아웃" />
         </SettingOptionContainer>
       </View>
     </>
