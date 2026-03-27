@@ -6,8 +6,16 @@ import Divider from '@/components/common/Divider';
 import { StyleSheet, View } from 'react-native';
 import { hp } from '@/utils/dimension';
 import { router } from 'expo-router';
+import useAuthStore from '@/store/authStore';
 
 const SettingScreen = () => {
+  const { logout } = useAuthStore();
+
+  const logoutHandler = () => {
+    logout();
+    router.replace('/');
+  };
+
   return (
     <>
       <PageHeader title="설정" />
@@ -20,7 +28,7 @@ const SettingScreen = () => {
         <Divider />
         <SettingOptionContainer>
           <SettingCategoryText title="서비스 이용" />
-          <SettingOption content="로그아웃" />
+          <SettingOption content="로그아웃" onClickHandler={logoutHandler} />
         </SettingOptionContainer>
       </View>
     </>

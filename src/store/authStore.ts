@@ -7,6 +7,7 @@ interface AuthStore {
   showLoginModal: boolean;
   login: () => void;
   logout: () => void;
+  isLoggingOut: boolean;
   returnPath: string;
   openLoginModal: (returnPath?: string) => void;
   closeLoginModal: () => void;
@@ -23,7 +24,8 @@ const useAuthStore = create<AuthStore>()(
           token: 'tempToken',
           showLoginModal: false,
         }),
-      logout: () => set({ token: null }),
+      isLoggingOut: false,
+      logout: () => set({ token: null, showLoginModal: false, isLoggingOut: true }),
       openLoginModal: (returnPath = '/') => set({ showLoginModal: true, returnPath }),
       closeLoginModal: () => set({ showLoginModal: false }),
     }),
