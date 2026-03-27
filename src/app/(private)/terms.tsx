@@ -1,4 +1,4 @@
-import TermAgreeScreen from '@/screens/accout/setting/TermAgreeScreen';
+import TermAgreeScreen from '@/screens/accout/setting/terms-agreement/TermAgreeScreen';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
