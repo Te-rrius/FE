@@ -5,6 +5,7 @@ import PageHeader from '@/components/layout/PageHeader';
 import SettingIcon from '@/assets/images/header/settingIcon.svg';
 import ProfileIcon from '@/assets/images/account/profileIcon.svg';
 import ReportIcon from '@/assets/images/account/reportIcon.svg';
+import { router } from 'expo-router';
 
 const ROLE_LABEL: Record<string, string> = {
   BASIC: '일반 회원',
@@ -19,7 +20,7 @@ const MyPageScreen = () => {
 
   return (
     <>
-      <PageHeader title="내 정보" rightContent={<SettingIcon />} />
+      <PageHeader title="내 정보" rightContent={<SettingIcon />} onRightPress={() => router.push('/setting')} />
       <View style={styles.profileContainer}>
         <View style={styles.userInfo}>
           <ProfileIcon />

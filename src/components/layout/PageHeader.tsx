@@ -7,16 +7,17 @@ import BackIcon from '@/assets/images/common/backIcon.svg';
 type PageHeaderProps = {
   title?: string;
   rightContent?: React.ReactNode;
+  onRightPress?: () => void;
 };
 
-const PageHeader = ({ title, rightContent }: PageHeaderProps) => {
+const PageHeader = ({ title, rightContent, onRightPress }: PageHeaderProps) => {
   return (
     <View style={styles.container}>
       <Pressable onPress={() => router.back()}>
         <BackIcon />
       </Pressable>
       <View>{title && <Text style={styles.titleText}>{title}</Text>}</View>
-      {rightContent ? <Pressable>{rightContent}</Pressable> : <View style={styles.fakeRight} />}
+      {rightContent ? <Pressable onPress={onRightPress}>{rightContent}</Pressable> : <View style={styles.fakeRight} />}
     </View>
   );
 };
