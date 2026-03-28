@@ -2,6 +2,13 @@ import { StyleSheet, View, Text } from 'react-native'; // 컴포넌트 내부
 import AgreeHeader from './components/AgreeHeader';
 import { hp, wp } from '@/utils/dimension';
 
+const TABLE_HEADERS = ['수집/이용 목적', '수집 항목', '보유 및 이용 기간'];
+const TABLE_DATA = [
+  '서비스/업데이트 정보 제공, 맞춤형 서비스/광고 제공, 이벤트/마케팅/광고 활용',
+  '회원 번호, 이름, ID, 이메일 주소, 휴대폰 번호, 디바이스 토큰, 서비스 이용 기록, 성별, 생년월일, ADID, 국가',
+  '동의 철회 또는 회원 탈퇴 시까지',
+];
+
 const PrivacyAgreeScreen = () => {
   return (
     <>
@@ -9,18 +16,14 @@ const PrivacyAgreeScreen = () => {
       <View style={styles.contentWrapper}>
         <View style={styles.table}>
           <View style={styles.headerRow}>
-            {['수집/이용 목적', '수집 항목', '보유 및 이용 기간'].map((title, i) => (
+            {TABLE_HEADERS.map((title, i) => (
               <View key={title} style={[styles.titleCell, i === 1 && styles.middleCell]}>
                 <Text style={styles.headerText}>{title}</Text>
               </View>
             ))}
           </View>
           <View style={styles.dataRow}>
-            {[
-              '서비스/업데이트 정보 제공, 맞춤형 서비스/광고 제공, 이벤트/마케팅/광고 활용',
-              '회원 번호, 이름, ID, 이메일 주소, 휴대폰 번호, 디바이스 토큰, 서비스 이용 기록, 성별, 생년월일, ADID, 국가',
-              '동의 철회 또는 회원 탈퇴 시까지',
-            ].map((text, i) => (
+            {TABLE_DATA.map((text, i) => (
               <View key={i} style={[styles.dataCell, i === 1 && styles.middleCell]}>
                 <Text style={styles.dataText}>{text}</Text>
               </View>
