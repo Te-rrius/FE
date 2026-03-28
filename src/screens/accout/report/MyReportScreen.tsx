@@ -6,15 +6,17 @@ import { StyleSheet, Text, View } from 'react-native';
 import ReportCard from './components/ReportCard';
 
 const dummyReports = [
-  { id: 1, date: '2026. 06. 05.' },
-  { id: 2, date: '2026. 05. 20.' },
-  { id: 3, date: '2026. 05. 10.' },
-  { id: 4, date: '2026. 04. 30.' },
+  { id: 1, date: '2025. 12. 01.' },
+  { id: 2, date: '2025. 12. 17.' },
+  { id: 3, date: '2026. 03. 06.' },
+  { id: 4, date: '2026. 03. 27.' },
 ];
 
 const MyReportScreen = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selected, setSelected] = useState('최신 순');
+
+  const sortedReports = [...dummyReports].sort((a, b) => (selected === '최신 순' ? b.id - a.id : a.id - b.id));
 
   return (
     <View style={styles.container}>
@@ -42,7 +44,7 @@ const MyReportScreen = () => {
             }}
           />
           <View style={styles.listWrapper}>
-            {dummyReports.map((report) => (
+            {sortedReports.map((report) => (
               <ReportCard key={report.id} date={report.date} />
             ))}
           </View>
