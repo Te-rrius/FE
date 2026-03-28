@@ -15,6 +15,5 @@ export default function MyReport() {
 const styles = StyleSheet.create({
   mypageContainer: {
     height: '100%',
-    backgroundColor: '#FCFCFC',
   },
 });
