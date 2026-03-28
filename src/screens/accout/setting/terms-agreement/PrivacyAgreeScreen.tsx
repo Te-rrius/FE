@@ -1,6 +1,8 @@
-import { StyleSheet, View, Text } from 'react-native'; // 컴포넌트 내부
+import { StyleSheet, View, Text } from 'react-native';
 import AgreeHeader from './components/AgreeHeader';
 import { hp, wp } from '@/utils/dimension';
+import Button from '@/components/common/Button';
+import Divider from '@/components/common/Divider';
 
 const TABLE_HEADERS = ['수집/이용 목적', '수집 항목', '보유 및 이용 기간'];
 const TABLE_DATA = [
@@ -11,42 +13,53 @@ const TABLE_DATA = [
 
 const PrivacyAgreeScreen = () => {
   return (
-    <>
-      <AgreeHeader title="개인 정보 수집 및 이용 동의" />
-      <View style={styles.contentWrapper}>
-        <View style={styles.table}>
-          <View style={styles.headerRow}>
-            {TABLE_HEADERS.map((title, i) => (
-              <View key={title} style={[styles.titleCell, i === 1 && styles.middleCell]}>
-                <Text style={styles.headerText}>{title}</Text>
-              </View>
-            ))}
+    <View style={styles.container}>
+      <View>
+        <AgreeHeader title="개인 정보 수집 및 이용 동의" />
+        <View style={styles.contentWrapper}>
+          <View style={styles.table}>
+            <View style={styles.headerRow}>
+              {TABLE_HEADERS.map((title, i) => (
+                <View key={title} style={[styles.titleCell, i === 1 && styles.middleCell]}>
+                  <Text style={styles.headerText}>{title}</Text>
+                </View>
+              ))}
+            </View>
+            <View style={styles.dataRow}>
+              {TABLE_DATA.map((text, i) => (
+                <View key={i} style={[styles.dataCell, i === 1 && styles.middleCell]}>
+                  <Text style={styles.dataText}>{text}</Text>
+                </View>
+              ))}
+            </View>
           </View>
-          <View style={styles.dataRow}>
-            {TABLE_DATA.map((text, i) => (
-              <View key={i} style={[styles.dataCell, i === 1 && styles.middleCell]}>
-                <Text style={styles.dataText}>{text}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
 
-        <View style={styles.subInfo}>
-          <Text style={styles.infoText}>※</Text>
-          <Text style={[styles.infoText, styles.textBody]}>
-            회사는 콘텐츠산업진흥법, 전자상거래 등에서의 소비자 보호에 관한 법률, 약관의 규제에 관한 법률, 전자문서 및
-            전자거래기본법, 전자금융거래법, 정보통신망 이용촉진 및 정보보호 등에 관한 법률, 개인정보 보호법 등 관련
-            법령을 위배하지 않는 범위에서 본 약관을 개정할 수 있습니다.
-          </Text>
+          <View style={styles.subInfo}>
+            <Text style={styles.infoText}>※</Text>
+            <Text style={[styles.infoText, styles.textBody]}>
+              회사는 콘텐츠산업진흥법, 전자상거래 등에서의 소비자 보호에 관한 법률, 약관의 규제에 관한 법률, 전자문서 및
+              전자거래기본법, 전자금융거래법, 정보통신망 이용촉진 및 정보보호 등에 관한 법률, 개인정보 보호법 등 관련
+              법령을 위배하지 않는 범위에서 본 약관을 개정할 수 있습니다.
+            </Text>
+          </View>
         </View>
       </View>
-    </>
+      <View>
+        <Divider />
+        <Button text="확인하기" />
+      </View>
+    </View>
   );
 };
 
 export default PrivacyAgreeScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+    justifyContent: 'space-between',
+  },
+
   contentWrapper: {
     paddingTop: hp(32),
     paddingHorizontal: wp(20),
