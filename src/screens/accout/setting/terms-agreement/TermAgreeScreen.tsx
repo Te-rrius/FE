@@ -29,6 +29,7 @@ const TermAgreeScreen = () => {
             isCheckbox={true}
             isChecked={isPersonalInfoAgreed}
             onToggleCheckHandler={() => setIsPersonalInfoAgreed((prev) => !prev)}
+            onClickHandler={() => router.push('/privacyDetail')}
           />
           <SettingOption
             content="(선택) 마케팅 정보 수집 동의"

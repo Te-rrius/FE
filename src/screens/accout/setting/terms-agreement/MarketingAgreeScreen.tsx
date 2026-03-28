@@ -65,6 +65,8 @@ const styles = StyleSheet.create({
   },
 
   subAgreeText: {
+    flex: 1,
+    flexShrink: 1,
     color: '#767676',
     fontFamily: 'Pretendard400',
     fontSize: wp(13),
