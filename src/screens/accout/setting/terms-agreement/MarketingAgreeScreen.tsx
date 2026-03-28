@@ -31,7 +31,7 @@ const MarketingAgreeScreen = () => {
               <CircleIcon style={styles.circleIcon} />
               <Text style={styles.subAgreeText}>
                 {
-                  '광고성정보수신의 변경은 "마이페이지 > 설정 (서비스 이용 동의) > 개인정보 수집 및 마케팅 수신 동의" 에서 언제든지 변경할 수 있습니다.'
+                  '광고성정보수신의 변경은 "마이페이지 > 설정 (서비스 이용 동의) > 개인 정보 수집 및 마케팅 수신 동의" 에서 언제든지 변경할 수 있습니다.'
                 }
               </Text>
             </View>

@@ -22,7 +22,7 @@ const TermAgreeScreen = () => {
         </SettingOptionContainer>
         <Divider />
         <SettingOptionContainer>
-          <SettingCategoryText title="개인정보 수집 및 마케팅 동의" />
+          <SettingCategoryText title="개인 정보 수집 및 마케팅 동의" />
           <SettingOption
             content="(선택) 개인 정보 수집 및 이용 동의"
             isCheckbox={true}

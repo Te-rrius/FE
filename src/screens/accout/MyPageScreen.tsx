@@ -32,7 +32,7 @@ const MyPageScreen = () => {
       </View>
       <View style={styles.menuContainer}>
         <Text style={styles.nameText}>내 활동</Text>
-        <Pressable style={styles.reportSection}>
+        <Pressable style={styles.reportSection} onPress={() => router.push('/myreport')}>
           <ReportIcon />
           <Text style={styles.reportText}>내 리포트</Text>
         </Pressable>
