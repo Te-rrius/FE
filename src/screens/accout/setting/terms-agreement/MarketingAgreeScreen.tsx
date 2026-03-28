@@ -5,8 +5,12 @@ import CircleIcon from '@/assets/images/account/circleIcon.svg';
 import { hp, wp } from '@/utils/dimension';
 import Divider from '@/components/common/Divider';
 import Button from '@/components/common/Button';
+import { useTermAgreeStore } from '@/store/termAgreeStore';
+import { router } from 'expo-router';
 
 const MarketingAgreeScreen = () => {
+  const { setMarketingAgreed } = useTermAgreeStore();
+
   return (
     <View style={styles.container}>
       <View>
@@ -36,7 +40,13 @@ const MarketingAgreeScreen = () => {
       </View>
       <View>
         <Divider />
-        <Button text="확인하기" />
+        <Button
+          text="확인하기"
+          onPress={() => {
+            setMarketingAgreed(true);
+            router.back();
+          }}
+        />
       </View>
     </View>
   );

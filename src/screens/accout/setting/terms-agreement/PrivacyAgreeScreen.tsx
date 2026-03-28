@@ -3,6 +3,8 @@ import AgreeHeader from './components/AgreeHeader';
 import { hp, wp } from '@/utils/dimension';
 import Button from '@/components/common/Button';
 import Divider from '@/components/common/Divider';
+import { useTermAgreeStore } from '@/store/termAgreeStore';
+import { router } from 'expo-router';
 
 const TABLE_HEADERS = ['수집/이용 목적', '수집 항목', '보유 및 이용 기간'];
 const TABLE_DATA = [
@@ -12,6 +14,8 @@ const TABLE_DATA = [
 ];
 
 const PrivacyAgreeScreen = () => {
+  const { setPrivacyAgreed } = useTermAgreeStore();
+
   return (
     <View style={styles.container}>
       <View>
@@ -46,7 +50,13 @@ const PrivacyAgreeScreen = () => {
       </View>
       <View>
         <Divider />
-        <Button text="확인하기" />
+        <Button
+          text="확인하기"
+          onPress={() => {
+            setPrivacyAgreed(true);
+            router.back();
+          }}
+        />
       </View>
     </View>
   );

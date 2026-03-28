@@ -5,12 +5,11 @@ import SettingOption from '@/screens/accout/setting/components/SettingOption';
 import Divider from '@/components/common/Divider';
 import { StyleSheet, View } from 'react-native';
 import { hp } from '@/utils/dimension';
-import { useState } from 'react';
 import { router } from 'expo-router';
+import { useTermAgreeStore } from '@/store/termAgreeStore';
 
 const TermAgreeScreen = () => {
-  const [isPersonalInfoAgreed, setIsPersonalInfoAgreed] = useState(false);
-  const [isMarketingAgreed, setIsMarketingAgreed] = useState(false);
+  const { isPrivacyAgreed, isMarketingAgreed, setPrivacyAgreed, setMarketingAgreed } = useTermAgreeStore();
 
   return (
     <>
@@ -27,15 +26,15 @@ const TermAgreeScreen = () => {
           <SettingOption
             content="(선택) 개인 정보 수집 및 이용 동의"
             isCheckbox={true}
-            isChecked={isPersonalInfoAgreed}
-            onToggleCheckHandler={() => setIsPersonalInfoAgreed((prev) => !prev)}
+            isChecked={isPrivacyAgreed}
+            onToggleCheckHandler={() => setPrivacyAgreed(!isPrivacyAgreed)}
             onClickHandler={() => router.push('/privacyDetail')}
           />
           <SettingOption
             content="(선택) 마케팅 정보 수집 동의"
             isCheckbox={true}
             isChecked={isMarketingAgreed}
-            onToggleCheckHandler={() => setIsMarketingAgreed((prev) => !prev)}
+            onToggleCheckHandler={() => setMarketingAgreed(!isMarketingAgreed)}
             onClickHandler={() => router.push('/marketingDetail')}
           />
         </SettingOptionContainer>
