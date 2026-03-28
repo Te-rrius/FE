@@ -25,7 +25,10 @@ const useAuthStore = create<AuthStore>()(
           showLoginModal: false,
         }),
       isLoggingOut: false,
-      logout: () => set({ token: null, showLoginModal: false, isLoggingOut: true }),
+      logout: () => {
+        set({ token: null, showLoginModal: false, isLoggingOut: true });
+        setTimeout(() => set({ isLoggingOut: false }), 0);
+      },
       openLoginModal: (returnPath = '/') => set({ showLoginModal: true, returnPath }),
       closeLoginModal: () => set({ showLoginModal: false }),
     }),
