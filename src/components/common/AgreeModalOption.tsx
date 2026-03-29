@@ -5,7 +5,6 @@ import Check from './Check';
 
 interface AgreeModalOptionProps {
   content: string;
-  isCheck?: boolean;
   onClickHandler?: () => void;
   isChecked?: boolean;
   onToggleCheckHandler?: () => void;
