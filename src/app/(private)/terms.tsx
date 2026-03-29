@@ -1,19 +1,12 @@
+import ScreenContainer from '@/components/layout/ScreenContainer';
 import TermAgreeScreen from '@/screens/accout/setting/terms-agreement/TermAgreeScreen';
-import { StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function Terms() {
+const Terms = () => {
   return (
-    <View style={styles.mypageContainer}>
-      <SafeAreaView>
-        <TermAgreeScreen />
-      </SafeAreaView>
-    </View>
+    <ScreenContainer>
+      <TermAgreeScreen />
+    </ScreenContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  mypageContainer: {
-    height: '100%',
-  },
-});
+export default Terms;

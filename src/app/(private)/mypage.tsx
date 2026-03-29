@@ -1,19 +1,12 @@
+import ScreenContainer from '@/components/layout/ScreenContainer';
 import MyPageScreen from '@/screens/accout/MyPageScreen';
-import { StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function MyPage() {
+const MyPage = () => {
   return (
-    <View style={styles.mypageContainer}>
-      <SafeAreaView>
-        <MyPageScreen />
-      </SafeAreaView>
-    </View>
+    <ScreenContainer>
+      <MyPageScreen />
+    </ScreenContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  mypageContainer: {
-    height: '100%',
-  },
-});
+export default MyPage;

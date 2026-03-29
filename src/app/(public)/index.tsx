@@ -1,10 +1,12 @@
-import { SafeAreaView } from 'react-native-safe-area-context';
+import ScreenContainer from '@/components/layout/ScreenContainer';
 import MainScreen from '@/screens/main/MainScreen';
 
-export default function PublicRoute() {
+const PublicRoute = () => {
   return (
-    <SafeAreaView>
+    <ScreenContainer>
       <MainScreen />
-    </SafeAreaView>
+    </ScreenContainer>
   );
-}
+};
+
+export default PublicRoute;
