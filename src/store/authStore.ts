@@ -5,6 +5,9 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 interface AuthStore {
   token: string | null;
   showLoginModal: boolean;
+  showAgreeModal: boolean;
+  openAgreeModal: () => void;
+  closeAgreeModal: () => void;
   login: () => void;
   logout: () => void;
   isLoggingOut: boolean;
@@ -18,6 +21,7 @@ const useAuthStore = create<AuthStore>()(
     (set) => ({
       token: null,
       showLoginModal: false,
+      showAgreeModal: false,
       returnPath: '/',
       login: () =>
         set({
@@ -31,6 +35,8 @@ const useAuthStore = create<AuthStore>()(
       },
       openLoginModal: (returnPath = '/') => set({ showLoginModal: true, returnPath }),
       closeLoginModal: () => set({ showLoginModal: false }),
+      openAgreeModal: () => set({ showAgreeModal: true }),
+      closeAgreeModal: () => set({ showAgreeModal: false }),
     }),
     {
       name: 'authToken',
