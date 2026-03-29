@@ -4,7 +4,12 @@ import { Stack } from 'expo-router';
 const PrivateRoute = () => {
   return (
     <AuthCheck>
-      <Stack screenOptions={{ headerShown: false }} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: '#FCFCFC' },
+        }}
+      />
     </AuthCheck>
   );
 };
