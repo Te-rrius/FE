@@ -4,13 +4,12 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 type ButtonProps = {
   text: string;
   onPress?: () => void;
-  disabled?: boolean;
 };
 
-const Button = ({ text, onPress, disabled }: ButtonProps) => {
+const Button = ({ text, onPress }: ButtonProps) => {
   return (
     <View style={styles.buttonWrapper}>
-      <Pressable style={styles.container} disabled={disabled} onPress={onPress}>
+      <Pressable style={styles.container} onPress={onPress}>
         <Text style={styles.buttonText}>{text}</Text>
       </Pressable>
     </View>
