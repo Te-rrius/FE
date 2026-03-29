@@ -1,7 +1,7 @@
 import PageHeader from '@/components/layout/PageHeader';
-import SettingOptionContainer from '@/screens/accout/setting/components/SettingOptionContainer';
-import SettingCategoryText from '@/screens/accout/setting/components/SettingCategoryText';
-import SettingOption from '@/screens/accout/setting/components/SettingOption';
+import SettingOptionContainer from '../components/SettingOptionContainer';
+import SettingCategoryText from '../components/SettingCategoryText';
+import SettingOption from '../components/SettingOption';
 import Divider from '@/components/common/Divider';
 import { StyleSheet, View } from 'react-native';
 import { hp } from '@/utils/dimension';

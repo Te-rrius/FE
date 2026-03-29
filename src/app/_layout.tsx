@@ -16,13 +16,13 @@ const RootLayout = () => {
   const { showLoginModal } = useAuthStore();
 
   const [fontsLoaded] = useFonts({
-    'KBLJump-B': require('../assets/fonts/KBLJump_B.ttf'),
-    'KBLJump-EB-Condensed': require('../assets/fonts/KBLJump_EB_Condensed.ttf'),
-    'KBLJump-EB-Extended': require('../assets/fonts/KBLJump_EB_Extended.ttf'),
-    Pretendard400: require('../assets/fonts/Pretendard-Regular.ttf'),
-    Pretendard500: require('../assets/fonts/Pretendard-Medium.ttf'),
-    Pretendard600: require('../assets/fonts/Pretendard-SemiBold.ttf'),
-    Pretendard700: require('../assets/fonts/Pretendard-Bold.ttf'),
+    'KBLJump-B': require('@/assets/fonts/KBLJump_B.ttf'),
+    'KBLJump-EB-Condensed': require('@/assets/fonts/KBLJump_EB_Condensed.ttf'),
+    'KBLJump-EB-Extended': require('@/assets/fonts/KBLJump_EB_Extended.ttf'),
+    Pretendard400: require('@/assets/fonts/Pretendard-Regular.ttf'),
+    Pretendard500: require('@/assets/fonts/Pretendard-Medium.ttf'),
+    Pretendard600: require('@/assets/fonts/Pretendard-SemiBold.ttf'),
+    Pretendard700: require('@/assets/fonts/Pretendard-Bold.ttf'),
   });
 
   if (!fontsLoaded) return null;
