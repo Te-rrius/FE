@@ -4,21 +4,17 @@ import Checkbox from '@/components/common/Checkbox';
 import Divider from '../common/Divider';
 import AgreeModalOption from '../common/AgreeModalOption';
 import Button from '../common/Button';
-import { useState } from 'react';
 import { useTermAgreeStore } from '@/store/termAgreeStore';
 import useAuthStore from '@/store/authStore';
 
 const AgreeModal = () => {
-  const [isTermsAgreed, setIsTermsAgreed] = useState(false);
-
-  const { setShowAgreeModal } = useAuthStore();
+  const { closeAgreeModal } = useAuthStore();
   const { isPrivacyAgreed, isMarketingAgreed, setPrivacyAgreed, setMarketingAgreed } = useTermAgreeStore();
 
-  const allChecked = isTermsAgreed && isPrivacyAgreed && isMarketingAgreed;
+  const allChecked = isPrivacyAgreed && isMarketingAgreed;
 
   const toggleAll = () => {
     const next = !allChecked;
-    setIsTermsAgreed(next);
     setPrivacyAgreed(next);
     setMarketingAgreed(next);
   };
@@ -37,11 +33,7 @@ const AgreeModal = () => {
           </View>
         </View>
         <View>
-          <AgreeModalOption
-            content="(필수) 스캡쳐 서비스 이용 약관 동의"
-            isChecked={isTermsAgreed}
-            onToggleCheckHandler={() => setIsTermsAgreed((v) => !v)}
-          />
+          <AgreeModalOption content="(필수) 스캡쳐 서비스 이용 약관 동의" isChecked={true} />
           <AgreeModalOption
             content="(선택) 개인 정보 수집 및 이용 동의"
             isChecked={isPrivacyAgreed}
@@ -54,7 +46,7 @@ const AgreeModal = () => {
           />
         </View>
       </View>
-      <Button text="동의하고 시작하기" disabled={!isTermsAgreed} onPress={() => setShowAgreeModal(false)} />
+      <Button text="동의하고 시작하기" onPress={closeAgreeModal} />
     </View>
   );
 };
