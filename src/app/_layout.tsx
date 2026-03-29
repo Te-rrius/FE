@@ -5,6 +5,7 @@ import useAuthStore from '@/store/authStore';
 import LoginModal from '@/components/auth/LoginModal';
 import { useEffect } from 'react';
 import { initializeKakaoSDK } from '@react-native-kakao/core';
+import AgreeModal from '@/components/auth/AgreeModal';
 
 const KAKAOKEY = process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY;
 
@@ -13,7 +14,7 @@ const RootLayout = () => {
     initializeKakaoSDK(KAKAOKEY);
   }, []);
 
-  const { showLoginModal } = useAuthStore();
+  const { showLoginModal, showAgreeModal } = useAuthStore();
 
   const [fontsLoaded] = useFonts({
     'KBLJump-B': require('@/assets/fonts/KBLJump_B.ttf'),
@@ -41,6 +42,12 @@ const RootLayout = () => {
           <LoginModal />
         </View>
       </Modal>
+
+      <Modal visible={showAgreeModal} transparent>
+        <View style={styles.bottomOverlay}>
+          <AgreeModal />
+        </View>
+      </Modal>
     </>
   );
 };
@@ -53,5 +60,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  bottomOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'flex-end',
   },
 });
