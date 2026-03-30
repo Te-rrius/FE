@@ -20,7 +20,7 @@ const MyPageScreen = () => {
 
   return (
     <>
-      <PageHeader title="내 정보" rightContent={<SettingIcon />} onRightPress={() => router.push('/setting')} />
+      <PageHeader title="내 정보" rightContent={<SettingIcon />} onRightPress={() => router.push('/account/setting')} />
       <View style={styles.profileContainer}>
         <View style={styles.userInfo}>
           <ProfileIcon />
@@ -32,7 +32,7 @@ const MyPageScreen = () => {
       </View>
       <View style={styles.menuContainer}>
         <Text style={styles.nameText}>내 활동</Text>
-        <Pressable style={styles.reportSection} onPress={() => router.push('/myreport')}>
+        <Pressable style={styles.reportSection} onPress={() => router.push('/account/myreport')}>
           <ReportIcon />
           <Text style={styles.reportText}>내 리포트</Text>
         </Pressable>
