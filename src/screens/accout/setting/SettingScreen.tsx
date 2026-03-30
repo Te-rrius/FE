@@ -23,7 +23,10 @@ const SettingScreen = () => {
       <View style={styles.optionContainer}>
         <SettingOptionContainer>
           <SettingCategoryText title="약관 및 정책" />
-          <SettingOption content="서비스 이용 동의" onClickHandler={() => router.push('/terms')} />
+          <SettingOption
+            content="서비스 이용 동의"
+            onClickHandler={() => router.push('/account/setting/terms-agreement')}
+          />
         </SettingOptionContainer>
         <Divider />
         <SettingOptionContainer>

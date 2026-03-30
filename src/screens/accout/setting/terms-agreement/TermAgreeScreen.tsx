@@ -28,14 +28,14 @@ const TermAgreeScreen = () => {
             isCheckbox={true}
             isChecked={isPrivacyAgreed}
             onToggleCheckHandler={() => setPrivacyAgreed(!isPrivacyAgreed)}
-            onClickHandler={() => router.push('/privacyDetail')}
+            onClickHandler={() => router.push('/terms-agreement/privacy')}
           />
           <SettingOption
             content="(선택) 마케팅 정보 수집 동의"
             isCheckbox={true}
             isChecked={isMarketingAgreed}
             onToggleCheckHandler={() => setMarketingAgreed(!isMarketingAgreed)}
-            onClickHandler={() => router.push('/marketingDetail')}
+            onClickHandler={() => router.push('/terms-agreement/marketing')}
           />
         </SettingOptionContainer>
       </View>

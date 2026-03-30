@@ -22,7 +22,7 @@ const Header = () => {
       </View>
 
       {isLogin ? (
-        <Pressable onPress={() => router.push('/(private)/mypage')}>
+        <Pressable onPress={() => router.push('/(private)/account')}>
           <AuthIcon />
         </Pressable>
       ) : (
