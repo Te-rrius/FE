@@ -13,13 +13,13 @@ const Header = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.logo}>
+      <Pressable style={styles.logo} onPress={() => router.replace('/')}>
         <MainLogoIcon />
         <View style={styles.tennis}>
           <TennisIcon />
           <Text style={styles.tennisText}>테니스</Text>
         </View>
-      </View>
+      </Pressable>
 
       {isLogin ? (
         <Pressable onPress={() => router.push('/account')}>
