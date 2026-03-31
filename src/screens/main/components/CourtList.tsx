@@ -54,7 +54,10 @@ const CourtList = ({ courtList, searchValue, selectedCity, selectedRegion }: Cou
 
         return (
           <View key={String(court.courtId)} style={styles.cardWrapper}>
-            <Pressable style={styles.cardContainer} onPress={() => router.push(`/court/${court.courtId}`)}>
+            <Pressable
+              style={styles.cardContainer}
+              onPress={() => router.push({ pathname: '/court/[courtId]', params: { courtId: court.courtId } })}
+            >
               <Image source={{ uri: court.image }} style={styles.courtImg} resizeMode="cover" />
               <LinearGradient colors={['transparent', 'rgba(17, 17, 17, 0.80)']} style={styles.imgCover} />
               <View style={styles.infoContainer}>
