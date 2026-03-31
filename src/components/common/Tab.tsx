@@ -18,7 +18,7 @@ const Tab = ({ tabs, activeTab }: TabProps) => {
           onPress={tab.handler}
           style={[styles.inner, activeTab === tab.title && styles.active]}
         >
-          <Text style={[styles.tabText, activeTab === tab.title && styles.activeText]}>{tab.title}</Text>{' '}
+          <Text style={[styles.tabText, activeTab === tab.title && styles.activeText]}>{tab.title}</Text>
         </Pressable>
       ))}
     </View>
