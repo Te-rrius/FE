@@ -12,15 +12,17 @@ interface TabProps {
 const Tab = ({ tabs, activeTab }: TabProps) => {
   return (
     <View style={styles.container}>
-      {tabs.map((tab) => (
-        <Pressable
-          key={tab.title}
-          onPress={tab.handler}
-          style={[styles.inner, activeTab === tab.title && styles.active]}
-        >
-          <Text style={[styles.tabText, activeTab === tab.title && styles.activeText]}>{tab.title}</Text>
-        </Pressable>
-      ))}
+      <View style={styles.wrapper}>
+        {tabs.map((tab) => (
+          <Pressable
+            key={tab.title}
+            onPress={tab.handler}
+            style={[styles.inner, activeTab === tab.title && styles.active]}
+          >
+            <Text style={[styles.tabText, activeTab === tab.title && styles.activeText]}>{tab.title}</Text>
+          </Pressable>
+        ))}
+      </View>
     </View>
   );
 };
@@ -29,6 +31,10 @@ export default Tab;
 
 const styles = StyleSheet.create({
   container: {
+    paddingHorizontal: wp(20),
+  },
+
+  wrapper: {
     backgroundColor: '#F5F5F5',
     paddingHorizontal: wp(6),
     paddingVertical: hp(6),
