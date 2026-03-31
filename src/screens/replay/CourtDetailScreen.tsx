@@ -52,7 +52,7 @@ const CourtDetailScreen = ({ courtId }: CourtDetailProps) => {
 
       {selectedTab === '분석 리포트 다운' ? (
         <>
-          <DetailToggle title="분석 리포트 받아보기">
+          <DetailToggle key="down" title="분석 리포트 받아보기">
             <StepScroll images={DOWN_STEPS} />
           </DetailToggle>
           <Divider />
@@ -62,7 +62,7 @@ const CourtDetailScreen = ({ courtId }: CourtDetailProps) => {
         </>
       ) : (
         <>
-          <DetailToggle title="분석 리포트 신청">
+          <DetailToggle key="request" title="분석 리포트 신청">
             <StepScroll images={REQUEST_STEPS} />
           </DetailToggle>
           <Divider />
