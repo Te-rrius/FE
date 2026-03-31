@@ -1,6 +1,7 @@
 import { CourtDto } from '@/constants/dummyCourt';
 import { hp, wp } from '@/utils/dimension';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import React from 'react';
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 
@@ -53,7 +54,7 @@ const CourtList = ({ courtList, searchValue, selectedCity, selectedRegion }: Cou
 
         return (
           <View key={String(court.courtId)} style={styles.cardWrapper}>
-            <Pressable style={styles.cardContainer}>
+            <Pressable style={styles.cardContainer} onPress={() => router.push(`/court/${court.courtId}`)}>
               <Image source={{ uri: court.image }} style={styles.courtImg} resizeMode="cover" />
               <LinearGradient colors={['transparent', 'rgba(17, 17, 17, 0.80)']} style={styles.imgCover} />
               <View style={styles.infoContainer}>
