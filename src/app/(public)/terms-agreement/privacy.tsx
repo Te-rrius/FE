@@ -1,10 +1,10 @@
 import ScreenContainer from '@/components/layout/ScreenContainer';
-import PrivacyAgreeScreen from '@/screens/accout/setting/terms-agreement/PrivacyAgreeScreen';
+import TermsAgreementDetail from '@/screens/accout/setting/terms-agreement/TermsAgreementDetail';
 
 const PrivacyDetail = () => {
   return (
     <ScreenContainer>
-      <PrivacyAgreeScreen />
+      <TermsAgreementDetail category="privacy" />
     </ScreenContainer>
   );
 };
