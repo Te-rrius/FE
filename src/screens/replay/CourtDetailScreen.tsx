@@ -16,6 +16,7 @@ import ReportDownBanner from '@/assets/images/banner/reportDownBanner.svg';
 import RequestStep1Icon from '@/assets/images/common/requestStep1Icon.svg';
 import RequestStep2Icon from '@/assets/images/common/requestStep2Icon.svg';
 import ReportRequestBanner from '@/assets/images/banner/reportRequestBanner.svg';
+import DatePicker from '@/components/common/DatePicker';
 
 const DOWN_STEPS = [DownStep1Icon, DownStep2Icon, DownStep3Icon];
 const REQUEST_STEPS = [RequestStep1Icon, RequestStep2Icon];
@@ -26,6 +27,7 @@ interface CourtDetailProps {
 
 const CourtDetailScreen = ({ courtId }: CourtDetailProps) => {
   const [selectedTab, setSelectedTab] = useState('분석 리포트 다운');
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const id = Array.isArray(courtId) ? Number(courtId[0]) : Number(courtId);
   const court = DUMMY_COURTS.find((c) => c.courtId === id);
@@ -59,6 +61,7 @@ const CourtDetailScreen = ({ courtId }: CourtDetailProps) => {
           <View style={styles.bannerWrapper}>
             <ReportDownBanner />
           </View>
+          <DatePicker type="download" selectedDate={selectedDate} onSelect={setSelectedDate} />
         </>
       ) : (
         <>
@@ -69,6 +72,7 @@ const CourtDetailScreen = ({ courtId }: CourtDetailProps) => {
           <View style={styles.bannerWrapper}>
             <ReportRequestBanner />
           </View>
+          <DatePicker type="request" selectedDate={selectedDate} onSelect={setSelectedDate} />
         </>
       )}
     </ScrollView>
