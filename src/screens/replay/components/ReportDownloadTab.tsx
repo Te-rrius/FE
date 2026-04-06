@@ -10,6 +10,10 @@ import DownStep3Icon from '@/assets/images/common/downStep3Icon.svg';
 import ReportDownBanner from '@/assets/images/banner/reportDownBanner.svg';
 import { hp } from '@/utils/dimension';
 import { useState } from 'react';
+import DetailTitle from './DetailTitle';
+
+import LocationIcon from '@/assets/images/replay/locationIcon.svg';
+import TimeIcon from '@/assets/images/replay/timeIcon.svg';
 
 const DOWN_STEPS = [DownStep1Icon, DownStep2Icon, DownStep3Icon];
 
@@ -26,6 +30,14 @@ const ReportDownloadTab = () => {
         <ReportDownBanner />
       </View>
       <DatePicker type="download" selectedDate={selectedDate} onSelect={setSelectedDate} />
+      <View style={styles.gameInfoWrapper}>
+        <View>
+          <DetailTitle icon={LocationIcon} title="구역명" />
+        </View>
+        <View>
+          <DetailTitle icon={TimeIcon} title="시간대" />
+        </View>
+      </View>
     </>
   );
 };
@@ -35,5 +47,10 @@ export default ReportDownloadTab;
 const styles = StyleSheet.create({
   bannerWrapper: {
     paddingVertical: hp(20),
+  },
+
+  gameInfoWrapper: {
+    paddingTop: hp(24),
+    gap: hp(32),
   },
 });
