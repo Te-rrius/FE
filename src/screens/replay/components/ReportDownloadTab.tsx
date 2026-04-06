@@ -15,9 +15,10 @@ import DownStep1Icon from '@/assets/images/common/downStep1Icon.svg';
 import DownStep2Icon from '@/assets/images/common/downStep2Icon.svg';
 import DownStep3Icon from '@/assets/images/common/downStep3Icon.svg';
 import ReportDownBanner from '@/assets/images/banner/reportDownBanner.svg';
-import WhiteArrowIcon from '@/assets/images/replay/whiteArrowIcon.svg';
+import NoReportIcon from '@/assets/images/replay/noReportIcon.svg';
 import FieldSelector from './FieldSelector';
 import { DUMMY_REPORT_COURTS } from '@/constants/reportTimeSchedule';
+import DownloadGuide from './DownloadGuide';
 
 interface ReportDownloadTabProps {
   courtId: number;
@@ -32,7 +33,18 @@ const ReportDownloadTab = ({ courtId }: ReportDownloadTabProps) => {
     DUMMY_REPORT_COURTS[courtId]?.[0]?.courtId ?? null,
   );
 
-  const hasAnyReport = (DUMMY_REPORT_COURTS[courtId]?.length ?? 0) > 0;
+  const toDateString = (date: Date) => date.toISOString().split('T')[0]; // 'YYYY-MM-DD'
+
+  const filteredSchedules = selectedFieldId
+    ? (DUMMY_REPORT_SCHEDULES[selectedFieldId] ?? []).filter((s) => s.date === toDateString(selectedDate))
+    : [];
+
+  const hasAnyReport = filteredSchedules.length > 0;
+
+  const handleDateSelect = (date: Date) => {
+    setSelectedDate(date);
+    setSelectedScheduleId(null);
+  };
 
   return (
     <>
@@ -43,42 +55,49 @@ const ReportDownloadTab = ({ courtId }: ReportDownloadTabProps) => {
       <View style={styles.bannerWrapper}>
         <ReportDownBanner />
       </View>
-      <DatePicker type="download" selectedDate={selectedDate} onSelect={setSelectedDate} />
+      <DatePicker type="download" selectedDate={selectedDate} onSelect={handleDateSelect} />
 
-      {hasAnyReport ? (
-        <View style={styles.gameInfoWrapper}>
-          <View style={styles.infoContainer}>
-            <DetailTitle icon={LocationIcon} title="구역명" />
-            <FieldSelector
-              courtList={DUMMY_REPORT_COURTS[courtId] ?? []}
-              selectedFieldId={selectedFieldId}
-              onPress={setSelectedFieldId}
-            />
-          </View>
-          <View style={styles.infoContainer}>
-            <DetailTitle icon={TimeIcon} title="시간대" />
+      <View style={styles.gameInfoWrapper}>
+        <View style={styles.infoContainer}>
+          <DetailTitle icon={LocationIcon} title="구역명" />
+          <FieldSelector
+            courtList={DUMMY_REPORT_COURTS[courtId] ?? []}
+            selectedFieldId={selectedFieldId}
+            onPress={setSelectedFieldId}
+          />
+        </View>
+
+        <View style={styles.infoContainer}>
+          <DetailTitle icon={TimeIcon} title="시간대" />
+
+          {hasAnyReport ? (
             <ReportScheduleList
-              scheduleList={selectedFieldId ? (DUMMY_REPORT_SCHEDULES[selectedFieldId] ?? []) : []}
+              scheduleList={filteredSchedules}
               selectedScheduleId={selectedScheduleId}
               onPress={setSelectedScheduleId}
             />
-          </View>
-          <View style={styles.anotherWrppaer}>
-            <View style={styles.anotherText}>
-              <Text style={styles.mainText}>다른 시간대 리포트가 궁금하다면?</Text>
-              <Text style={styles.subText}>
-                {`리포트 신청을 먼저 진행하셔야 받아보실 수 있습니다!\n(리포트 제작은 신청 이후, 24시간 안에 완성됩니다)`}
-              </Text>
-            </View>
-            <Pressable style={styles.requestButton}>
-              <Text style={styles.requestText}>리포트 신청하러 가기</Text>
-              <WhiteArrowIcon />
-            </Pressable>
-          </View>
+          ) : (
+            <DownloadGuide
+              icon={<NoReportIcon />}
+              mainText="아직 신청된 리포트가 없어요"
+              subText={`리포트 신청을 먼저 진행하셔야 받아보실 수 있습니다!\n(리포트 제작은 신청 이후, 24시간 안에 완성됩니다)`}
+              onPress={() => {
+                /* 신청 화면 이동 */
+              }}
+            />
+          )}
         </View>
-      ) : (
-        <View></View>
-      )}
+
+        {hasAnyReport && (
+          <DownloadGuide
+            mainText="다른 시간대 리포트가 궁금하다면?"
+            subText={`리포트 신청을 먼저 진행하셔야 받아보실 수 있습니다!\n(리포트 제작은 신청 이후, 24시간 안에 완성됩니다)`}
+            onPress={() => {
+              /* 신청 화면 이동 */
+            }}
+          />
+        )}
+      </View>
     </>
   );
 };
@@ -145,5 +164,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: hp(18),
     letterSpacing: wp(-0.325),
+  },
+
+  noWrapper: {
+    alignItems: 'center',
+    gap: hp(18),
+    paddingVertical: hp(28),
   },
 });
