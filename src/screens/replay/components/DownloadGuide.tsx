@@ -12,10 +12,12 @@ interface ReportRequestCardProps {
 const DownloadGuide = ({ icon, mainText, subText, onPress }: ReportRequestCardProps) => {
   return (
     <View style={styles.wrapper}>
-      {icon}
-      <View style={styles.textWrapper}>
-        <Text style={styles.mainText}>{mainText}</Text>
-        <Text style={styles.subText}>{subText}</Text>
+      <View style={styles.topWrapper}>
+        {icon}
+        <View style={styles.textWrapper}>
+          <Text style={styles.mainText}>{mainText}</Text>
+          <Text style={styles.subText}>{subText}</Text>
+        </View>
       </View>
       <Pressable style={styles.requestButton} onPress={onPress}>
         <Text style={styles.requestText}>리포트 신청하러 가기</Text>
@@ -32,6 +34,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: hp(28),
     paddingVertical: hp(28),
+  },
+
+  topWrapper: {
+    alignItems: 'center',
+
+    gap: hp(18),
   },
 
   textWrapper: {
@@ -59,11 +67,12 @@ const styles = StyleSheet.create({
 
   requestButton: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#4048F7',
     paddingHorizontal: wp(37.5),
     paddingVertical: hp(9),
     borderRadius: 6,
+    gap: wp(4),
   },
 
   requestText: {
