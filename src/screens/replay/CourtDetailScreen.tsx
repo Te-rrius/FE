@@ -37,7 +37,7 @@ const CourtDetailScreen = ({ courtId }: CourtDetailProps) => {
         />
       </View>
 
-      {selectedTab === '분석 리포트 다운' ? <ReportDownloadTab /> : <RequestReportTab />}
+      {selectedTab === '분석 리포트 다운' ? <ReportDownloadTab courtId={id} /> : <RequestReportTab />}
     </ScrollView>
   );
 };

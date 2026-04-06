@@ -20,7 +20,6 @@ export default DetailTitle;
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: wp(20),
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp(6),
