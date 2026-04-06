@@ -4,16 +4,23 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 interface CourtSelectorProps {
   courtList?: CourtSelectorDto[];
+  selectedFieldId?: number | null;
   onPress?: (courtId: number) => void;
 }
 
-const FieldSelector = ({ courtList = [], onPress }: CourtSelectorProps) => {
+const FieldSelector = ({ courtList = [], selectedFieldId, onPress }: CourtSelectorProps) => {
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       <View style={styles.row}>
         {courtList.map((court) => (
-          <Pressable key={court.courtId} style={styles.locationcard} onPress={() => onPress?.(court.courtId)}>
-            <Text style={styles.courtName}>{court.name}</Text>
+          <Pressable
+            key={court.courtId}
+            style={[styles.locationcard, selectedFieldId === court.courtId && styles.locationcardActive]}
+            onPress={() => onPress?.(court.courtId)}
+          >
+            <Text style={[styles.courtName, selectedFieldId === court.courtId && styles.courtNameActive]}>
+              {court.name}
+            </Text>
           </Pressable>
         ))}
       </View>
@@ -45,5 +52,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard500',
     lineHeight: hp(20),
     letterSpacing: wp(-0.35),
+  },
+
+  locationcardActive: {
+    borderColor: '#4048F7',
+  },
+
+  courtNameActive: {
+    color: '#212121',
   },
 });

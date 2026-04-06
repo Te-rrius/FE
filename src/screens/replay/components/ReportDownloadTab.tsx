@@ -26,7 +26,10 @@ const DOWN_STEPS = [DownStep1Icon, DownStep2Icon, DownStep3Icon];
 
 const ReportDownloadTab = ({ courtId }: ReportDownloadTabProps) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-
+  const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
+  const [selectedFieldId, setSelectedFieldId] = useState<number | null>(
+    DUMMY_REPORT_COURTS[courtId]?.[0]?.courtId ?? null,
+  );
   return (
     <>
       <DetailToggle title="분석 리포트 받아보기">
@@ -40,11 +43,19 @@ const ReportDownloadTab = ({ courtId }: ReportDownloadTabProps) => {
       <View style={styles.gameInfoWrapper}>
         <View style={styles.infoContainer}>
           <DetailTitle icon={LocationIcon} title="구역명" />
-          <FieldSelector courtList={DUMMY_REPORT_COURTS[courtId] ?? []} />
+          <FieldSelector
+            courtList={DUMMY_REPORT_COURTS[courtId] ?? []}
+            selectedFieldId={selectedFieldId}
+            onPress={setSelectedFieldId}
+          />
         </View>
         <View style={styles.infoContainer}>
           <DetailTitle icon={TimeIcon} title="시간대" />
-          <ReportScheduleList scheduleList={DUMMY_REPORT_SCHEDULES[courtId] ?? []} />
+          <ReportScheduleList
+            scheduleList={selectedFieldId ? (DUMMY_REPORT_SCHEDULES[selectedFieldId] ?? []) : []}
+            selectedScheduleId={selectedScheduleId}
+            onPress={setSelectedScheduleId}
+          />
         </View>
       </View>
     </>

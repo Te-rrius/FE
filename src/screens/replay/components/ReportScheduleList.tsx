@@ -1,10 +1,10 @@
-import { DUMMY_REPORT_SCHEDULES } from '@/constants/reportSchedule';
 import { hp, wp } from '@/utils/dimension';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ReportScheduleDto } from '@/constants/reportSchedule';
 
 interface ReportScheduleListProps {
   scheduleList?: ReportScheduleDto[];
+  selectedScheduleId?: number | null;
   onPress?: (scheduleId: number) => void;
 }
 
@@ -13,14 +13,14 @@ const GAME_TYPE_LABEL = {
   DOUBLE: '복식 경기',
 } as const;
 
-const ReportScheduleList = ({ scheduleList = [], onPress }: ReportScheduleListProps) => {
+const ReportScheduleList = ({ scheduleList = [], selectedScheduleId, onPress }: ReportScheduleListProps) => {
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       <View style={styles.row}>
         {scheduleList.map((schedule) => (
           <Pressable
             key={schedule.scheduleId}
-            style={styles.scheduleCard}
+            style={[styles.scheduleCard, selectedScheduleId === schedule.scheduleId && styles.scheduleCardActive]}
             onPress={() => onPress?.(schedule.scheduleId)}
           >
             <Text style={styles.scheduleHours}>{schedule.hours}</Text>
@@ -53,15 +53,23 @@ const styles = StyleSheet.create({
 
   scheduleHours: {
     color: '#212121',
+    fontFamily: 'Pretendard600',
     fontSize: wp(14),
     fontWeight: '600',
     lineHeight: hp(20),
+    letterSpacing: wp(-0.35),
   },
 
   scheduleCount: {
     color: '#767676',
+    fontFamily: 'Pretendard400',
     fontSize: wp(12),
     fontWeight: '400',
     lineHeight: hp(18),
+    letterSpacing: wp(-0.3),
+  },
+
+  scheduleCardActive: {
+    borderColor: '#4048F7',
   },
 });
