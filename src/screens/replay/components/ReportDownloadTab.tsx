@@ -15,6 +15,8 @@ import DownStep1Icon from '@/assets/images/common/downStep1Icon.svg';
 import DownStep2Icon from '@/assets/images/common/downStep2Icon.svg';
 import DownStep3Icon from '@/assets/images/common/downStep3Icon.svg';
 import ReportDownBanner from '@/assets/images/banner/reportDownBanner.svg';
+import FieldSelector from './FieldSelector';
+import { DUMMY_REPORT_COURTS } from '@/constants/reportTimeSchedule';
 
 interface ReportDownloadTabProps {
   courtId: number;
@@ -38,6 +40,7 @@ const ReportDownloadTab = ({ courtId }: ReportDownloadTabProps) => {
       <View style={styles.gameInfoWrapper}>
         <View style={styles.infoContainer}>
           <DetailTitle icon={LocationIcon} title="구역명" />
+          <FieldSelector courtList={DUMMY_REPORT_COURTS[courtId] ?? []} />
         </View>
         <View style={styles.infoContainer}>
           <DetailTitle icon={TimeIcon} title="시간대" />
