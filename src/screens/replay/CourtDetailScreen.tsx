@@ -1,25 +1,11 @@
-import Divider from '@/components/common/Divider';
 import Tab from '@/components/common/Tab';
 import Header from '@/components/layout/Header';
 import { DUMMY_COURTS } from '@/constants/dummyCourt';
 import { hp, wp } from '@/utils/dimension';
 import { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import DetailToggle from '@/components/common/DetailToggle';
-import StepScroll from '@/components/common/StepScroll';
-
-import DownStep1Icon from '@/assets/images/common/downStep1Icon.svg';
-import DownStep2Icon from '@/assets/images/common/downStep2Icon.svg';
-import DownStep3Icon from '@/assets/images/common/downStep3Icon.svg';
-import ReportDownBanner from '@/assets/images/banner/reportDownBanner.svg';
-
-import RequestStep1Icon from '@/assets/images/common/requestStep1Icon.svg';
-import RequestStep2Icon from '@/assets/images/common/requestStep2Icon.svg';
-import ReportRequestBanner from '@/assets/images/banner/reportRequestBanner.svg';
-import DatePicker from '@/components/common/DatePicker';
-
-const DOWN_STEPS = [DownStep1Icon, DownStep2Icon, DownStep3Icon];
-const REQUEST_STEPS = [RequestStep1Icon, RequestStep2Icon];
+import ReportDownloadTab from './components/ReportDownloadTab';
+import RequestReportTab from './components/RequestReportTab';
 
 interface CourtDetailProps {
   courtId: string | string[];
@@ -27,7 +13,6 @@ interface CourtDetailProps {
 
 const CourtDetailScreen = ({ courtId }: CourtDetailProps) => {
   const [selectedTab, setSelectedTab] = useState('분석 리포트 다운');
-  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const id = Array.isArray(courtId) ? Number(courtId[0]) : Number(courtId);
   const court = DUMMY_COURTS.find((c) => c.courtId === id);
@@ -52,29 +37,7 @@ const CourtDetailScreen = ({ courtId }: CourtDetailProps) => {
         />
       </View>
 
-      {selectedTab === '분석 리포트 다운' ? (
-        <>
-          <DetailToggle key="down" title="분석 리포트 받아보기">
-            <StepScroll images={DOWN_STEPS} />
-          </DetailToggle>
-          <Divider />
-          <View style={styles.bannerWrapper}>
-            <ReportDownBanner />
-          </View>
-          <DatePicker type="download" selectedDate={selectedDate} onSelect={setSelectedDate} />
-        </>
-      ) : (
-        <>
-          <DetailToggle key="request" title="분석 리포트 신청">
-            <StepScroll images={REQUEST_STEPS} />
-          </DetailToggle>
-          <Divider />
-          <View style={styles.bannerWrapper}>
-            <ReportRequestBanner />
-          </View>
-          <DatePicker type="request" selectedDate={selectedDate} onSelect={setSelectedDate} />
-        </>
-      )}
+      {selectedTab === '분석 리포트 다운' ? <ReportDownloadTab /> : <RequestReportTab />}
     </ScrollView>
   );
 };
@@ -120,9 +83,5 @@ const styles = StyleSheet.create({
 
   partition: {
     gap: wp(20),
-  },
-
-  bannerWrapper: {
-    paddingVertical: hp(20),
   },
 });
