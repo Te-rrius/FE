@@ -75,7 +75,11 @@ const RequestReportTab = ({
         </View>
         <DatePicker type="request" selectedDate={selectedDate} onSelect={setSelectedDate} />
         <View style={styles.timeList}>
-          <RequestScheduleList selectedCourtId={selectedCourtId} selectedDate={selectedDate} />
+          <RequestScheduleList
+            selectedCourtId={selectedCourtId}
+            selectedDate={selectedDate}
+            courtName={selectedCourt?.name ?? ''}
+          />
         </View>
       </View>
     </>

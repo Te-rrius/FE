@@ -1,9 +1,12 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { hp, wp } from '@/utils/dimension';
 import { DUMMY_MATCH_SCHEDULES, MatchScheduleDto } from '@/constants/dummySchedule';
+import { useState } from 'react';
+import RequestModal from '@/components/modal/RequestModal';
 
 interface RequestScheduleListProps {
   selectedCourtId: number | null;
+  courtName: string;
   selectedDate: Date;
 }
 
@@ -12,7 +15,10 @@ const formatToKoreanTime = (hours: string) => {
   return startHour < 12 ? '오전' : '오후';
 };
 
-const RequestScheduleList = ({ selectedCourtId, selectedDate }: RequestScheduleListProps) => {
+const RequestScheduleList = ({ selectedCourtId, courtName, selectedDate }: RequestScheduleListProps) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedSchedule, setSelectedSchedule] = useState<MatchScheduleDto | null>(null);
+
   const toDateString = (date: Date) => date.toISOString().split('T')[0];
 
   const scheduleList: MatchScheduleDto[] = selectedCourtId
@@ -45,7 +51,8 @@ const RequestScheduleList = ({ selectedCourtId, selectedDate }: RequestScheduleL
               style={[styles.button, schedule.isRequested && styles.buttonDisabled]}
               disabled={schedule.isRequested}
               onPress={() => {
-                /* 신청 액션 */
+                setSelectedSchedule(schedule);
+                setIsModalVisible(true);
               }}
             >
               <Text style={[styles.buttonText, schedule.isRequested && styles.buttonTextDisabled]}>
@@ -55,6 +62,10 @@ const RequestScheduleList = ({ selectedCourtId, selectedDate }: RequestScheduleL
           </View>
         );
       })}
+
+      {isModalVisible && selectedSchedule && (
+        <RequestModal schedule={selectedSchedule} courtName={courtName} onClose={() => setIsModalVisible(false)} />
+      )}
     </View>
   );
 };
