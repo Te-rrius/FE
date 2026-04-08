@@ -2,41 +2,67 @@ import { StadiumSelectorDto } from '@/constants/reportTimeSchedule';
 import { hp, wp } from '@/utils/dimension';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-interface StadiumSelectorProps {
+import LocationIcon from '@/assets/images/replay/locationIcon.svg';
+
+interface CourtSelectorProps {
   stadiumList?: StadiumSelectorDto[];
   selectedCourtId?: number | null;
   onPress?: (stadiumId: number) => void;
 }
 
-const CourtSelector = ({ stadiumList = [], selectedCourtId, onPress }: StadiumSelectorProps) => {
+const CourtSelector = ({ stadiumList = [], selectedCourtId, onPress }: CourtSelectorProps) => {
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-      <View style={styles.row}>
-        {stadiumList.map((stadium) => (
-          <Pressable
-            key={stadium.stadiumId}
-            style={[styles.locationcard, selectedCourtId === stadium.stadiumId && styles.locationcardActive]}
-            onPress={() => onPress?.(stadium.stadiumId)}
-          >
-            <Text style={[styles.stadiumName, selectedCourtId === stadium.stadiumId && styles.stadiumNameActive]}>
-              {stadium.name}
-            </Text>
-          </Pressable>
-        ))}
+    <View style={styles.wrapper}>
+      <View style={styles.titleRow}>
+        <LocationIcon />
+        <Text style={styles.titleText}>구역명</Text>
       </View>
-    </ScrollView>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={styles.row}>
+          {stadiumList.map((stadium) => (
+            <Pressable
+              key={stadium.stadiumId}
+              style={[styles.locationCard, selectedCourtId === stadium.stadiumId && styles.locationCardActive]}
+              onPress={() => onPress?.(stadium.stadiumId)}
+            >
+              <Text style={[styles.stadiumName, selectedCourtId === stadium.stadiumId && styles.stadiumNameActive]}>
+                {stadium.name}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
 export default CourtSelector;
 
 const styles = StyleSheet.create({
+  wrapper: {
+    gap: hp(8),
+  },
+
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp(6),
+  },
+
+  titleText: {
+    color: '#5C5C5C',
+    fontFamily: 'Pretendard600',
+    fontSize: wp(14),
+    lineHeight: hp(20),
+    letterSpacing: wp(-0.35),
+  },
+
   row: {
     flexDirection: 'row',
     gap: wp(10),
   },
 
-  locationcard: {
+  locationCard: {
     alignSelf: 'flex-start',
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
@@ -54,7 +80,7 @@ const styles = StyleSheet.create({
     letterSpacing: wp(-0.35),
   },
 
-  locationcardActive: {
+  locationCardActive: {
     borderColor: '#4048F7',
   },
 
