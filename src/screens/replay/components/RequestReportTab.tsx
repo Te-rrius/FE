@@ -4,7 +4,6 @@ import Divider from '@/components/common/Divider';
 import StepScroll from '@/components/common/StepScroll';
 import { StyleSheet, Text, View } from 'react-native';
 import { hp, wp } from '@/utils/dimension';
-import CourtSelector from './CourtSelector';
 import { DUMMY_REPORT_COURTS } from '@/constants/dummySchedule';
 
 import ReportRequestBanner from '@/assets/images/banner/reportRequestBanner.svg';
@@ -12,6 +11,9 @@ import RequestStep1Icon from '@/assets/images/common/requestStep1Icon.svg';
 import RequestStep2Icon from '@/assets/images/common/requestStep2Icon.svg';
 import RequestScheduleList from './RequestScheduleList';
 import ScheduleIcon from '@/assets/images/replay/scheduleIcon.svg';
+import { useState } from 'react';
+import Dropdown from '@/components/common/Dropdown';
+import LocationIcon from '@/assets/images/replay/locationIcon.svg';
 
 const REQUEST_STEPS = [RequestStep1Icon, RequestStep2Icon];
 
@@ -30,6 +32,19 @@ const RequestReportTab = ({
   selectedCourtId,
   setSelectedCourtId,
 }: RequestReportTabProps) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const courtList = DUMMY_REPORT_COURTS[stadiumId] ?? [];
+  const selectedCourt = courtList.find((c) => c.courtId === selectedCourtId);
+
+  const selectDropdownHandler = (name: string) => {
+    const court = courtList.find((c) => c.name === name);
+    if (court) {
+      setSelectedCourtId(court.courtId);
+      setIsDropdownOpen(false);
+    }
+  };
+
   return (
     <>
       <DetailToggle title="분석 리포트 신청">
@@ -39,11 +54,18 @@ const RequestReportTab = ({
       <View style={styles.bannerWrapper}>
         <ReportRequestBanner />
       </View>
+      <View style={styles.titleRow}>
+        <LocationIcon />
+        <Text style={styles.titleText}>구역명</Text>
+      </View>
       <View style={styles.courtNameWrapper}>
-        <CourtSelector
-          courtList={DUMMY_REPORT_COURTS[stadiumId] ?? []}
-          selectedCourtId={selectedCourtId}
-          onPress={setSelectedCourtId}
+        <Dropdown
+          width={wp(350)}
+          selectedText={selectedCourt?.name ?? ''}
+          dropdownList={courtList.map((c) => c.name)}
+          isDropdownOpen={isDropdownOpen}
+          setIsDropdownOpen={setIsDropdownOpen}
+          selectDropdownHandler={selectDropdownHandler}
         />
       </View>
       <View style={styles.wrapper}>
@@ -72,6 +94,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: wp(6),
     paddingHorizontal: wp(20),
+    paddingTop: wp(24),
   },
 
   titleText: {
@@ -88,7 +111,7 @@ const styles = StyleSheet.create({
 
   courtNameWrapper: {
     paddingTop: hp(24),
-    paddingBottom: hp(32),
+    paddingBottom: hp(8),
     paddingHorizontal: wp(20),
     gap: hp(32),
   },
