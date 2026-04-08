@@ -7,9 +7,9 @@ import MainBanner from '@/assets/images/banner/mainBanner.svg';
 import Divider from '@/components/common/Divider';
 import SearchBar from '@/components/common/SearchBar';
 import Dropdown from '@/components/common/Dropdown';
-import CourtList from './components/CourtList';
-import { DUMMY_COURTS } from '@/constants/dummyCourt';
 import useBannerSize from '@/utils/bannerSize';
+import { DUMMY_COURTS } from '@/constants/dummyStadium';
+import StadiumList from './components/CourtList';
 
 const tabs = [
   { key: 'GENERAL', label: '구장' },
@@ -59,12 +59,12 @@ const MainScreen = () => {
     setRegionDropdownOpen(false);
   };
 
-  const filteredType = DUMMY_COURTS.filter((court) => court.type === activeTab);
+  const filteredType = DUMMY_COURTS.filter((stadium) => stadium.type === activeTab);
 
-  const cityDropdownList = ['전체 보기', ...new Set(filteredType.map((court) => court.location.split(' ')[0]))];
+  const cityDropdownList = ['전체 보기', ...new Set(filteredType.map((stadium) => stadium.location.split(' ')[0]))];
 
-  const regionDropdownList = filteredType.reduce<Record<string, string[]>>((acc, court) => {
-    const parts = court.location.split(' ');
+  const regionDropdownList = filteredType.reduce<Record<string, string[]>>((acc, stadium) => {
+    const parts = stadium.location.split(' ');
     const city = parts[0];
     const region = parts[1];
     if (!acc[city]) acc[city] = [];
@@ -111,9 +111,9 @@ const MainScreen = () => {
               />
             </View>
 
-            <View style={styles.courtListWrapper}>
-              <CourtList
-                courtList={filteredType}
+            <View style={styles.stadiumListWrapper}>
+              <StadiumList
+                stadiumList={filteredType}
                 searchValue={searchValue}
                 selectedCity={city}
                 selectedRegion={region}
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     gap: wp(8),
   },
 
-  courtListWrapper: {
+  stadiumListWrapper: {
     paddingTop: hp(11),
     gap: hp(4),
   },

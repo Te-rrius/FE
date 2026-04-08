@@ -1,14 +1,14 @@
 import ScreenContainer from '@/components/layout/ScreenContainer';
-import CourtDetailScreen from '@/screens/replay/CourtDetailScreen';
+import StadiumDetailScreen from '@/screens/replay/StadiumDetailScreen';
 
 import { useLocalSearchParams } from 'expo-router';
 
 const Detail = () => {
-  const { courtId } = useLocalSearchParams();
+  const { stadiumId } = useLocalSearchParams();
 
   return (
     <ScreenContainer>
-      <CourtDetailScreen courtId={courtId} />
+      <StadiumDetailScreen stadiumId={stadiumId} />
     </ScreenContainer>
   );
 };

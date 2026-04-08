@@ -1,6 +1,6 @@
 import Tab from '@/components/common/Tab';
 import Header from '@/components/layout/Header';
-import { DUMMY_COURTS } from '@/constants/dummyCourt';
+import { DUMMY_COURTS } from '@/constants/dummyStadium';
 import { DUMMY_REPORT_COURTS } from '@/constants/reportTimeSchedule';
 import { hp, wp } from '@/utils/dimension';
 import { useState } from 'react';
@@ -8,29 +8,31 @@ import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import ReportDownloadTab from './components/ReportDownloadTab';
 import RequestReportTab from './components/RequestReportTab';
 
-interface CourtDetailProps {
-  courtId: string | string[];
+interface StadiumDetailProps {
+  stadiumId: string | string[];
 }
 
-const CourtDetailScreen = ({ courtId }: CourtDetailProps) => {
+const StadiumDetailScreen = ({ stadiumId }: StadiumDetailProps) => {
   const [selectedTab, setSelectedTab] = useState('분석 리포트 다운');
 
-  const id = Array.isArray(courtId) ? Number(courtId[0]) : Number(courtId);
-  const court = DUMMY_COURTS.find((c) => c.courtId === id);
+  const id = Array.isArray(stadiumId) ? Number(stadiumId[0]) : Number(stadiumId);
+  const stadium = DUMMY_COURTS.find((c) => c.stadiumId === id);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedFieldId, setSelectedFieldId] = useState<number | null>(DUMMY_REPORT_COURTS[id]?.[0]?.courtId ?? null);
+  const [selectedCourtId, setSelectedCourtId] = useState<number | null>(
+    DUMMY_REPORT_COURTS[id]?.[0]?.stadiumId ?? null,
+  );
 
-  if (!court) return null;
+  if (!stadium) return null;
 
   return (
     <ScrollView>
       <Header />
-      <Image source={{ uri: court.image }} style={styles.courtImg} />
-      <View style={styles.courtDetailContainer}>
-        <View style={styles.courtInfo}>
-          <Text style={styles.nameText}>{court.name}</Text>
-          <Text style={styles.locationText}>{court.location}</Text>
+      <Image source={{ uri: stadium.image }} style={styles.stadiumImg} />
+      <View style={styles.stadiumDetailContainer}>
+        <View style={styles.stadiumInfo}>
+          <Text style={styles.nameText}>{stadium.name}</Text>
+          <Text style={styles.locationText}>{stadium.location}</Text>
         </View>
         <Tab
           tabs={[
@@ -43,33 +45,33 @@ const CourtDetailScreen = ({ courtId }: CourtDetailProps) => {
 
       {selectedTab === '분석 리포트 다운' ? (
         <ReportDownloadTab
-          courtId={id}
+          stadiumId={id}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
-          selectedFieldId={selectedFieldId}
-          setSelectedFieldId={setSelectedFieldId}
+          selectedCourtId={selectedCourtId}
+          setSelectedCourtId={setSelectedCourtId}
         />
       ) : (
         <RequestReportTab
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
-          selectedFieldId={selectedFieldId}
-          setSelectedFieldId={setSelectedFieldId}
+          selectedCourtId={selectedCourtId}
+          setSelectedCourtId={setSelectedCourtId}
         />
       )}
     </ScrollView>
   );
 };
 
-export default CourtDetailScreen;
+export default StadiumDetailScreen;
 
 const styles = StyleSheet.create({
-  courtImg: {
+  stadiumImg: {
     width: '100%',
     height: hp(220),
   },
 
-  courtDetailContainer: {
+  stadiumDetailContainer: {
     marginTop: -hp(24),
     marginBottom: hp(16),
     backgroundColor: '#FFFFFF',
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
     gap: hp(20),
   },
 
-  courtInfo: {
+  stadiumInfo: {
     gap: hp(4),
     paddingHorizontal: wp(20),
   },

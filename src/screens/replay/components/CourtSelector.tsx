@@ -1,25 +1,25 @@
-import { CourtSelectorDto } from '@/constants/reportTimeSchedule';
+import { StadiumSelectorDto } from '@/constants/reportTimeSchedule';
 import { hp, wp } from '@/utils/dimension';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-interface CourtSelectorProps {
-  courtList?: CourtSelectorDto[];
-  selectedFieldId?: number | null;
-  onPress?: (courtId: number) => void;
+interface StadiumSelectorProps {
+  stadiumList?: StadiumSelectorDto[];
+  selectedCourtId?: number | null;
+  onPress?: (stadiumId: number) => void;
 }
 
-const FieldSelector = ({ courtList = [], selectedFieldId, onPress }: CourtSelectorProps) => {
+const CourtSelector = ({ stadiumList = [], selectedCourtId, onPress }: StadiumSelectorProps) => {
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       <View style={styles.row}>
-        {courtList.map((court) => (
+        {stadiumList.map((stadium) => (
           <Pressable
-            key={court.courtId}
-            style={[styles.locationcard, selectedFieldId === court.courtId && styles.locationcardActive]}
-            onPress={() => onPress?.(court.courtId)}
+            key={stadium.stadiumId}
+            style={[styles.locationcard, selectedCourtId === stadium.stadiumId && styles.locationcardActive]}
+            onPress={() => onPress?.(stadium.stadiumId)}
           >
-            <Text style={[styles.courtName, selectedFieldId === court.courtId && styles.courtNameActive]}>
-              {court.name}
+            <Text style={[styles.stadiumName, selectedCourtId === stadium.stadiumId && styles.stadiumNameActive]}>
+              {stadium.name}
             </Text>
           </Pressable>
         ))}
@@ -28,7 +28,7 @@ const FieldSelector = ({ courtList = [], selectedFieldId, onPress }: CourtSelect
   );
 };
 
-export default FieldSelector;
+export default CourtSelector;
 
 const styles = StyleSheet.create({
   row: {
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     paddingVertical: hp(11),
   },
 
-  courtName: {
+  stadiumName: {
     color: '#767676',
     fontSize: wp(14),
     fontFamily: 'Pretendard500',
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     borderColor: '#4048F7',
   },
 
-  courtNameActive: {
+  stadiumNameActive: {
     color: '#212121',
   },
 });

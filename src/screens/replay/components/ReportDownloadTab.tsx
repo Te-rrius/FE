@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import DatePicker from '@/components/common/DatePicker';
 import DetailToggle from '@/components/common/DetailToggle';
 import Divider from '@/components/common/Divider';
@@ -7,7 +6,6 @@ import { StyleSheet, View } from 'react-native';
 import { hp } from '@/utils/dimension';
 import DetailTitle from './DetailTitle';
 import ReportScheduleList from './ReportScheduleList';
-import FieldSelector from './FieldSelector';
 import { DUMMY_REPORT_COURTS } from '@/constants/reportTimeSchedule';
 
 import LocationIcon from '@/assets/images/replay/locationIcon.svg';
@@ -16,23 +14,24 @@ import DownStep1Icon from '@/assets/images/common/downStep1Icon.svg';
 import DownStep2Icon from '@/assets/images/common/downStep2Icon.svg';
 import DownStep3Icon from '@/assets/images/common/downStep3Icon.svg';
 import ReportDownBanner from '@/assets/images/banner/reportDownBanner.svg';
+import CourtSelector from './CourtSelector';
 
 interface ReportDownloadTabProps {
-  courtId: number;
+  stadiumId: number;
   selectedDate: Date;
   setSelectedDate: (date: Date) => void;
-  selectedFieldId: number | null;
-  setSelectedFieldId: (fieldId: number | null) => void;
+  selectedCourtId: number | null;
+  setSelectedCourtId: (courtId: number | null) => void;
 }
 
 const DOWN_STEPS = [DownStep1Icon, DownStep2Icon, DownStep3Icon];
 
 const ReportDownloadTab = ({
-  courtId,
+  stadiumId,
   selectedDate,
   setSelectedDate,
-  selectedFieldId,
-  setSelectedFieldId,
+  selectedCourtId,
+  setSelectedCourtId,
 }: ReportDownloadTabProps) => {
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
@@ -51,16 +50,16 @@ const ReportDownloadTab = ({
       <View style={styles.gameInfoWrapper}>
         <View style={styles.infoContainer}>
           <DetailTitle icon={LocationIcon} title="구역명" />
-          <FieldSelector
-            courtList={DUMMY_REPORT_COURTS[courtId] ?? []}
-            selectedFieldId={selectedFieldId}
-            onPress={setSelectedFieldId}
+          <CourtSelector
+            stadiumList={DUMMY_REPORT_COURTS[stadiumId] ?? []}
+            selectedCourtId={selectedCourtId}
+            onPress={setSelectedCourtId}
           />
         </View>
         <View style={styles.infoContainer}>
           <DetailTitle icon={TimeIcon} title="시간대" />
           <ReportScheduleList
-            selectedFieldId={selectedFieldId}
+            selectedCourtId={selectedCourtId}
             selectedDate={selectedDate}
             onPress={() => {
               /* 신청 화면 이동 */

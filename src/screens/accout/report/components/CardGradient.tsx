@@ -1,6 +1,6 @@
 import { hp, wp } from '@/utils/dimension';
 import { LinearGradient } from 'expo-linear-gradient';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 type CardGradientProps = {
   width?: number;

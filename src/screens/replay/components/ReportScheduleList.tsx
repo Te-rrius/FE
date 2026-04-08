@@ -6,7 +6,7 @@ import { DUMMY_REPORT_SCHEDULES, ReportScheduleDto } from '@/constants/reportSch
 import RequestReportInfo from './RequestReportInfo';
 
 interface ReportScheduleListProps {
-  selectedFieldId: number | null;
+  selectedCourtId: number | null;
   selectedDate: Date;
   onPress: () => void;
 }
@@ -16,15 +16,15 @@ const GAME_TYPE_LABEL = {
   DOUBLE: '복식 경기',
 } as const;
 
-const ReportScheduleList = ({ selectedFieldId, selectedDate, onPress }: ReportScheduleListProps) => {
+const ReportScheduleList = ({ selectedCourtId, selectedDate, onPress }: ReportScheduleListProps) => {
   // 선택된 스케줄 상태
   const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
 
   const toDateString = (date: Date) => date.toISOString().split('T')[0];
 
   // 선택된 구역 + 날짜로 더미 데이터 필터링
-  const scheduleList: ReportScheduleDto[] = selectedFieldId
-    ? (DUMMY_REPORT_SCHEDULES[selectedFieldId] ?? []).filter((s) => s.date === toDateString(selectedDate))
+  const scheduleList: ReportScheduleDto[] = selectedCourtId
+    ? (DUMMY_REPORT_SCHEDULES[selectedCourtId] ?? []).filter((s) => s.date === toDateString(selectedDate))
     : [];
 
   // 리포트 존재 여부 판단

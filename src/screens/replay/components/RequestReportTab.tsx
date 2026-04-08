@@ -9,22 +9,21 @@ import ReportRequestBanner from '@/assets/images/banner/reportRequestBanner.svg'
 import RequestStep1Icon from '@/assets/images/common/requestStep1Icon.svg';
 import RequestStep2Icon from '@/assets/images/common/requestStep2Icon.svg';
 import { hp } from '@/utils/dimension';
-import { useState } from 'react';
 
 const REQUEST_STEPS = [RequestStep1Icon, RequestStep2Icon];
 
 interface RequestReportTabProps {
   selectedDate: Date;
   setSelectedDate: (date: Date) => void;
-  selectedFieldId: number | null;
-  setSelectedFieldId: (fieldId: number | null) => void;
+  selectedCourtId: number | null;
+  setSelectedCourtId: (courtId: number | null) => void;
 }
 
 const RequestReportTab = ({
   selectedDate,
   setSelectedDate,
-  selectedFieldId,
-  setSelectedFieldId,
+  selectedCourtId,
+  setSelectedCourtId,
 }: RequestReportTabProps) => {
   return (
     <>
