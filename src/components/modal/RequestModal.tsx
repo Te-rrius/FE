@@ -2,6 +2,8 @@ import { MatchScheduleDto } from '@/constants/dummySchedule';
 import { hp, wp } from '@/utils/dimension';
 import { Modal, StyleSheet, Text, View } from 'react-native';
 import ButtonGroup from '../common/ButtonGroup';
+import { useRouter } from 'expo-router';
+import useAuthStore from '@/store/authStore';
 
 import LocationIcon from '@/assets/images/replay/locationIcon.svg';
 import ScheduleIcon from '@/assets/images/replay/scheduleIcon.svg';
@@ -16,6 +18,19 @@ interface RequestModalProps {
 const formatDate = (date: string) => date.replace(/-/g, '.');
 
 const RequestModal = ({ schedule, courtName, onClose }: RequestModalProps) => {
+  const router = useRouter();
+  const { token, openLoginModal } = useAuthStore();
+
+  const handleRequest = () => {
+    if (!token) {
+      onClose();
+      router.replace('/');
+      openLoginModal();
+    } else {
+      // 신청 로직
+    }
+  };
+
   return (
     <Modal visible={true} transparent animationType="fade" onRequestClose={onClose}>
       <View style={styles.overlay}>
@@ -40,7 +55,13 @@ const RequestModal = ({ schedule, courtName, onClose }: RequestModalProps) => {
               </View>
             </View>
           </View>
-          <ButtonGroup leftText="취소" rightText="신청하기" onLeftPress={onClose} leftWidth={wp(88)} />
+          <ButtonGroup
+            leftText="취소"
+            rightText="신청하기"
+            onLeftPress={onClose}
+            onRightPress={handleRequest}
+            leftWidth={wp(88)}
+          />
         </View>
       </View>
     </Modal>
