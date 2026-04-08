@@ -6,12 +6,12 @@ import { StyleSheet, View } from 'react-native';
 import { hp, wp } from '@/utils/dimension';
 import ReportScheduleList from './ReportScheduleList';
 import CourtSelector from './CourtSelector';
-import { DUMMY_REPORT_COURTS } from '@/constants/reportTimeSchedule';
 
 import DownStep1Icon from '@/assets/images/common/downStep1Icon.svg';
 import DownStep2Icon from '@/assets/images/common/downStep2Icon.svg';
 import DownStep3Icon from '@/assets/images/common/downStep3Icon.svg';
 import ReportDownBanner from '@/assets/images/banner/reportDownBanner.svg';
+import { DUMMY_REPORT_COURTS } from '@/constants/dummySchedule';
 
 interface ReportDownloadTabProps {
   stadiumId: number;
@@ -42,7 +42,7 @@ const ReportDownloadTab = ({
       <DatePicker type="download" selectedDate={selectedDate} onSelect={setSelectedDate} />
       <View style={styles.gameInfoWrapper}>
         <CourtSelector
-          stadiumList={DUMMY_REPORT_COURTS[stadiumId] ?? []}
+          courtList={DUMMY_REPORT_COURTS[stadiumId] ?? []}
           selectedCourtId={selectedCourtId}
           onPress={setSelectedCourtId}
         />

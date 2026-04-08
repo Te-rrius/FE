@@ -1,12 +1,12 @@
 import Tab from '@/components/common/Tab';
 import Header from '@/components/layout/Header';
 import { DUMMY_COURTS } from '@/constants/dummyStadium';
-import { DUMMY_REPORT_COURTS } from '@/constants/reportTimeSchedule';
 import { hp, wp } from '@/utils/dimension';
 import { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import ReportDownloadTab from './components/ReportDownloadTab';
 import RequestReportTab from './components/RequestReportTab';
+import { DUMMY_REPORT_COURTS } from '@/constants/dummySchedule';
 
 interface StadiumDetailProps {
   stadiumId: string | string[];
@@ -19,9 +19,7 @@ const StadiumDetailScreen = ({ stadiumId }: StadiumDetailProps) => {
   const stadium = DUMMY_COURTS.find((c) => c.stadiumId === id);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedCourtId, setSelectedCourtId] = useState<number | null>(
-    DUMMY_REPORT_COURTS[id]?.[0]?.stadiumId ?? null,
-  );
+  const [selectedCourtId, setSelectedCourtId] = useState<number | null>(DUMMY_REPORT_COURTS[id]?.[0]?.courtId ?? null);
 
   if (!stadium) return null;
 

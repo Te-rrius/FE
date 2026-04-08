@@ -1,16 +1,16 @@
-import { StadiumSelectorDto } from '@/constants/reportTimeSchedule';
+import { CourtDto } from '@/constants/dummySchedule';
 import { hp, wp } from '@/utils/dimension';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import LocationIcon from '@/assets/images/replay/locationIcon.svg';
 
 interface CourtSelectorProps {
-  stadiumList?: StadiumSelectorDto[];
+  courtList?: CourtDto[];
   selectedCourtId?: number | null;
-  onPress?: (stadiumId: number) => void;
+  onPress?: (courtId: number) => void;
 }
 
-const CourtSelector = ({ stadiumList = [], selectedCourtId, onPress }: CourtSelectorProps) => {
+const CourtSelector = ({ courtList = [], selectedCourtId, onPress }: CourtSelectorProps) => {
   return (
     <View style={styles.wrapper}>
       <View style={styles.titleRow}>
@@ -19,14 +19,14 @@ const CourtSelector = ({ stadiumList = [], selectedCourtId, onPress }: CourtSele
       </View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.row}>
-          {stadiumList.map((stadium) => (
+          {courtList.map((court) => (
             <Pressable
-              key={stadium.stadiumId}
-              style={[styles.locationCard, selectedCourtId === stadium.stadiumId && styles.locationCardActive]}
-              onPress={() => onPress?.(stadium.stadiumId)}
+              key={court.courtId}
+              style={[styles.locationCard, selectedCourtId === court.courtId && styles.locationCardActive]}
+              onPress={() => onPress?.(court.courtId)}
             >
-              <Text style={[styles.stadiumName, selectedCourtId === stadium.stadiumId && styles.stadiumNameActive]}>
-                {stadium.name}
+              <Text style={[styles.courtName, selectedCourtId === court.courtId && styles.courtNameActive]}>
+                {court.name}
               </Text>
             </Pressable>
           ))}
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     paddingVertical: hp(11),
   },
 
-  stadiumName: {
+  courtName: {
     color: '#767676',
     fontSize: wp(14),
     fontFamily: 'Pretendard500',
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     borderColor: '#4048F7',
   },
 
-  stadiumNameActive: {
+  courtNameActive: {
     color: '#212121',
   },
 });

@@ -2,10 +2,10 @@ import { StyleSheet, View } from 'react-native';
 import { Pressable, ScrollView, Text } from 'react-native';
 import { useState } from 'react';
 import { hp, wp } from '@/utils/dimension';
-import { DUMMY_REPORT_SCHEDULES, ReportScheduleDto } from '@/constants/reportSchedule';
 import RequestReportInfo from './RequestReportInfo';
 
 import TimeIcon from '@/assets/images/replay/timeIcon.svg';
+import { DUMMY_REPORT_SCHEDULES, ReportScheduleDto } from '@/constants/dummySchedule';
 
 interface ReportScheduleListProps {
   selectedCourtId: number | null;
