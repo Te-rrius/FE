@@ -48,6 +48,7 @@ const StadiumDetailScreen = ({ stadiumId }: StadiumDetailProps) => {
           setSelectedDate={setSelectedDate}
           selectedCourtId={selectedCourtId}
           setSelectedCourtId={setSelectedCourtId}
+          goToRequestTab={() => setSelectedTab('분석 리포트 신청')}
         />
       ) : (
         <RequestReportTab

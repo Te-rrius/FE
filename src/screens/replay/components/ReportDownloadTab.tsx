@@ -19,6 +19,7 @@ interface ReportDownloadTabProps {
   setSelectedDate: (date: Date) => void;
   selectedCourtId: number | null;
   setSelectedCourtId: (courtId: number | null) => void;
+  goToRequestTab: () => void;
 }
 
 const DOWN_STEPS = [DownStep1Icon, DownStep2Icon, DownStep3Icon];
@@ -29,6 +30,7 @@ const ReportDownloadTab = ({
   setSelectedDate,
   selectedCourtId,
   setSelectedCourtId,
+  goToRequestTab,
 }: ReportDownloadTabProps) => {
   const reportDates = selectedCourtId
     ? (DUMMY_REPORT_SCHEDULES[selectedCourtId] ?? []).map((s) => new Date(s.date))
@@ -50,13 +52,7 @@ const ReportDownloadTab = ({
           selectedCourtId={selectedCourtId}
           onPress={setSelectedCourtId}
         />
-        <ReportScheduleList
-          selectedCourtId={selectedCourtId}
-          selectedDate={selectedDate}
-          onPress={() => {
-            /* 신청 화면 이동 */
-          }}
-        />
+        <ReportScheduleList selectedCourtId={selectedCourtId} selectedDate={selectedDate} onPress={goToRequestTab} />
       </View>
     </>
   );
