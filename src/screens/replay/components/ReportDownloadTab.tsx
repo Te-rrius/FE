@@ -11,7 +11,7 @@ import DownStep1Icon from '@/assets/images/common/downStep1Icon.svg';
 import DownStep2Icon from '@/assets/images/common/downStep2Icon.svg';
 import DownStep3Icon from '@/assets/images/common/downStep3Icon.svg';
 import ReportDownBanner from '@/assets/images/banner/reportDownBanner.svg';
-import { DUMMY_REPORT_COURTS } from '@/constants/dummySchedule';
+import { DUMMY_REPORT_COURTS, DUMMY_REPORT_SCHEDULES } from '@/constants/dummySchedule';
 
 interface ReportDownloadTabProps {
   stadiumId: number;
@@ -30,6 +30,10 @@ const ReportDownloadTab = ({
   selectedCourtId,
   setSelectedCourtId,
 }: ReportDownloadTabProps) => {
+  const reportDates = selectedCourtId
+    ? (DUMMY_REPORT_SCHEDULES[selectedCourtId] ?? []).map((s) => new Date(s.date))
+    : [];
+
   return (
     <>
       <DetailToggle title="분석 리포트 받아보기">
@@ -39,7 +43,7 @@ const ReportDownloadTab = ({
       <View style={styles.bannerWrapper}>
         <ReportDownBanner />
       </View>
-      <DatePicker type="download" selectedDate={selectedDate} onSelect={setSelectedDate} />
+      <DatePicker type="download" selectedDate={selectedDate} onSelect={setSelectedDate} highlightDates={reportDates} />
       <View style={styles.gameInfoWrapper}>
         <CourtSelector
           courtList={DUMMY_REPORT_COURTS[stadiumId] ?? []}
