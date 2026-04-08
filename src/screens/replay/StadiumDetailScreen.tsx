@@ -52,6 +52,7 @@ const StadiumDetailScreen = ({ stadiumId }: StadiumDetailProps) => {
         />
       ) : (
         <RequestReportTab
+          stadiumId={id}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
           selectedCourtId={selectedCourtId}

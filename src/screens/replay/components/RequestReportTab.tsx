@@ -2,17 +2,21 @@ import DatePicker from '@/components/common/DatePicker';
 import DetailToggle from '@/components/common/DetailToggle';
 import Divider from '@/components/common/Divider';
 import StepScroll from '@/components/common/StepScroll';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { hp, wp } from '@/utils/dimension';
+import CourtSelector from './CourtSelector';
+import { DUMMY_REPORT_COURTS } from '@/constants/dummySchedule';
 
 import ReportRequestBanner from '@/assets/images/banner/reportRequestBanner.svg';
-
 import RequestStep1Icon from '@/assets/images/common/requestStep1Icon.svg';
 import RequestStep2Icon from '@/assets/images/common/requestStep2Icon.svg';
-import { hp } from '@/utils/dimension';
+import RequestScheduleList from './RequestScheduleList';
+import ScheduleIcon from '@/assets/images/replay/scheduleIcon.svg';
 
 const REQUEST_STEPS = [RequestStep1Icon, RequestStep2Icon];
 
 interface RequestReportTabProps {
+  stadiumId: number;
   selectedDate: Date;
   setSelectedDate: (date: Date) => void;
   selectedCourtId: number | null;
@@ -20,6 +24,7 @@ interface RequestReportTabProps {
 }
 
 const RequestReportTab = ({
+  stadiumId,
   selectedDate,
   setSelectedDate,
   selectedCourtId,
@@ -34,7 +39,23 @@ const RequestReportTab = ({
       <View style={styles.bannerWrapper}>
         <ReportRequestBanner />
       </View>
-      <DatePicker type="request" selectedDate={selectedDate} onSelect={setSelectedDate} />
+      <View style={styles.courtNameWrapper}>
+        <CourtSelector
+          courtList={DUMMY_REPORT_COURTS[stadiumId] ?? []}
+          selectedCourtId={selectedCourtId}
+          onPress={setSelectedCourtId}
+        />
+      </View>
+      <View style={styles.wrapper}>
+        <View style={styles.titleRow}>
+          <ScheduleIcon />
+          <Text style={styles.titleText}>날짜 & 시간</Text>
+        </View>
+        <DatePicker type="request" selectedDate={selectedDate} onSelect={setSelectedDate} />
+        <View style={styles.timeList}>
+          <RequestScheduleList selectedCourtId={selectedCourtId} selectedDate={selectedDate} />
+        </View>
+      </View>
     </>
   );
 };
@@ -42,7 +63,37 @@ const RequestReportTab = ({
 export default RequestReportTab;
 
 const styles = StyleSheet.create({
+  wrapper: {
+    gap: hp(12),
+  },
+
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp(6),
+    paddingHorizontal: wp(20),
+  },
+
+  titleText: {
+    color: '#5C5C5C',
+    fontFamily: 'Pretendard600',
+    fontSize: wp(14),
+    lineHeight: hp(20),
+    letterSpacing: wp(-0.35),
+  },
+
   bannerWrapper: {
-    paddingVertical: hp(20),
+    paddingTop: hp(20),
+  },
+
+  courtNameWrapper: {
+    paddingTop: hp(24),
+    paddingBottom: hp(32),
+    paddingHorizontal: wp(20),
+    gap: hp(32),
+  },
+
+  timeList: {
+    paddingHorizontal: wp(20),
   },
 });
