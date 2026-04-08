@@ -13,9 +13,19 @@ import { useState } from 'react';
 
 const REQUEST_STEPS = [RequestStep1Icon, RequestStep2Icon];
 
-const RequestReportTab = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+interface RequestReportTabProps {
+  selectedDate: Date;
+  setSelectedDate: (date: Date) => void;
+  selectedFieldId: number | null;
+  setSelectedFieldId: (fieldId: number | null) => void;
+}
 
+const RequestReportTab = ({
+  selectedDate,
+  setSelectedDate,
+  selectedFieldId,
+  setSelectedFieldId,
+}: RequestReportTabProps) => {
   return (
     <>
       <DetailToggle title="분석 리포트 신청">

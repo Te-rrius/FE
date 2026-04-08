@@ -1,6 +1,7 @@
 import Tab from '@/components/common/Tab';
 import Header from '@/components/layout/Header';
 import { DUMMY_COURTS } from '@/constants/dummyCourt';
+import { DUMMY_REPORT_COURTS } from '@/constants/reportTimeSchedule';
 import { hp, wp } from '@/utils/dimension';
 import { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -16,6 +17,9 @@ const CourtDetailScreen = ({ courtId }: CourtDetailProps) => {
 
   const id = Array.isArray(courtId) ? Number(courtId[0]) : Number(courtId);
   const court = DUMMY_COURTS.find((c) => c.courtId === id);
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedFieldId, setSelectedFieldId] = useState<number | null>(DUMMY_REPORT_COURTS[id]?.[0]?.courtId ?? null);
 
   if (!court) return null;
 
@@ -37,7 +41,22 @@ const CourtDetailScreen = ({ courtId }: CourtDetailProps) => {
         />
       </View>
 
-      {selectedTab === '분석 리포트 다운' ? <ReportDownloadTab courtId={id} /> : <RequestReportTab />}
+      {selectedTab === '분석 리포트 다운' ? (
+        <ReportDownloadTab
+          courtId={id}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          selectedFieldId={selectedFieldId}
+          setSelectedFieldId={setSelectedFieldId}
+        />
+      ) : (
+        <RequestReportTab
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          selectedFieldId={selectedFieldId}
+          setSelectedFieldId={setSelectedFieldId}
+        />
+      )}
     </ScrollView>
   );
 };
@@ -79,9 +98,5 @@ const styles = StyleSheet.create({
     fontSize: wp(14),
     lineHeight: hp(20),
     letterSpacing: wp(-0.35),
-  },
-
-  partition: {
-    gap: wp(20),
   },
 });
