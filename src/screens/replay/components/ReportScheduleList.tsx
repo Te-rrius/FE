@@ -21,7 +21,13 @@ const GAME_TYPE_LABEL = {
 const ReportScheduleList = ({ selectedCourtId, selectedDate, onPress }: ReportScheduleListProps) => {
   const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
 
-  const toDateString = (date: Date) => date.toISOString().split('T')[0];
+  // 로컬 시간 기준 포맷팅
+  const toDateString = (date: Date) => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  };
 
   const scheduleList: ReportScheduleDto[] = selectedCourtId
     ? (DUMMY_REPORT_SCHEDULES[selectedCourtId] ?? []).filter((s) => s.date === toDateString(selectedDate))
