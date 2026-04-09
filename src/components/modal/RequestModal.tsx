@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
   },
 
   modalContainer: {
+    width: wp(340),
     padding: wp(20),
     flexDirection: 'column',
     justifyContent: 'center',

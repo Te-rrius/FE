@@ -33,7 +33,6 @@ export default ButtonGroup;
 
 const styles = StyleSheet.create({
   container: {
-    width: wp(300),
     flexDirection: 'row',
     gap: wp(8),
   },
