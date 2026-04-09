@@ -3,6 +3,7 @@ import { hp, wp } from '@/utils/dimension';
 import { DUMMY_MATCH_SCHEDULES, MatchScheduleDto } from '@/constants/dummySchedule';
 import { useState } from 'react';
 import RequestModal from '@/components/modal/RequestModal';
+import useAuthStore from '@/store/authStore';
 
 interface RequestScheduleListProps {
   selectedCourtId: number | null;
@@ -16,6 +17,8 @@ const formatToKoreanTime = (hours: string) => {
 };
 
 const RequestScheduleList = ({ selectedCourtId, courtName, selectedDate }: RequestScheduleListProps) => {
+  const { token, openLoginModal } = useAuthStore();
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState<MatchScheduleDto | null>(null);
 
@@ -51,6 +54,10 @@ const RequestScheduleList = ({ selectedCourtId, courtName, selectedDate }: Reque
               style={[styles.button, schedule.isRequested && styles.buttonDisabled]}
               disabled={schedule.isRequested}
               onPress={() => {
+                if (!token) {
+                  openLoginModal();
+                  return;
+                }
                 setSelectedSchedule(schedule);
                 setIsModalVisible(true);
               }}

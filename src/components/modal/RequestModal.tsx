@@ -24,10 +24,10 @@ const RequestModal = ({ schedule, courtName, onClose }: RequestModalProps) => {
   const handleRequest = () => {
     if (!token) {
       onClose();
-      router.replace('/');
-      openLoginModal();
     } else {
       // 신청 로직
+      onClose();
+      router.push('/request-complete');
     }
   };
 
