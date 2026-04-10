@@ -5,6 +5,7 @@ import { useState } from 'react';
 import RequestModal from '@/components/modal/RequestModal';
 import useAuthStore from '@/store/authStore';
 import useRequestStore from '@/store/requestStore';
+import { useQuery } from '@tanstack/react-query';
 
 interface RequestScheduleListProps {
   selectedCourtId: number | null;
@@ -12,23 +13,33 @@ interface RequestScheduleListProps {
   selectedDate: Date;
 }
 
+// 시작 시간 기준 오전/오후
 const formatToKoreanTime = (hours: string) => {
   const startHour = parseInt(hours.split('~')[0].split(':')[0]);
   return startHour < 12 ? '오전' : '오후';
 };
 
+// 수정 예정
+const fetchMatchSchedules = async (courtId: number) => DUMMY_MATCH_SCHEDULES[courtId] ?? [];
+
 const RequestScheduleList = ({ selectedCourtId, courtName, selectedDate }: RequestScheduleListProps) => {
   const { token, openLoginModal } = useAuthStore();
+  const { requestedIds, addRequestedId } = useRequestStore();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState<MatchScheduleDto | null>(null);
-  const { requestedIds, addRequestedId } = useRequestStore();
 
   const toDateString = (date: Date) => date.toISOString().split('T')[0];
 
-  const scheduleList: MatchScheduleDto[] = selectedCourtId
-    ? (DUMMY_MATCH_SCHEDULES[selectedCourtId] ?? []).filter((s) => s.date === toDateString(selectedDate))
-    : [];
+  // 선택된 코트의 경기 시간 목록 조회
+  const { data: allSchedules = [] } = useQuery({
+    queryKey: ['matchSchedules', selectedCourtId],
+    queryFn: () => fetchMatchSchedules(selectedCourtId!),
+    enabled: selectedCourtId !== null,
+  });
+
+  // 선택된 날짜에 해당하는 일정만 필터링
+  const scheduleList = allSchedules.filter((s) => s.date === toDateString(selectedDate));
 
   const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
   const day = String(selectedDate.getDate()).padStart(2, '0');
@@ -37,7 +48,7 @@ const RequestScheduleList = ({ selectedCourtId, courtName, selectedDate }: Reque
     <View>
       {scheduleList.map((schedule) => {
         const [startTime, endTime] = schedule.hours.split('~');
-        const isRequested = schedule.isRequested || requestedIds.has(schedule.scheduleId); // ✅ 여기
+        const isRequested = schedule.isRequested || requestedIds.has(schedule.scheduleId);
 
         return (
           <View key={schedule.scheduleId} style={styles.row}>

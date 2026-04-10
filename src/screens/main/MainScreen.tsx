@@ -10,12 +10,15 @@ import Dropdown from '@/components/common/Dropdown';
 import useBannerSize from '@/utils/bannerSize';
 import { DUMMY_COURTS } from '@/constants/dummyStadium';
 import StadiumList from './components/CourtList';
+import { useQuery } from '@tanstack/react-query';
 
 const tabs = [
   { key: 'GENERAL', label: '구장' },
   { key: 'ACADEMY', label: '아카데미' },
   { key: 'PRO', label: '프로구장' },
 ];
+
+const fetchCourts = async () => DUMMY_COURTS; // 수정 예정
 
 const MainScreen = () => {
   const [activeTab, setActiveTab] = useState('GENERAL');
@@ -59,7 +62,12 @@ const MainScreen = () => {
     setRegionDropdownOpen(false);
   };
 
-  const filteredType = DUMMY_COURTS.filter((stadium) => stadium.type === activeTab);
+  const { data: courts = [] } = useQuery({
+    queryKey: ['courts'],
+    queryFn: fetchCourts,
+  });
+
+  const filteredType = courts.filter((stadium) => stadium.type === activeTab);
 
   const cityDropdownList = ['전체 보기', ...new Set(filteredType.map((stadium) => stadium.location.split(' ')[0]))];
 

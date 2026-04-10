@@ -14,6 +14,7 @@ import ScheduleIcon from '@/assets/images/replay/scheduleIcon.svg';
 import { useState } from 'react';
 import Dropdown from '@/components/common/Dropdown';
 import LocationIcon from '@/assets/images/replay/locationIcon.svg';
+import { useQuery } from '@tanstack/react-query';
 
 const REQUEST_STEPS = [RequestStep1Icon, RequestStep2Icon];
 
@@ -25,6 +26,10 @@ interface RequestReportTabProps {
   setSelectedCourtId: (courtId: number | null) => void;
 }
 
+// 수정 예정
+// StadiumDetailScreen ReportDownloadTab 중복 분리 예정
+const fetchReportCourts = async (id: number) => DUMMY_REPORT_COURTS[id] ?? [];
+
 const RequestReportTab = ({
   stadiumId,
   selectedDate,
@@ -34,7 +39,12 @@ const RequestReportTab = ({
 }: RequestReportTabProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const courtList = DUMMY_REPORT_COURTS[stadiumId] ?? [];
+  // 해당 구장의 코트 목록
+  const { data: courtList = [] } = useQuery({
+    queryKey: ['reportCourts', stadiumId],
+    queryFn: () => fetchReportCourts(stadiumId),
+  });
+
   const selectedCourt = courtList.find((c) => c.courtId === selectedCourtId);
 
   const selectDropdownHandler = (name: string) => {

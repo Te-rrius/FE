@@ -6,8 +6,11 @@ import LoginModal from '@/components/auth/LoginModal';
 import { useEffect } from 'react';
 import { initializeKakaoSDK } from '@react-native-kakao/core';
 import AgreeModal from '@/components/auth/AgreeModal';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const KAKAOKEY = process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY;
+
+const queryClient = new QueryClient();
 
 const RootLayout = () => {
   useEffect(() => {
@@ -29,7 +32,7 @@ const RootLayout = () => {
   if (!fontsLoaded) return null;
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <Stack
         screenOptions={{
           headerShown: false,
@@ -48,7 +51,7 @@ const RootLayout = () => {
           <AgreeModal />
         </View>
       </Modal>
-    </>
+    </QueryClientProvider>
   );
 };
 

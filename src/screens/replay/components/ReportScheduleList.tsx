@@ -5,7 +5,8 @@ import { hp, wp } from '@/utils/dimension';
 import RequestReportInfo from './RequestReportInfo';
 
 import TimeIcon from '@/assets/images/replay/timeIcon.svg';
-import { DUMMY_REPORT_SCHEDULES, ReportScheduleDto } from '@/constants/dummySchedule';
+import { DUMMY_REPORT_SCHEDULES } from '@/constants/dummySchedule';
+import { useQuery } from '@tanstack/react-query';
 
 interface ReportScheduleListProps {
   selectedCourtId: number | null;
@@ -18,7 +19,12 @@ const GAME_TYPE_LABEL = {
   DOUBLE: '복식 경기',
 } as const;
 
+// 수정 예정
+// ReportDownloadTab 중복 분리
+const fetchReportSchedules = async (courtId: number) => DUMMY_REPORT_SCHEDULES[courtId] ?? [];
+
 const ReportScheduleList = ({ selectedCourtId, selectedDate, onPress }: ReportScheduleListProps) => {
+  // 선택된 리포트
   const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
 
   // 로컬 시간 기준 포맷팅
@@ -29,10 +35,16 @@ const ReportScheduleList = ({ selectedCourtId, selectedDate, onPress }: ReportSc
     return `${y}-${m}-${d}`;
   };
 
-  const scheduleList: ReportScheduleDto[] = selectedCourtId
-    ? (DUMMY_REPORT_SCHEDULES[selectedCourtId] ?? []).filter((s) => s.date === toDateString(selectedDate))
-    : [];
+  const { data: allSchedules = [] } = useQuery({
+    queryKey: ['reportSchedules', selectedCourtId],
+    queryFn: () => fetchReportSchedules(selectedCourtId!),
+    enabled: selectedCourtId !== null,
+  });
 
+  // 선택된 날짜에 해당하는 리포트만 필터링
+  const scheduleList = allSchedules.filter((s) => s.date === toDateString(selectedDate));
+
+  // 리포트 존재 시에만 목록 렌더링
   const hasAnyReport = scheduleList.length > 0;
 
   return (

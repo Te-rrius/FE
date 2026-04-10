@@ -12,6 +12,7 @@ import DownStep2Icon from '@/assets/images/common/downStep2Icon.svg';
 import DownStep3Icon from '@/assets/images/common/downStep3Icon.svg';
 import ReportDownBanner from '@/assets/images/banner/reportDownBanner.svg';
 import { DUMMY_REPORT_COURTS, DUMMY_REPORT_SCHEDULES } from '@/constants/dummySchedule';
+import { useQuery } from '@tanstack/react-query';
 
 interface ReportDownloadTabProps {
   stadiumId: number;
@@ -24,6 +25,12 @@ interface ReportDownloadTabProps {
 
 const DOWN_STEPS = [DownStep1Icon, DownStep2Icon, DownStep3Icon];
 
+// 수정 예정
+// 선택된 코드 일정
+const fetchReportSchedules = async (courtId: number) => DUMMY_REPORT_SCHEDULES[courtId] ?? [];
+// StadiumDetailScreen 중복 분리 예정
+const fetchReportCourts = async (id: number) => DUMMY_REPORT_COURTS[id] ?? [];
+
 const ReportDownloadTab = ({
   stadiumId,
   selectedDate,
@@ -32,9 +39,20 @@ const ReportDownloadTab = ({
   setSelectedCourtId,
   goToRequestTab,
 }: ReportDownloadTabProps) => {
-  const reportDates = selectedCourtId
-    ? (DUMMY_REPORT_SCHEDULES[selectedCourtId] ?? []).map((s) => new Date(s.date))
-    : [];
+  const { data: courtList = [] } = useQuery({
+    queryKey: ['reportCourts', stadiumId],
+    queryFn: () => fetchReportCourts(stadiumId),
+  });
+
+  // 선택된 코트의 일정 목록
+  const { data: schedules = [] } = useQuery({
+    queryKey: ['reportSchedules', selectedCourtId],
+    queryFn: () => fetchReportSchedules(selectedCourtId!),
+    enabled: selectedCourtId !== null,
+  });
+
+  // 리포트 있는 날짜만 캘린더에 하이라이트
+  const reportDates = schedules.map((s) => new Date(s.date));
 
   return (
     <>
@@ -47,11 +65,7 @@ const ReportDownloadTab = ({
       </View>
       <DatePicker type="download" selectedDate={selectedDate} onSelect={setSelectedDate} highlightDates={reportDates} />
       <View style={styles.gameInfoWrapper}>
-        <CourtSelector
-          courtList={DUMMY_REPORT_COURTS[stadiumId] ?? []}
-          selectedCourtId={selectedCourtId}
-          onPress={setSelectedCourtId}
-        />
+        <CourtSelector courtList={courtList} selectedCourtId={selectedCourtId} onPress={setSelectedCourtId} />
         <ReportScheduleList selectedCourtId={selectedCourtId} selectedDate={selectedDate} onPress={goToRequestTab} />
       </View>
     </>
