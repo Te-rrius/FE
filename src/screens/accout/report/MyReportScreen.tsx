@@ -4,6 +4,7 @@ import { hp, wp } from '@/utils/dimension';
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import ReportCard from './components/ReportCard';
+import { router } from 'expo-router';
 
 const dummyReports = [
   { id: 1, date: '2025. 12. 01.' },
@@ -45,7 +46,11 @@ const MyReportScreen = () => {
           />
           <View style={styles.listWrapper}>
             {sortedReports.map((report) => (
-              <ReportCard key={report.id} date={report.date} />
+              <ReportCard
+                key={report.id}
+                date={report.date}
+                onPress={() => router.push({ pathname: '/report/[reportId]', params: { reportId: report.id } })}
+              />
             ))}
           </View>
         </View>

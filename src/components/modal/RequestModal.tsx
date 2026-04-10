@@ -28,7 +28,7 @@ const RequestModal = ({ schedule, courtName, onClose, onConfirm }: RequestModalP
     } else {
       // 신청 로직
       onConfirm(schedule.scheduleId);
-      router.push('/request-complete');
+      router.push('/replay/request-complete');
     }
   };
 
@@ -38,8 +38,8 @@ const RequestModal = ({ schedule, courtName, onClose, onConfirm }: RequestModalP
         <View style={styles.modalContainer}>
           <Text style={styles.titleText}>분석 리포트 신청</Text>
           <Text style={styles.descriptionText}>
-            리포트는 신청 후 <Text style={styles.blueText}>24시간 이내</Text>로 완료되며,{`\n`}제작 완료 시{' '}
-            <Text style={styles.strongText}>알림톡</Text>을 보내드립니다!
+            리포트는 신청 후 <Text style={styles.blueText}>24시간 이내</Text>로 완료되며,{`\n`}
+            제작 완료 시 <Text style={styles.strongText}>알림톡</Text>을 보내드립니다!
           </Text>
           <View style={styles.reportInfoContainer}>
             <Text style={styles.containerTitle}>신청한 하이라이트 영상</Text>
