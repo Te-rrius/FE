@@ -1,8 +1,15 @@
-import PageHeader from '@/components/layout/PageHeader';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import ReportDownloadIcon from '@/assets/images/report/reportDownloadIcon.svg';
+import SelectArrowIcon from '@/assets/images/report/selectArrowIcon.svg';
+import Player1Icon from '@/assets/images/report/player1Icon.svg';
+import Player2Icon from '@/assets/images/report/player2Icon.svg';
+
+import PageHeader from '@/components/layout/PageHeader';
+
 import { hp, wp } from '@/utils/dimension';
+import Divider from '@/components/common/Divider';
+import ReportInfo from './components/ReportInfo';
 
 type ReportScreenProps = {
   reportId: string | string[];
@@ -10,22 +17,47 @@ type ReportScreenProps = {
 
 const ReportScreen = ({ reportId }: ReportScreenProps) => {
   return (
-    <>
+    <View style={styles.container}>
       <PageHeader
         rightContent={
-          <View style={styles.headerDownContainer}>
+          <Pressable style={styles.headerDownContainer}>
             <Text style={styles.headerDownText}>리포트 다운</Text>
             <ReportDownloadIcon />
-          </View>
+          </Pressable>
         }
       />
-    </>
+      <View style={styles.topContainer}>
+        <View style={styles.infoContainer}>
+          <SelectArrowIcon />
+          <Text style={styles.selectText}>
+            아래 분석할 <Text style={styles.strongText}>대상을 먼저 선택</Text>해 주세요!
+          </Text>
+          <SelectArrowIcon />
+        </View>
+        <View style={styles.playerIcon}>
+          <Pressable>
+            <Player1Icon />
+          </Pressable>
+          <Pressable>
+            <Player2Icon />
+          </Pressable>
+        </View>
+      </View>
+      <Divider />
+      <View style={styles.reportInfoWrapper}>
+        <ReportInfo />
+      </View>
+    </View>
   );
 };
 
 export default ReportScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    gap: hp(16),
+  },
+
   headerDownContainer: {
     paddingHorizontal: wp(10),
     paddingVertical: hp(6),
@@ -35,6 +67,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E8E8E8',
     borderRadius: 100,
+    backgroundColor: '#FFFFFF',
   },
 
   headerDownText: {
@@ -43,5 +76,46 @@ const styles = StyleSheet.create({
     fontSize: wp(14),
     lineHeight: hp(20),
     letterSpacing: wp(-0.3),
+  },
+
+  topContainer: {
+    paddingHorizontal: wp(20),
+    gap: hp(16),
+    paddingBottom: hp(24),
+  },
+
+  infoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: hp(14),
+    paddingHorizontal: wp(55),
+    gap: wp(6),
+    borderWidth: 1,
+    borderColor: '#E8E8E8',
+    borderRadius: 8,
+  },
+
+  selectText: {
+    color: '#181A1D',
+    fontFamily: 'Pretendard600',
+    fontSize: wp(13),
+    lineHeight: hp(18),
+    letterSpacing: wp(-0.3),
+  },
+
+  strongText: {
+    color: '#4048F7',
+  },
+
+  playerIcon: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: wp(60),
+  },
+
+  reportInfoWrapper: {
+    paddingTop: hp(40),
+    paddingBottom: hp(32),
   },
 });
