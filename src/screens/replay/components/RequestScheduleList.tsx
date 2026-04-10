@@ -4,6 +4,7 @@ import { DUMMY_MATCH_SCHEDULES, MatchScheduleDto } from '@/constants/dummySchedu
 import { useState } from 'react';
 import RequestModal from '@/components/modal/RequestModal';
 import useAuthStore from '@/store/authStore';
+import useRequestStore from '@/store/requestStore';
 
 interface RequestScheduleListProps {
   selectedCourtId: number | null;
@@ -21,6 +22,7 @@ const RequestScheduleList = ({ selectedCourtId, courtName, selectedDate }: Reque
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState<MatchScheduleDto | null>(null);
+  const { requestedIds, addRequestedId } = useRequestStore();
 
   const toDateString = (date: Date) => date.toISOString().split('T')[0];
 
@@ -35,6 +37,8 @@ const RequestScheduleList = ({ selectedCourtId, courtName, selectedDate }: Reque
     <View>
       {scheduleList.map((schedule) => {
         const [startTime, endTime] = schedule.hours.split('~');
+        const isRequested = schedule.isRequested || requestedIds.has(schedule.scheduleId); // ✅ 여기
+
         return (
           <View key={schedule.scheduleId} style={styles.row}>
             <View style={styles.timeInfo}>
@@ -51,8 +55,8 @@ const RequestScheduleList = ({ selectedCourtId, courtName, selectedDate }: Reque
               </View>
             </View>
             <Pressable
-              style={[styles.button, schedule.isRequested && styles.buttonDisabled]}
-              disabled={schedule.isRequested}
+              style={[styles.button, isRequested && styles.buttonDisabled]}
+              disabled={isRequested}
               onPress={() => {
                 if (!token) {
                   openLoginModal();
@@ -62,8 +66,8 @@ const RequestScheduleList = ({ selectedCourtId, courtName, selectedDate }: Reque
                 setIsModalVisible(true);
               }}
             >
-              <Text style={[styles.buttonText, schedule.isRequested && styles.buttonTextDisabled]}>
-                {schedule.isRequested ? '신청완료' : '신청하기'}
+              <Text style={[styles.buttonText, isRequested && styles.buttonTextDisabled]}>
+                {isRequested ? '신청완료' : '신청하기'}
               </Text>
             </Pressable>
           </View>
@@ -71,7 +75,15 @@ const RequestScheduleList = ({ selectedCourtId, courtName, selectedDate }: Reque
       })}
 
       {isModalVisible && selectedSchedule && (
-        <RequestModal schedule={selectedSchedule} courtName={courtName} onClose={() => setIsModalVisible(false)} />
+        <RequestModal
+          schedule={selectedSchedule}
+          courtName={courtName}
+          onClose={() => setIsModalVisible(false)}
+          onConfirm={(scheduleId) => {
+            addRequestedId(scheduleId);
+            setIsModalVisible(false);
+          }}
+        />
       )}
     </View>
   );

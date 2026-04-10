@@ -13,20 +13,21 @@ interface RequestModalProps {
   schedule: MatchScheduleDto;
   courtName: string;
   onClose: () => void;
+  onConfirm: (scheduleId: number) => void;
 }
 
 const formatDate = (date: string) => date.replace(/-/g, '.');
 
-const RequestModal = ({ schedule, courtName, onClose }: RequestModalProps) => {
+const RequestModal = ({ schedule, courtName, onClose, onConfirm }: RequestModalProps) => {
   const router = useRouter();
-  const { token, openLoginModal } = useAuthStore();
+  const { token } = useAuthStore();
 
   const handleRequest = () => {
     if (!token) {
       onClose();
     } else {
       // 신청 로직
-      onClose();
+      onConfirm(schedule.scheduleId);
       router.push('/request-complete');
     }
   };
