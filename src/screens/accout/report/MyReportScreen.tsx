@@ -3,7 +3,7 @@ import PageHeader from '@/components/layout/PageHeader';
 import { hp, wp } from '@/utils/dimension';
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import ReportCard from './components/ReportCard';
+import ReportList from './components/ReportList';
 import { router } from 'expo-router';
 
 const dummyReports = [
@@ -46,7 +46,7 @@ const MyReportScreen = () => {
           />
           <View style={styles.listWrapper}>
             {sortedReports.map((report) => (
-              <ReportCard
+              <ReportList
                 key={report.id}
                 date={report.date}
                 onPress={() => router.push({ pathname: '/report/[reportId]', params: { reportId: report.id } })}

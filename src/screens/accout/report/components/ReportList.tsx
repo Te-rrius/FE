@@ -3,12 +3,12 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import CardGradient from './CardGradient';
 import TennisCardIcon from '@/assets/images/account/tennisCardIcon.svg';
 
-type ReportCardProps = {
+type ReportListProps = {
   date: string;
   onPress: () => void;
 };
 
-const ReportCard = ({ date, onPress }: ReportCardProps) => {
+const ReportList = ({ date, onPress }: ReportListProps) => {
   return (
     <Pressable style={styles.container} onPress={onPress}>
       <View style={styles.cardHeader}>
@@ -29,7 +29,7 @@ const ReportCard = ({ date, onPress }: ReportCardProps) => {
   );
 };
 
-export default ReportCard;
+export default ReportList;
 
 const styles = StyleSheet.create({
   container: {
