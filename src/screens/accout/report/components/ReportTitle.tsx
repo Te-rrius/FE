@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(16),
     paddingVertical: hp(14),
     gap: wp(10),
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: '#E8E8E8',
     borderRadius: 20,

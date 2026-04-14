@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     paddingTop: hp(18),
     paddingBottom: hp(20),
     borderWidth: 1,
+    backgroundColor: '#FFFFFF',
     borderColor: '#EAEAEA',
     borderRadius: 20,
     gap: hp(25),

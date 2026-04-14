@@ -8,6 +8,7 @@ import { useState } from 'react';
 import AnalysisCard from './AnalysisCard';
 import ShotIcon from '@/assets/images/report/shotIcon.svg';
 import ScoreIcon from '@/assets/images/report/scoreIcon.svg';
+import AnalysisStateCard from './AnalysisStateCard';
 
 const POSES = ['포핸드', '백핸드', '서브', '스매시'] as const;
 
@@ -25,8 +26,23 @@ const PoseAnalysis = () => {
         </View>
         {/* 영상 삽입 예정 */}
         <View style={styles.allCard}>
-          <AnalysisCard title="샷 유형" analysisText="백핸드" icon={<ShotIcon />} />
-          <AnalysisCard title="종합 점수" analysisText="00.0점" icon={<ScoreIcon />} />
+          <View style={styles.generalCard}>
+            <AnalysisCard title="샷 유형" analysisText="백핸드" icon={<ShotIcon />} />
+            <AnalysisCard title="종합 점수" analysisText="00.0점" icon={<ScoreIcon />} />
+          </View>
+          <AnalysisStateCard title="어깨 회전" value={85} recommended={80} comment="이상적인 어깨 회전이에요!" />
+          <AnalysisStateCard
+            title="척추 회전"
+            value={64}
+            recommended={80}
+            comment="6° 부족해요. 상체를 더 틀어보세요"
+          />
+          <AnalysisStateCard
+            title="허리 회전"
+            value={10}
+            recommended={80}
+            comment="6° 부족해요. 허리를 더 틀어보세요"
+          />
         </View>
       </View>
     </View>
@@ -37,7 +53,6 @@ export default PoseAnalysis;
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: wp(20),
     gap: hp(20),
   },
 
@@ -51,6 +66,10 @@ const styles = StyleSheet.create({
   },
 
   allCard: {
+    gap: hp(8),
+  },
+
+  generalCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
