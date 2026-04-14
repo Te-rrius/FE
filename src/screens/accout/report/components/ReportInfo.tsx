@@ -6,8 +6,19 @@ import LineIcon from '@/assets/images/modal/lineIcon.svg';
 import DefaultProfileIcon from '@/assets/images/report/defaultProfileIcon.svg';
 
 import { hp, wp } from '@/utils/dimension';
+import { CourtDto, ReportScheduleDto } from '@/constants/dummySchedule';
+import { StadiumDto } from '@/constants/dummyStadium';
 
-const ReportInfo = () => {
+interface ReportInfoProps {
+  date: string;
+  schedule: ReportScheduleDto | undefined;
+  courts: CourtDto[] | undefined;
+  stadium: StadiumDto | undefined;
+}
+
+const ReportInfo = ({ date, schedule, courts, stadium }: ReportInfoProps) => {
+  const courtName = courts?.[0]?.name ?? '구역명';
+
   return (
     <View style={styles.boxWrapper}>
       <View style={styles.boxContainer}>
@@ -16,17 +27,17 @@ const ReportInfo = () => {
           <View style={styles.infoRow}>
             <GrayCalendarIcon />
             <View style={styles.infoDetailWrapper}>
-              <Text style={styles.infoDetailText}>0000년 0월 0일 월요일</Text>
+              <Text style={styles.infoDetailText}>{date}</Text>
               <LineIcon />
-              <Text style={styles.infoDetailText}>00:00 - 00:00</Text>
+              <Text style={styles.infoDetailText}>{schedule?.hours ?? '00:00~00:00'}</Text>
             </View>
           </View>
           <View style={styles.infoRow}>
             <GrayLocationIcon />
             <View style={styles.infoDetailWrapper}>
-              <Text style={styles.infoDetailText}>구장명</Text>
+              <Text style={styles.infoDetailText}>{stadium?.name ?? '구장명'}</Text>
               <LineIcon />
-              <Text style={styles.infoDetailText}>구역명</Text>
+              <Text style={styles.infoDetailText}>{courtName}</Text>
             </View>
           </View>
         </View>

@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import PageHeader from '@/components/layout/PageHeader';
 import Divider from '@/components/common/Divider';
 import ReportInfo from './components/ReportInfo';
@@ -10,14 +10,22 @@ import Player2Icon from '@/assets/images/report/player2Icon.svg';
 
 import { hp, wp } from '@/utils/dimension';
 import PoseAnalysis from './components/PoseAnalysis';
+import GameAnalysis from './components/GameAnalysis';
+import { getReportDetail } from '@/constants/dummySchedule';
 
 type ReportScreenProps = {
   reportId: string | string[];
 };
 
 const ReportScreen = ({ reportId }: ReportScreenProps) => {
+  const id = Number(Array.isArray(reportId) ? reportId[0] : reportId);
+  const detail = getReportDetail(id);
+
+  if (!detail) return null;
+  const { report, stadium, courts, schedule, matchSchedules } = detail;
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.selectContainer}>
         <PageHeader
           rightContent={
@@ -47,11 +55,13 @@ const ReportScreen = ({ reportId }: ReportScreenProps) => {
         </View>
         <Divider />
         <View style={styles.reportInfoWrapper}>
-          <ReportInfo />
+          <ReportInfo date={report.date} schedule={schedule} courts={courts} stadium={stadium} />
         </View>
       </View>
-      <PoseAnalysis />
-    </View>
+      <View style={styles.analysisDetail}>
+        <PoseAnalysis />
+      </View>
+    </ScrollView>
   );
 };
 
@@ -123,5 +133,10 @@ const styles = StyleSheet.create({
   reportInfoWrapper: {
     paddingTop: hp(40),
     paddingBottom: hp(32),
+  },
+
+  analysisDetail: {
+    paddingHorizontal: wp(20),
+    gap: hp(36),
   },
 });
