@@ -29,7 +29,7 @@ const ReportScreen = ({ reportId }: ReportScreenProps) => {
   const { report, stadium, courts, schedule, matchSchedules } = detail;
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView>
       <View style={styles.selectContainer}>
         <PageHeader
           rightContent={
@@ -49,23 +49,38 @@ const ReportScreen = ({ reportId }: ReportScreenProps) => {
           </View>
           <View style={styles.playerIcon}>
             {/* 프로필 선택 시 분기 처리 예정 */}
-            <Pressable>
+            <Pressable
+              style={[styles.playerIconWrapper, selectedPlayer === 1 && styles.selectedIconWrapper]}
+              onPress={() => setSelectedPlayer(1)}
+            >
               <Player1Icon />
             </Pressable>
-            <Pressable>
+            <Pressable
+              style={[styles.playerIconWrapper, selectedPlayer === 2 && styles.selectedIconWrapper]}
+              onPress={() => setSelectedPlayer(2)}
+            >
               <Player2Icon />
             </Pressable>
           </View>
         </View>
         <Divider />
         <View style={styles.reportInfoWrapper}>
-          <ReportInfo date={report.date} schedule={schedule} courts={courts} stadium={stadium} />
+          <ReportInfo
+            date={report.date}
+            schedule={schedule}
+            courts={courts}
+            stadium={stadium}
+            selectedPlayer={selectedPlayer}
+          />
         </View>
       </View>
       <View style={styles.analysisDetail}>
         <PoseAnalysis player={selectedPlayer} />
         <GameAnalysis player={selectedPlayer} />
-        <SceneAnalysis player={selectedPlayer} />
+
+        {/* 영상 추가 시 플레이어 선택 관리 예정 */}
+        {/* <SceneAnalysis player={selectedPlayer} /> */}
+        <SceneAnalysis />
       </View>
     </ScrollView>
   );
@@ -74,8 +89,6 @@ const ReportScreen = ({ reportId }: ReportScreenProps) => {
 export default ReportScreen;
 
 const styles = StyleSheet.create({
-  container: {},
-
   selectContainer: {
     gap: hp(16),
   },
@@ -134,6 +147,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     gap: wp(60),
+  },
+
+  playerIconWrapper: {
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+
+  selectedIconWrapper: {
+    borderColor: '#4048F7',
   },
 
   reportInfoWrapper: {

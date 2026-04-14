@@ -8,40 +8,57 @@ import DefaultProfileIcon from '@/assets/images/report/defaultProfileIcon.svg';
 import { hp, wp } from '@/utils/dimension';
 import { CourtDto, ReportScheduleDto } from '@/constants/dummySchedule';
 import { StadiumDto } from '@/constants/dummyStadium';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface ReportInfoProps {
   date: string;
   schedule: ReportScheduleDto | undefined;
   courts: CourtDto[] | undefined;
   stadium: StadiumDto | undefined;
+  selectedPlayer: 1 | 2 | null;
 }
 
-const ReportInfo = ({ date, schedule, courts, stadium }: ReportInfoProps) => {
+const ReportInfo = ({ date, schedule, courts, stadium, selectedPlayer }: ReportInfoProps) => {
   const courtName = courts?.[0]?.name ?? '구역명';
 
-  return (
-    <View style={styles.boxWrapper}>
-      <View style={styles.boxContainer}>
-        <Text style={styles.infoText}>분석할 대상이 필요합니다.</Text>
-        <View style={styles.infoWrapper}>
-          <View style={styles.infoRow}>
-            <GrayCalendarIcon />
-            <View style={styles.infoDetailWrapper}>
-              <Text style={styles.infoDetailText}>{date}</Text>
-              <LineIcon />
-              <Text style={styles.infoDetailText}>{schedule?.hours ?? '00:00~00:00'}</Text>
-            </View>
+  const content = (
+    <>
+      <Text style={styles.infoText}>{selectedPlayer === null ? '분석할 대상이 필요합니다.' : '분석 리포트'}</Text>
+      <View style={styles.infoWrapper}>
+        <View style={styles.infoRow}>
+          <GrayCalendarIcon />
+          <View style={styles.infoDetailWrapper}>
+            <Text style={styles.infoDetailText}>{date}</Text>
+            <LineIcon />
+            <Text style={styles.infoDetailText}>{schedule?.hours ?? '00:00~00:00'}</Text>
           </View>
-          <View style={styles.infoRow}>
-            <GrayLocationIcon />
-            <View style={styles.infoDetailWrapper}>
-              <Text style={styles.infoDetailText}>{stadium?.name ?? '구장명'}</Text>
-              <LineIcon />
-              <Text style={styles.infoDetailText}>{courtName}</Text>
-            </View>
+        </View>
+        <View style={styles.infoRow}>
+          <GrayLocationIcon />
+          <View style={styles.infoDetailWrapper}>
+            <Text style={styles.infoDetailText}>{stadium?.name ?? '구장명'}</Text>
+            <LineIcon />
+            <Text style={styles.infoDetailText}>{courtName}</Text>
           </View>
         </View>
       </View>
+    </>
+  );
+
+  return (
+    <View style={styles.boxWrapper}>
+      {selectedPlayer === null ? (
+        <View style={styles.boxContainer}>{content}</View>
+      ) : (
+        <LinearGradient
+          colors={['#4048F7', '#656CFF']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.boxContainer}
+        >
+          {content}
+        </LinearGradient>
+      )}
       <View style={styles.profileIcon}>
         <DefaultProfileIcon />
         <View style={styles.profileBorder} />
