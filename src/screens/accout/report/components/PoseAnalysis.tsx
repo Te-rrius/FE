@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import PoseAnalysisIcon from '@/assets/images/report/poseAnalysisIcon.svg';
 import ReportTitle from './ReportTitle';
@@ -43,6 +43,13 @@ const PoseAnalysis = () => {
             recommended={80}
             comment="6° 부족해요. 허리를 더 틀어보세요"
           />
+          <View style={styles.upgradeContainer}>
+            <Text style={styles.upgradeTitle}>개선 포인트</Text>
+            <Text style={styles.upgradeText}>
+              허리 회전 방향을 교정하면 점수가 약 <Text style={styles.upgradeStrongText}>+15점</Text> 향상될 수 있어요
+              (개선 포인트 내용)
+            </Text>
+          </View>
         </View>
       </View>
     </View>
@@ -72,5 +79,34 @@ const styles = StyleSheet.create({
   generalCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+
+  upgradeContainer: {
+    padding: 16,
+    backgroundColor: '#F7F7FB',
+    borderWidth: 1,
+    borderColor: '#E8E8E8',
+    borderRadius: 20,
+    gap: hp(8),
+  },
+
+  upgradeTitle: {
+    color: '#4048F7',
+    fontSize: wp(15),
+    fontFamily: 'Pretendard600',
+    lineHeight: hp(21.75),
+    letterSpacing: wp(-0.375),
+  },
+
+  upgradeText: {
+    color: '#505050',
+    fontSize: wp(14),
+    fontFamily: 'Pretendard400',
+    lineHeight: hp(20),
+    letterSpacing: wp(-0.35),
+  },
+
+  upgradeStrongText: {
+    fontFamily: 'Pretendard600',
   },
 });
