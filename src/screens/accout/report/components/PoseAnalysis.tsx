@@ -9,6 +9,8 @@ import PoseAnalysisCard from './PoseAnalysisCard';
 import ShotIcon from '@/assets/images/report/shotIcon.svg';
 import ScoreIcon from '@/assets/images/report/scoreIcon.svg';
 import AnalysisStateCard from './AnalysisStateCard';
+import { useQuery } from '@tanstack/react-query';
+import { DUMMY_REPORT_ANALYSIS } from '@/constants/dummyReport';
 
 const POSES = ['포핸드', '백핸드', '서브', '스매시'] as const;
 
@@ -18,6 +20,12 @@ type PoseAnalysisProps = {
 
 const PoseAnalysis = ({ player }: PoseAnalysisProps) => {
   const [selectedPose, setSelectedPose] = useState<string | null>(null);
+
+  const { data } = useQuery({
+    queryKey: ['reportAnalysis', player],
+    queryFn: () => DUMMY_REPORT_ANALYSIS[player!],
+    enabled: player !== null,
+  });
 
   return (
     <View style={styles.container}>
@@ -35,46 +43,36 @@ const PoseAnalysis = ({ player }: PoseAnalysisProps) => {
         </View>
         <View style={styles.allCard}>
           <View style={styles.generalCard}>
-            <PoseAnalysisCard title="샷 유형" analysisText={player ? '백핸드' : '-'} icon={<ShotIcon />} />
-            <PoseAnalysisCard title="종합 점수" analysisText={player ? '00.0점' : '-'} icon={<ScoreIcon />} />
+            <PoseAnalysisCard title="샷 유형" analysisText={data ? data.pose.shotType : '-'} icon={<ShotIcon />} />
+            <PoseAnalysisCard title="종합 점수" analysisText={data ? data.pose.totalScore : '-'} icon={<ScoreIcon />} />
           </View>
           <AnalysisStateCard
             title="어깨 회전"
-            value={player ? 85 : null}
+            value={data?.pose.shoulderRotation.value ?? null}
             recommended={80}
-            comment={player ? '이상적인 어깨 회전이에요!' : ''}
+            comment={data?.pose.shoulderRotation.comment ?? ''}
           />
           <AnalysisStateCard
             title="척추 회전"
-            value={player ? 64 : null}
+            value={data?.pose.spineRotation.value ?? null}
             recommended={80}
-            comment={player ? '6° 부족해요. 상체를 더 틀어보세요' : ''}
+            comment={data?.pose.spineRotation.comment ?? ''}
           />
           <AnalysisStateCard
             title="허리 회전"
-            value={player ? 10 : null}
+            value={data?.pose.waistRotation.value ?? null}
             recommended={80}
-            comment={player ? '6° 부족해요. 허리를 더 틀어보세요' : ''}
+            comment={data?.pose.waistRotation.comment ?? ''}
           />
           <View style={styles.upgradeContainer}>
             <Text style={styles.upgradeTitle}>개선 포인트</Text>
-            <Text style={styles.upgradeText}>
-              {player ? (
-                <>
-                  허리 회전 방향을 교정하면 점수가 약 <Text style={styles.upgradeStrongText}>+15점</Text> 향상될 수
-                  있어요
-                </>
-              ) : (
-                '-'
-              )}
-            </Text>
+            <Text style={styles.upgradeText}>{data?.pose.improvePoint ?? '-'}</Text>
           </View>
         </View>
       </View>
     </View>
   );
 };
-
 export default PoseAnalysis;
 
 const styles = StyleSheet.create({

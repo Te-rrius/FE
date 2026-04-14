@@ -13,8 +13,16 @@ import ServeMaxSpeedIcon from '@/assets/images/report/serveMaxSpeedIcon.svg';
 
 import GameAnalysisCard from './GameAnalysisCard';
 import ServeDataCard from './ServeDataCard';
+import { useQuery } from '@tanstack/react-query';
+import { DUMMY_REPORT_ANALYSIS } from '@/constants/dummyReport';
 
 const GameAnalysis = ({ player }: { player: 1 | 2 | null }) => {
+  const { data } = useQuery({
+    queryKey: ['reportAnalysis', player],
+    queryFn: () => DUMMY_REPORT_ANALYSIS[player!],
+    enabled: player !== null,
+  });
+
   return (
     <View style={styles.container}>
       <ReportTitle icon={<GameAnalysisIcon />} title="경기 단위 분석" />
@@ -28,13 +36,13 @@ const GameAnalysis = ({ player }: { player: 1 | 2 | null }) => {
             <GameAnalysisCard
               title="평균 랠리 횟수"
               icon={<AvgRallyIcon />}
-              analysisText={player ? '222' : '-'}
+              analysisText={data ? String(data.game.avgRally) : '-'}
               unit="회"
             />
             <GameAnalysisCard
               title="최대 랠리 횟수"
               icon={<MaxRallyIcon />}
-              analysisText={player ? '24' : '-'}
+              analysisText={data ? String(data.game.maxRally) : '-'}
               unit="회"
             />
           </View>
@@ -43,13 +51,13 @@ const GameAnalysis = ({ player }: { player: 1 | 2 | null }) => {
               status="active"
               title="총 샷 수"
               icon={<TotalShotIcon />}
-              analysisText={player ? '342' : '-'}
+              analysisText={data ? String(data.game.totalShot) : '-'}
               unit="개"
             />
             <GameAnalysisCard
               title="최소 랠리 횟수"
               icon={<MinRallyIcon />}
-              analysisText={player ? '24' : '-'}
+              analysisText={data ? String(data.game.minRally) : '-'}
               unit="회"
             />
           </View>
@@ -62,18 +70,23 @@ const GameAnalysis = ({ player }: { player: 1 | 2 | null }) => {
           <Text style={styles.titleText}>서브 데이터</Text>
         </View>
         <View style={styles.serveGrid}>
-          {player !== null ? (
+          {data ? (
             <>
               <View style={styles.serveRow}>
-                <ServeDataCard title="퍼스트 서브 성공률" icon={<FirstServeIcon />} value={10} />
-                <View style={{ flex: 90 }} />
+                <ServeDataCard title="퍼스트 서브 성공률" icon={<FirstServeIcon />} value={data.game.firstServeRate} />
+                <View style={{ flex: 100 - data.game.firstServeRate }} />
               </View>
               <View style={styles.serveRow}>
-                <ServeDataCard title="세컨드 서브 성공률" icon={<SecondServeIcon />} value={80} status="active" />
-                <View style={{ flex: 20 }} />
+                <ServeDataCard
+                  title="세컨드 서브 성공률"
+                  icon={<SecondServeIcon />}
+                  value={data.game.secondServeRate}
+                  status="active"
+                />
+                <View style={{ flex: 100 - data.game.secondServeRate }} />
               </View>
               <View style={styles.serveRow}>
-                <ServeDataCard title="서브 최고 속도" icon={<ServeMaxSpeedIcon />} value={10} />
+                <ServeDataCard title="서브 최고 속도" icon={<ServeMaxSpeedIcon />} value={data.game.serveMaxSpeed} />
                 <View style={{ flex: 90 }} />
               </View>
             </>
