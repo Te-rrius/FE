@@ -60,6 +60,7 @@ const ReportScreen = ({ reportId }: ReportScreenProps) => {
       </View>
       <View style={styles.analysisDetail}>
         <PoseAnalysis />
+        <GameAnalysis />
       </View>
     </ScrollView>
   );

@@ -5,7 +5,7 @@ import ReportTitle from './ReportTitle';
 import { hp, wp } from '@/utils/dimension';
 import PoseButton from '@/screens/replay/components/PoseButton';
 import { useState } from 'react';
-import AnalysisCard from './AnalysisCard';
+import PoseAnalysisCard from './PoseAnalysisCard';
 import ShotIcon from '@/assets/images/report/shotIcon.svg';
 import ScoreIcon from '@/assets/images/report/scoreIcon.svg';
 import AnalysisStateCard from './AnalysisStateCard';
@@ -27,8 +27,8 @@ const PoseAnalysis = () => {
         {/* 영상 삽입 예정 */}
         <View style={styles.allCard}>
           <View style={styles.generalCard}>
-            <AnalysisCard title="샷 유형" analysisText="백핸드" icon={<ShotIcon />} />
-            <AnalysisCard title="종합 점수" analysisText="00.0점" icon={<ScoreIcon />} />
+            <PoseAnalysisCard title="샷 유형" analysisText="백핸드" icon={<ShotIcon />} />
+            <PoseAnalysisCard title="종합 점수" analysisText="00.0점" icon={<ScoreIcon />} />
           </View>
           <AnalysisStateCard title="어깨 회전" value={85} recommended={80} comment="이상적인 어깨 회전이에요!" />
           <AnalysisStateCard
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
 
   generalCard: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    gap: wp(8),
   },
 
   upgradeContainer: {
