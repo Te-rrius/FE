@@ -13,12 +13,15 @@ import PoseAnalysis from './components/PoseAnalysis';
 import GameAnalysis from './components/GameAnalysis';
 import { getReportDetail } from '@/constants/dummySchedule';
 import SceneAnalysis from './components/SceneAnalysis';
+import { useState } from 'react';
 
 type ReportScreenProps = {
   reportId: string | string[];
 };
 
 const ReportScreen = ({ reportId }: ReportScreenProps) => {
+  const [selectedPlayer, setSelectedPlayer] = useState<1 | 2 | null>(null);
+
   const id = Number(Array.isArray(reportId) ? reportId[0] : reportId);
   const detail = getReportDetail(id);
 
@@ -60,9 +63,9 @@ const ReportScreen = ({ reportId }: ReportScreenProps) => {
         </View>
       </View>
       <View style={styles.analysisDetail}>
-        <PoseAnalysis />
-        <GameAnalysis />
-        <SceneAnalysis />
+        <PoseAnalysis player={selectedPlayer} />
+        <GameAnalysis player={selectedPlayer} />
+        <SceneAnalysis player={selectedPlayer} />
       </View>
     </ScrollView>
   );

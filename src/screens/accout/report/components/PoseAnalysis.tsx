@@ -12,7 +12,11 @@ import AnalysisStateCard from './AnalysisStateCard';
 
 const POSES = ['포핸드', '백핸드', '서브', '스매시'] as const;
 
-const PoseAnalysis = () => {
+type PoseAnalysisProps = {
+  player: 1 | 2 | null;
+};
+
+const PoseAnalysis = ({ player }: PoseAnalysisProps) => {
   const [selectedPose, setSelectedPose] = useState<string | null>(null);
 
   return (
@@ -21,33 +25,48 @@ const PoseAnalysis = () => {
       <View style={styles.allPose}>
         <View style={styles.poseWrapper}>
           {POSES.map((pose) => (
-            <PoseButton key={pose} text={pose} selected={selectedPose === pose} onPress={() => setSelectedPose(pose)} />
+            <PoseButton
+              key={pose}
+              text={pose}
+              selected={selectedPose === pose}
+              onPress={() => player && setSelectedPose(pose)}
+            />
           ))}
         </View>
-        {/* 영상 삽입 예정 */}
         <View style={styles.allCard}>
           <View style={styles.generalCard}>
-            <PoseAnalysisCard title="샷 유형" analysisText="백핸드" icon={<ShotIcon />} />
-            <PoseAnalysisCard title="종합 점수" analysisText="00.0점" icon={<ScoreIcon />} />
+            <PoseAnalysisCard title="샷 유형" analysisText={player ? '백핸드' : '-'} icon={<ShotIcon />} />
+            <PoseAnalysisCard title="종합 점수" analysisText={player ? '00.0점' : '-'} icon={<ScoreIcon />} />
           </View>
-          <AnalysisStateCard title="어깨 회전" value={85} recommended={80} comment="이상적인 어깨 회전이에요!" />
+          <AnalysisStateCard
+            title="어깨 회전"
+            value={player ? 85 : null}
+            recommended={80}
+            comment={player ? '이상적인 어깨 회전이에요!' : ''}
+          />
           <AnalysisStateCard
             title="척추 회전"
-            value={64}
+            value={player ? 64 : null}
             recommended={80}
-            comment="6° 부족해요. 상체를 더 틀어보세요"
+            comment={player ? '6° 부족해요. 상체를 더 틀어보세요' : ''}
           />
           <AnalysisStateCard
             title="허리 회전"
-            value={10}
+            value={player ? 10 : null}
             recommended={80}
-            comment="6° 부족해요. 허리를 더 틀어보세요"
+            comment={player ? '6° 부족해요. 허리를 더 틀어보세요' : ''}
           />
           <View style={styles.upgradeContainer}>
             <Text style={styles.upgradeTitle}>개선 포인트</Text>
             <Text style={styles.upgradeText}>
-              허리 회전 방향을 교정하면 점수가 약 <Text style={styles.upgradeStrongText}>+15점</Text> 향상될 수 있어요
-              (개선 포인트 내용)
+              {player ? (
+                <>
+                  허리 회전 방향을 교정하면 점수가 약 <Text style={styles.upgradeStrongText}>+15점</Text> 향상될 수
+                  있어요
+                </>
+              ) : (
+                '-'
+              )}
             </Text>
           </View>
         </View>

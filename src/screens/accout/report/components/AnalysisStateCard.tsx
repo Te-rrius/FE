@@ -5,7 +5,7 @@ type Status = '양호' | '보통' | '개선 필요';
 
 interface AnalysisStateCardProps {
   title: string;
-  value: number;
+  value: number | null;
   recommended: number;
   maxValue?: number;
   comment: string;
@@ -24,10 +24,10 @@ const STATUS_CONFIG: Record<Status, { label: string; color: string; bg: string; 
 };
 
 const AnalysisStateCard = ({ title, value, recommended, maxValue = 100, comment }: AnalysisStateCardProps) => {
-  const status = getStatus(value);
-  const { label, color, bg, barColor } = STATUS_CONFIG[status];
+  const status = value !== null ? getStatus(value) : null;
+  const config = status ? STATUS_CONFIG[status] : null;
 
-  const fillRatio = Math.min(Math.max(value / maxValue, 0), 1);
+  const fillRatio = value !== null ? Math.min(Math.max(value / maxValue, 0), 1) : 0;
   const recommendedRatio = Math.min(Math.max(recommended / maxValue, 0), 1);
 
   return (
@@ -35,23 +35,24 @@ const AnalysisStateCard = ({ title, value, recommended, maxValue = 100, comment 
       {/* 헤더 */}
       <View style={styles.header}>
         <Text style={styles.titleText}>{title}</Text>
-        <View style={[styles.badge, { backgroundColor: bg }]}>
-          <Text style={[styles.badgeText, { color }]}>{label}</Text>
-        </View>
+        {config && (
+          <View style={[styles.badge, { backgroundColor: config.bg }]}>
+            <Text style={[styles.badgeText, { color: config.color }]}>{config.label}</Text>
+          </View>
+        )}
       </View>
 
       <View style={styles.stateContent}>
         {/* 바 + 수치 */}
         <View style={styles.barRow}>
           <View style={styles.barTrack}>
-            <View style={[styles.barFill, { flex: fillRatio, backgroundColor: barColor }]} />
+            <View style={[styles.barFill, { flex: fillRatio, backgroundColor: config?.barColor ?? '#E5E7EB' }]} />
             <View style={[styles.barFill, { flex: 1 - fillRatio, backgroundColor: '#E5E7EB' }]} />
-            {/* 권장 위치 마커 */}
-            <View style={[styles.thumb, { left: `${recommendedRatio * 100}%` as any }]} />
+            {value !== null && <View style={[styles.thumb, { left: `${recommendedRatio * 100}%` as any }]} />}
           </View>
           <Text style={styles.valueText}>
-            <Text style={styles.valueBold}>{value}°</Text>
-            <Text style={styles.recommendedText}>{` / 권장 ${recommended}°`}</Text>
+            <Text style={styles.valueBold}>{value !== null ? `${value}°` : ''}</Text>
+            {value !== null && <Text style={styles.recommendedText}>{` / 권장 ${recommended}°`}</Text>}
           </Text>
         </View>
 
