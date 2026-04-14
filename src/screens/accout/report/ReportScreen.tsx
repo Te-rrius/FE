@@ -12,6 +12,7 @@ import { hp, wp } from '@/utils/dimension';
 import PoseAnalysis from './components/PoseAnalysis';
 import GameAnalysis from './components/GameAnalysis';
 import { getReportDetail } from '@/constants/dummySchedule';
+import SceneAnalysis from './components/SceneAnalysis';
 
 type ReportScreenProps = {
   reportId: string | string[];
@@ -61,6 +62,7 @@ const ReportScreen = ({ reportId }: ReportScreenProps) => {
       <View style={styles.analysisDetail}>
         <PoseAnalysis />
         <GameAnalysis />
+        <SceneAnalysis />
       </View>
     </ScrollView>
   );
