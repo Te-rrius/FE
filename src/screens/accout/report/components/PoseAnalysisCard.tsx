@@ -1,13 +1,13 @@
 import { hp, wp } from '@/utils/dimension';
 import { StyleSheet, Text, View } from 'react-native';
 
-interface AnalysisCardProps {
+interface PoseAnalysisCardProps {
   title: string;
   icon?: React.ReactNode;
   analysisText: string;
 }
 
-const AnalysisCard = ({ title, icon, analysisText }: AnalysisCardProps) => {
+const PoseAnalysisCard = ({ title, icon, analysisText }: PoseAnalysisCardProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.analysisTitle}>
@@ -19,11 +19,11 @@ const AnalysisCard = ({ title, icon, analysisText }: AnalysisCardProps) => {
   );
 };
 
-export default AnalysisCard;
+export default PoseAnalysisCard;
 
 const styles = StyleSheet.create({
   container: {
-    width: wp(171),
+    flex: 1,
     paddingHorizontal: wp(14),
     paddingTop: hp(18),
     paddingBottom: hp(20),
@@ -46,6 +46,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard500',
     lineHeight: hp(19),
     letterSpacing: wp(-0.325),
+  },
+
+  textRow: {
+    flexDirection: 'row',
+    gap: wp(2),
   },
 
   analysisText: {
