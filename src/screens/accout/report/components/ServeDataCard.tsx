@@ -32,7 +32,7 @@ export default ServeDataCard;
 
 const styles = StyleSheet.create({
   container: {
-    minWidth: wp(100),
+    minWidth: wp(105),
     height: hp(111),
     paddingHorizontal: wp(14),
     paddingTop: hp(16),

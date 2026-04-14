@@ -14,7 +14,7 @@ import ServeMaxSpeedIcon from '@/assets/images/report/serveMaxSpeedIcon.svg';
 import GameAnalysisCard from './GameAnalysisCard';
 import ServeDataCard from './ServeDataCard';
 
-const GameAnalysis = () => {
+const GameAnalysis = ({ player }: { player: 1 | 2 | null }) => {
   return (
     <View style={styles.container}>
       <ReportTitle icon={<GameAnalysisIcon />} title="경기 단위 분석" />
@@ -25,12 +25,33 @@ const GameAnalysis = () => {
         </View>
         <View style={styles.grid}>
           <View style={styles.row}>
-            <GameAnalysisCard title="평균 랠리 횟수" icon={<AvgRallyIcon />} analysisText="222" unit="회" />
-            <GameAnalysisCard title="최대 랠리 횟수" icon={<MaxRallyIcon />} analysisText="24" unit="회" />
+            <GameAnalysisCard
+              title="평균 랠리 횟수"
+              icon={<AvgRallyIcon />}
+              analysisText={player ? '222' : '-'}
+              unit="회"
+            />
+            <GameAnalysisCard
+              title="최대 랠리 횟수"
+              icon={<MaxRallyIcon />}
+              analysisText={player ? '24' : '-'}
+              unit="회"
+            />
           </View>
           <View style={styles.row}>
-            <GameAnalysisCard status="active" title="총 샷 수" icon={<TotalShotIcon />} analysisText="342" unit="개" />
-            <GameAnalysisCard title="최소 랠리 횟수" icon={<MinRallyIcon />} analysisText="24" unit="회" />
+            <GameAnalysisCard
+              status="active"
+              title="총 샷 수"
+              icon={<TotalShotIcon />}
+              analysisText={player ? '342' : '-'}
+              unit="개"
+            />
+            <GameAnalysisCard
+              title="최소 랠리 횟수"
+              icon={<MinRallyIcon />}
+              analysisText={player ? '24' : '-'}
+              unit="회"
+            />
           </View>
         </View>
       </View>
@@ -41,18 +62,28 @@ const GameAnalysis = () => {
           <Text style={styles.titleText}>서브 데이터</Text>
         </View>
         <View style={styles.serveGrid}>
-          <View style={styles.serveRow}>
-            <ServeDataCard title={`퍼스트\n서브 성공률`} icon={<FirstServeIcon />} value={10} />
-            <View style={{ flex: 90 }} />
-          </View>
-          <View style={styles.serveRow}>
-            <ServeDataCard title={`세컨드\n서브 성공률`} icon={<SecondServeIcon />} value={80} status="active" />
-            <View style={{ flex: 20 }} />
-          </View>
-          <View style={styles.serveRow}>
-            <ServeDataCard title="서브 최고 속도" icon={<ServeMaxSpeedIcon />} value={10} />
-            <View style={{ flex: 90 }} />
-          </View>
+          {player !== null ? (
+            <>
+              <View style={styles.serveRow}>
+                <ServeDataCard title="퍼스트 서브 성공률" icon={<FirstServeIcon />} value={10} />
+                <View style={{ flex: 90 }} />
+              </View>
+              <View style={styles.serveRow}>
+                <ServeDataCard title="세컨드 서브 성공률" icon={<SecondServeIcon />} value={80} status="active" />
+                <View style={{ flex: 20 }} />
+              </View>
+              <View style={styles.serveRow}>
+                <ServeDataCard title="서브 최고 속도" icon={<ServeMaxSpeedIcon />} value={10} />
+                <View style={{ flex: 90 }} />
+              </View>
+            </>
+          ) : (
+            <>
+              <View style={[styles.serveRow, { height: hp(111) }]} />
+              <View style={[styles.serveRow, { height: hp(111) }]} />
+              <View style={[styles.serveRow, { height: hp(111) }]} />
+            </>
+          )}
         </View>
       </View>
     </View>
