@@ -1,15 +1,15 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import PageHeader from '@/components/layout/PageHeader';
+import Divider from '@/components/common/Divider';
+import ReportInfo from './components/ReportInfo';
 
 import ReportDownloadIcon from '@/assets/images/report/reportDownloadIcon.svg';
 import SelectArrowIcon from '@/assets/images/report/selectArrowIcon.svg';
 import Player1Icon from '@/assets/images/report/player1Icon.svg';
 import Player2Icon from '@/assets/images/report/player2Icon.svg';
 
-import PageHeader from '@/components/layout/PageHeader';
-
 import { hp, wp } from '@/utils/dimension';
-import Divider from '@/components/common/Divider';
-import ReportInfo from './components/ReportInfo';
+import PoseAnalysis from './components/PoseAnalysis';
 
 type ReportScreenProps = {
   reportId: string | string[];
@@ -18,35 +18,39 @@ type ReportScreenProps = {
 const ReportScreen = ({ reportId }: ReportScreenProps) => {
   return (
     <View style={styles.container}>
-      <PageHeader
-        rightContent={
-          <Pressable style={styles.headerDownContainer}>
-            <Text style={styles.headerDownText}>리포트 다운</Text>
-            <ReportDownloadIcon />
-          </Pressable>
-        }
-      />
-      <View style={styles.topContainer}>
-        <View style={styles.infoContainer}>
-          <SelectArrowIcon />
-          <Text style={styles.selectText}>
-            아래 분석할 <Text style={styles.strongText}>대상을 먼저 선택</Text>해 주세요!
-          </Text>
-          <SelectArrowIcon />
+      <View style={styles.selectContainer}>
+        <PageHeader
+          rightContent={
+            <Pressable style={styles.headerDownContainer}>
+              <Text style={styles.headerDownText}>리포트 다운</Text>
+              <ReportDownloadIcon />
+            </Pressable>
+          }
+        />
+        <View style={styles.topContainer}>
+          <View style={styles.infoContainer}>
+            <SelectArrowIcon />
+            <Text style={styles.selectText}>
+              아래 분석할 <Text style={styles.strongText}>대상을 먼저 선택</Text>해 주세요!
+            </Text>
+            <SelectArrowIcon />
+          </View>
+          <View style={styles.playerIcon}>
+            {/* 프로필 선택 시 분기 처리 예정 */}
+            <Pressable>
+              <Player1Icon />
+            </Pressable>
+            <Pressable>
+              <Player2Icon />
+            </Pressable>
+          </View>
         </View>
-        <View style={styles.playerIcon}>
-          <Pressable>
-            <Player1Icon />
-          </Pressable>
-          <Pressable>
-            <Player2Icon />
-          </Pressable>
+        <Divider />
+        <View style={styles.reportInfoWrapper}>
+          <ReportInfo />
         </View>
       </View>
-      <Divider />
-      <View style={styles.reportInfoWrapper}>
-        <ReportInfo />
-      </View>
+      <PoseAnalysis />
     </View>
   );
 };
@@ -54,7 +58,9 @@ const ReportScreen = ({ reportId }: ReportScreenProps) => {
 export default ReportScreen;
 
 const styles = StyleSheet.create({
-  container: {
+  container: {},
+
+  selectContainer: {
     gap: hp(16),
   },
 
