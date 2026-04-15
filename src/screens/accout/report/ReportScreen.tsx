@@ -3,7 +3,8 @@ import PageHeader from '@/components/layout/PageHeader';
 import Divider from '@/components/common/Divider';
 import ReportInfo from './components/ReportInfo';
 
-import ReportDownloadIcon from '@/assets/images/report/reportDownloadIcon.svg';
+import ActiveDownloadIcon from '@/assets/images/report/activeDownloadIcon.svg';
+import InactiveDownloadIcon from '@/assets/images/report/inactiveDownloadIcon.svg';
 import SelectArrowIcon from '@/assets/images/report/selectArrowIcon.svg';
 import Player1Icon from '@/assets/images/report/player1Icon.svg';
 import Player2Icon from '@/assets/images/report/player2Icon.svg';
@@ -33,9 +34,15 @@ const ReportScreen = ({ reportId }: ReportScreenProps) => {
       <View style={styles.selectContainer}>
         <PageHeader
           rightContent={
-            <Pressable style={styles.headerDownContainer}>
-              <Text style={styles.headerDownText}>리포트 다운</Text>
-              <ReportDownloadIcon />
+            <Pressable
+              style={[styles.headerDownContainer, selectedPlayer !== null && styles.headerDownContainerActive]}
+              onPress={() => selectedPlayer !== null && }
+              disabled={selectedPlayer === null}
+            >
+              <Text style={[styles.headerDownText, selectedPlayer !== null && styles.headerDownTextActive]}>
+                리포트 다운
+              </Text>
+              {selectedPlayer !== null ? <ActiveDownloadIcon /> : <InactiveDownloadIcon />}
             </Pressable>
           }
         />
@@ -105,12 +112,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
 
+  headerDownContainerActive: {
+    borderColor: '#4048F7',
+  },
+
   headerDownText: {
     color: '#999999',
     fontFamily: 'Pretendard600',
     fontSize: wp(14),
     lineHeight: hp(20),
     letterSpacing: wp(-0.3),
+  },
+
+  headerDownTextActive: {
+    color: '#4048F7',
   },
 
   topContainer: {
