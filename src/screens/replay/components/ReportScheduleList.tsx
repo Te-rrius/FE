@@ -7,6 +7,7 @@ import RequestReportInfo from './RequestReportInfo';
 import TimeIcon from '@/assets/images/replay/timeIcon.svg';
 import { DUMMY_SCHEDULES } from '@/constants/dummySchedule';
 import { useQuery } from '@tanstack/react-query';
+import { router } from 'expo-router';
 
 interface ReportScheduleListProps {
   selectedCourtId: number | null;
@@ -61,7 +62,10 @@ const ReportScheduleList = ({ selectedCourtId, selectedDate, onPress }: ReportSc
               <Pressable
                 key={schedule.scheduleId}
                 style={[styles.scheduleCard, selectedScheduleId === schedule.scheduleId && styles.scheduleCardActive]}
-                onPress={() => setSelectedScheduleId(schedule.scheduleId)}
+                onPress={() => {
+                  setSelectedScheduleId(schedule.scheduleId);
+                  router.push({ pathname: '/report/[reportId]', params: { reportId: schedule.reportId } });
+                }}
               >
                 <Text style={styles.scheduleHours}>{schedule.hours}</Text>
                 <Text style={styles.scheduleCount}>{GAME_TYPE_LABEL[schedule.gameType]}</Text>
