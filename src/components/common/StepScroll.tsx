@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
 import {
+  Image,
+  ImageSourcePropType,
   NativeScrollEvent,
   NativeSyntheticEvent,
   ScrollView,
@@ -11,8 +13,11 @@ import {
 import { hp, wp } from '@/utils/dimension';
 import { SvgProps } from 'react-native-svg';
 
+type ImageItem = ImageSourcePropType;
+type SvgItem = React.ComponentType<SvgProps>;
+
 type StepScrollProps = {
-  images: React.ComponentType<SvgProps>[];
+  images: (ImageItem | SvgItem)[];
 };
 
 const StepScroll = ({ images }: StepScrollProps) => {
@@ -46,9 +51,16 @@ const StepScroll = ({ images }: StepScrollProps) => {
         onScroll={onScroll}
         scrollEventThrottle={16}
       >
-        {images.map((ScrollImg, index) => (
+        {images.map((item, index) => (
           <View key={index} style={[styles.slide, index < total - 1 && { marginRight: wp(12) }]}>
-            <ScrollImg style={styles.stepImg} />
+            {typeof item === 'function' ? (
+              (() => {
+                const Svg = item;
+                return <Svg width={wp(330)} height={hp(300)} />;
+              })()
+            ) : (
+              <Image source={item} style={styles.stepImg} resizeMode="contain" />
+            )}
           </View>
         ))}
       </ScrollView>
