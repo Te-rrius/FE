@@ -8,8 +8,8 @@ import ReportScheduleList from './ReportScheduleList';
 import CourtSelector from './CourtSelector';
 
 import DownStep1Icon from '@/assets/images/common/downStep1Icon.svg';
-import DownStep2Icon from '@/assets/images/common/downStep2Icon.svg';
-import DownStep3Icon from '@/assets/images/common/downStep3Icon.svg';
+import DownStep2Icon from '@/assets/images/common/pngIcon/downStep2Icon.png';
+import DownStep3Icon from '@/assets/images/common/pngIcon/downStep3Icon.png';
 import ReportDownBanner from '@/assets/images/banner/reportDownBanner.svg';
 import { useQuery } from '@tanstack/react-query';
 import { DUMMY_COURTS, DUMMY_SCHEDULES } from '@/constants/dummySchedule';
