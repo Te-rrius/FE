@@ -2,12 +2,12 @@ import { ScheduleDto } from '@/constants/dummySchedule';
 import { hp, wp } from '@/utils/dimension';
 import { Modal, StyleSheet, Text, View } from 'react-native';
 import ButtonGroup from '../common/ButtonGroup';
-import { useRouter } from 'expo-router';
 import useAuthStore from '@/store/authStore';
 
 import LocationIcon from '@/assets/images/replay/locationIcon.svg';
 import ScheduleIcon from '@/assets/images/replay/scheduleIcon.svg';
 import LineIcon from '@/assets/images/modal/lineIcon.svg';
+import { router } from 'expo-router';
 
 interface RequestModalProps {
   schedule: ScheduleDto;
@@ -19,7 +19,6 @@ interface RequestModalProps {
 const formatDate = (date: string) => date.replace(/-/g, '.');
 
 const RequestModal = ({ schedule, courtName, onClose, onConfirm }: RequestModalProps) => {
-  const router = useRouter();
   const { token } = useAuthStore();
 
   const handleRequest = () => {

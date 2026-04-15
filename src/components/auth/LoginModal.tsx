@@ -1,5 +1,4 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useRouter } from 'expo-router';
 import { hp, wp } from '@/utils/dimension';
 import { login } from '@react-native-kakao/user';
 import useAuthStore from '@/store/authStore';
@@ -7,10 +6,10 @@ import useAuthStore from '@/store/authStore';
 import MainLogoIcon from '@/assets/images/mainLogoIcon.svg';
 import LoginModalCloseIcon from '@/assets/images/modal/loginModalCloseIcon.svg';
 import KakaoIcon from '@/assets/images/modal/kakaoIcon.svg';
+import { router } from 'expo-router';
 
 const LoginModal = () => {
   const { closeLoginModal, login: authLogin, returnPath } = useAuthStore();
-  const router = useRouter();
 
   const handleKakaoLogin = async () => {
     try {
