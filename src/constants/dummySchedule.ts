@@ -1,34 +1,13 @@
-import { DUMMY_COURTS } from './dummyStadium';
+import { DUMMY_STADIUMS } from './dummyStadium';
 
+// 코트
 export interface CourtDto {
   courtId: number;
   name: string;
 }
 
-export interface ReportScheduleDto {
-  scheduleId: number;
-  date: string;
-  hours: string;
-  gameType: 'SINGLE' | 'DOUBLE';
-}
-
-export interface MatchScheduleDto {
-  scheduleId: number;
-  date: string;
-  hours: string;
-  isRequested: boolean;
-}
-
-export interface ReportDummyDto {
-  reportId: number;
-  date: string;
-  stadiumId: number;
-  courtId: number;
-  scheduleId: number;
-}
-
-// 구역명
-export const DUMMY_REPORT_COURTS: Record<number, CourtDto[]> = {
+// StadiumId → 코트 목록
+export const DUMMY_COURTS: Record<number, CourtDto[]> = {
   1: [
     { courtId: 1, name: '1코트' },
     { courtId: 2, name: '2코트' },
@@ -39,77 +18,101 @@ export const DUMMY_REPORT_COURTS: Record<number, CourtDto[]> = {
   ],
 };
 
-// 리포트 시간대
-export const DUMMY_REPORT_SCHEDULES: Record<number, ReportScheduleDto[]> = {
+// 스케줄
+export interface ScheduleDto {
+  scheduleId: number; // 전역 유일
+  courtId: number;
+  date: string;
+  hours: string;
+  gameType: 'SINGLE' | 'DOUBLE';
+  isRequested: boolean;
+  reportId?: number; // 신청 후 리포트 완성되면 생김
+}
+
+// courtId → 경기 목록
+export const DUMMY_SCHEDULES: Record<number, ScheduleDto[]> = {
+  // 1코트
   1: [
-    { scheduleId: 1, date: '2026-04-03', hours: '10:00~11:00', gameType: 'SINGLE' },
-    { scheduleId: 2, date: '2026-04-04', hours: '12:00~13:00', gameType: 'DOUBLE' },
-    { scheduleId: 3, date: '2026-04-04', hours: '12:00~13:00', gameType: 'DOUBLE' },
-    { scheduleId: 4, date: '2026-04-07', hours: '12:00~13:00', gameType: 'DOUBLE' },
-    { scheduleId: 5, date: '2026-04-10', hours: '12:00~13:00', gameType: 'DOUBLE' },
-    { scheduleId: 6, date: '2026-04-12', hours: '14:00~15:00', gameType: 'DOUBLE' },
+    {
+      scheduleId: 1,
+      courtId: 1,
+      date: '2026-04-12',
+      hours: '10:00~11:00',
+      gameType: 'SINGLE',
+      isRequested: true,
+      reportId: 1,
+    },
+    {
+      scheduleId: 2,
+      courtId: 1,
+      date: '2026-04-14',
+      hours: '12:00~13:00',
+      gameType: 'DOUBLE',
+      isRequested: true,
+      reportId: 2,
+    },
+    { scheduleId: 3, courtId: 1, date: '2026-04-14', hours: '15:00~19:00', gameType: 'SINGLE', isRequested: false },
+    { scheduleId: 4, courtId: 1, date: '2026-04-15', hours: '09:00~10:00', gameType: 'DOUBLE', isRequested: false },
   ],
+  // 2코트
   2: [
-    { scheduleId: 7, date: '2026-04-06', hours: '10:00~12:00', gameType: 'SINGLE' },
-    { scheduleId: 8, date: '2026-04-08', hours: '14:00~15:00', gameType: 'DOUBLE' },
-    { scheduleId: 9, date: '2026-04-09', hours: '09:00~13:00', gameType: 'SINGLE' },
-    { scheduleId: 10, date: '2026-04-09', hours: '14:00~16:00', gameType: 'DOUBLE' },
+    {
+      scheduleId: 5,
+      courtId: 2,
+      date: '2026-04-10',
+      hours: '10:00~12:00',
+      gameType: 'SINGLE',
+      isRequested: true,
+      reportId: 3,
+    },
+    { scheduleId: 6, courtId: 2, date: '2026-04-13', hours: '14:00~15:00', gameType: 'DOUBLE', isRequested: false },
   ],
+  // A코트
   3: [
-    { scheduleId: 11, date: '2026-04-03', hours: '11:00~12:00', gameType: 'SINGLE' },
-    { scheduleId: 12, date: '2026-04-03', hours: '13:00~15:00', gameType: 'DOUBLE' },
-    { scheduleId: 13, date: '2026-04-04', hours: '10:00~12:00', gameType: 'SINGLE' },
-    { scheduleId: 14, date: '2026-04-08', hours: '10:00~11:00', gameType: 'DOUBLE' },
+    {
+      scheduleId: 7,
+      courtId: 3,
+      date: '2026-04-13',
+      hours: '11:00~12:00',
+      gameType: 'SINGLE',
+      isRequested: true,
+      reportId: 4,
+    },
+    { scheduleId: 8, courtId: 3, date: '2026-04-15', hours: '09:00~10:00', gameType: 'DOUBLE', isRequested: false },
   ],
+  // B코트
   4: [
-    { scheduleId: 15, date: '2026-04-04', hours: '11:00~12:00', gameType: 'SINGLE' },
-    { scheduleId: 16, date: '2026-04-04', hours: '13:00~15:00', gameType: 'DOUBLE' },
-    { scheduleId: 17, date: '2026-04-07', hours: '10:00~12:00', gameType: 'SINGLE' },
-    { scheduleId: 18, date: '2026-04-09', hours: '10:00~11:00', gameType: 'DOUBLE' },
+    { scheduleId: 9, courtId: 4, date: '2026-04-10', hours: '11:00~12:00', gameType: 'SINGLE', isRequested: false },
+    { scheduleId: 10, courtId: 4, date: '2026-04-13', hours: '10:00~12:00', gameType: 'DOUBLE', isRequested: false },
   ],
 };
 
-// 경기 스케줄
-export const DUMMY_MATCH_SCHEDULES: Record<number, MatchScheduleDto[]> = {
-  1: [
-    { scheduleId: 1, date: '2026-04-08', hours: '10:00~11:00', isRequested: false },
-    { scheduleId: 2, date: '2026-04-08', hours: '12:00~14:00', isRequested: false },
-    { scheduleId: 3, date: '2026-04-08', hours: '15:00~19:00', isRequested: false },
-    { scheduleId: 4, date: '2026-04-09', hours: '09:00~10:00', isRequested: false },
-    { scheduleId: 5, date: '2026-04-14', hours: '10:00~12:00', isRequested: false },
-    { scheduleId: 6, date: '2026-04-14', hours: '13:00~14:00', isRequested: false },
-  ],
-  2: [
-    { scheduleId: 7, date: '2026-04-08', hours: '09:00~10:00', isRequested: false },
-    { scheduleId: 8, date: '2026-04-09', hours: '09:00~10:00', isRequested: false },
-    { scheduleId: 9, date: '2026-04-10', hours: '16:00~18:00', isRequested: false },
-  ],
-  3: [
-    { scheduleId: 10, date: '2026-04-08', hours: '12:00~13:00', isRequested: false },
-    { scheduleId: 11, date: '2026-04-09', hours: '09:00~10:00', isRequested: false },
-    { scheduleId: 12, date: '2026-04-10', hours: '11:00~13:00', isRequested: false },
-  ],
-  4: [
-    { scheduleId: 13, date: '2026-04-08', hours: '10:00~11:00', isRequested: false },
-    { scheduleId: 14, date: '2026-04-10', hours: '14:00~15:00', isRequested: false },
-  ],
+// 리포트
+export interface ReportDto {
+  reportId: number;
+  scheduleId: number; // 경기와 리포트는 무조건 일대일
+  stadiumId: number;
+  courtId: number;
+  date: string;
+}
+
+// reportId → 리포트
+export const DUMMY_REPORTS: Record<number, ReportDto> = {
+  1: { reportId: 1, scheduleId: 1, stadiumId: 1, courtId: 1, date: '2026. 04. 03.' },
+  2: { reportId: 2, scheduleId: 2, stadiumId: 1, courtId: 1, date: '2026. 04. 04.' },
+  3: { reportId: 3, scheduleId: 5, stadiumId: 1, courtId: 2, date: '2026. 04. 06.' },
+  4: { reportId: 4, scheduleId: 7, stadiumId: 2, courtId: 3, date: '2026. 04. 03.' },
 };
 
-export const DUMMY_REPORTS: Record<number, ReportDummyDto> = {
-  1: { reportId: 1, date: '2025. 12. 01.', stadiumId: 1, courtId: 1, scheduleId: 1 },
-  2: { reportId: 2, date: '2025. 12. 17.', stadiumId: 1, courtId: 2, scheduleId: 7 },
-  3: { reportId: 3, date: '2026. 03. 06.', stadiumId: 2, courtId: 3, scheduleId: 11 },
-  4: { reportId: 4, date: '2026. 03. 27.', stadiumId: 2, courtId: 4, scheduleId: 15 },
-};
-
+// 추후 변경 예정
 export const getReportDetail = (reportId: number) => {
   const report = DUMMY_REPORTS[reportId];
   if (!report) return null;
 
-  const stadium = DUMMY_COURTS.find((s) => s.stadiumId === report.stadiumId);
-  const courts = DUMMY_REPORT_COURTS[report.courtId];
-  const schedule = DUMMY_REPORT_SCHEDULES[report.courtId]?.find((s) => s.scheduleId === report.scheduleId);
-  const matchSchedules = DUMMY_MATCH_SCHEDULES[report.courtId];
+  const stadium = DUMMY_STADIUMS.find((s) => s.stadiumId === report.stadiumId);
+  const courts = DUMMY_COURTS[report.stadiumId];
+  const court = courts?.find((c) => c.courtId === report.courtId);
+  const schedule = DUMMY_SCHEDULES[report.courtId]?.find((s) => s.scheduleId === report.scheduleId);
 
-  return { report, stadium, courts, schedule, matchSchedules };
+  return { report, stadium, court, schedule };
 };

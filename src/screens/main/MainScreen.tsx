@@ -8,9 +8,9 @@ import Divider from '@/components/common/Divider';
 import SearchBar from '@/components/common/SearchBar';
 import Dropdown from '@/components/common/Dropdown';
 import useBannerSize from '@/utils/bannerSize';
-import { DUMMY_COURTS } from '@/constants/dummyStadium';
 import StadiumList from './components/CourtList';
 import { useQuery } from '@tanstack/react-query';
+import { DUMMY_STADIUMS } from '@/constants/dummyStadium';
 
 const tabs = [
   { key: 'GENERAL', label: '구장' },
@@ -18,7 +18,7 @@ const tabs = [
   { key: 'PRO', label: '프로구장' },
 ];
 
-const fetchCourts = async () => DUMMY_COURTS; // 수정 예정
+const fetchCourts = async () => DUMMY_STADIUMS; // 수정 예정
 
 const MainScreen = () => {
   const [activeTab, setActiveTab] = useState('GENERAL');

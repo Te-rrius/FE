@@ -4,7 +4,6 @@ import Divider from '@/components/common/Divider';
 import StepScroll from '@/components/common/StepScroll';
 import { StyleSheet, Text, View } from 'react-native';
 import { hp, wp } from '@/utils/dimension';
-import { DUMMY_REPORT_COURTS } from '@/constants/dummySchedule';
 
 import ReportRequestBanner from '@/assets/images/banner/reportRequestBanner.svg';
 import RequestStep1Icon from '@/assets/images/common/requestStep1Icon.svg';
@@ -15,6 +14,7 @@ import { useState } from 'react';
 import Dropdown from '@/components/common/Dropdown';
 import LocationIcon from '@/assets/images/replay/locationIcon.svg';
 import { useQuery } from '@tanstack/react-query';
+import { DUMMY_COURTS } from '@/constants/dummySchedule';
 
 const REQUEST_STEPS = [RequestStep1Icon, RequestStep2Icon];
 
@@ -28,7 +28,7 @@ interface RequestReportTabProps {
 
 // 수정 예정
 // StadiumDetailScreen ReportDownloadTab 중복 분리 예정
-const fetchReportCourts = async (id: number) => DUMMY_REPORT_COURTS[id] ?? [];
+const fetchCourts = async (id: number) => DUMMY_COURTS[id] ?? [];
 
 const RequestReportTab = ({
   stadiumId,
@@ -41,8 +41,8 @@ const RequestReportTab = ({
 
   // 해당 구장의 코트 목록
   const { data: courtList = [] } = useQuery({
-    queryKey: ['reportCourts', stadiumId],
-    queryFn: () => fetchReportCourts(stadiumId),
+    queryKey: ['courts', stadiumId],
+    queryFn: () => fetchCourts(stadiumId),
   });
 
   const selectedCourt = courtList.find((c) => c.courtId === selectedCourtId);

@@ -11,7 +11,7 @@ export interface StadiumLocationDto {
   region: string[];
 }
 
-export const DUMMY_COURTS: StadiumDto[] = [
+export const DUMMY_STADIUMS: StadiumDto[] = [
   {
     stadiumId: 1,
     name: '천마 풋살파크',

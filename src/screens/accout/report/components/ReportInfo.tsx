@@ -6,20 +6,20 @@ import LineIcon from '@/assets/images/modal/lineIcon.svg';
 import DefaultProfileIcon from '@/assets/images/report/defaultProfileIcon.svg';
 
 import { hp, wp } from '@/utils/dimension';
-import { CourtDto, ReportScheduleDto } from '@/constants/dummySchedule';
+import { CourtDto, ScheduleDto } from '@/constants/dummySchedule';
 import { StadiumDto } from '@/constants/dummyStadium';
 import { LinearGradient } from 'expo-linear-gradient';
 
 interface ReportInfoProps {
   date: string;
-  schedule: ReportScheduleDto | undefined;
-  courts: CourtDto[] | undefined;
+  schedule: ScheduleDto | undefined;
+  court: CourtDto | undefined;
   stadium: StadiumDto | undefined;
   selectedPlayer: 1 | 2 | null;
 }
 
-const ReportInfo = ({ date, schedule, courts, stadium, selectedPlayer }: ReportInfoProps) => {
-  const courtName = courts?.[0]?.name ?? '구역명';
+const ReportInfo = ({ date, schedule, court, stadium, selectedPlayer }: ReportInfoProps) => {
+  const courtName = court?.name ?? '구역명';
 
   const content = (
     <>

@@ -22,25 +22,25 @@ export interface ReportAnalysisDto {
   game: GameAnalysisDto;
 }
 
-export const DUMMY_REPORT_ANALYSIS: Record<1 | 2, ReportAnalysisDto> = {
+// reportId → 분석 데이터
+export const DUMMY_REPORT_ANALYSIS: Record<number, ReportAnalysisDto> = {
   1: {
     pose: {
       shotType: '백핸드',
       totalScore: '87.5점',
       shoulderRotation: { value: 85, recommended: 80, comment: '이상적인 어깨 회전이에요!' },
       spineRotation: { value: 64, recommended: 80, comment: '6° 부족해요. 상체를 더 틀어보세요' },
-      waistRotation: { value: 10, recommended: 80, comment: '6° 부족해요. 허리를 더 틀어보세요' },
-      improvePoint: '허리 회전 방향을 교정하면 점수가 약 +15점 향상될 수 있어요',
+      waistRotation: { value: 10, recommended: 80, comment: '허리를 더 틀어보세요' },
+      improvePoint: '허리 회전 교정 시 약 +15점 향상 가능해요',
     },
-
     game: {
-      avgRally: 222,
+      avgRally: 18,
       maxRally: 24,
       totalShot: 342,
-      minRally: 24,
-      firstServeRate: 10,
+      minRally: 5,
+      firstServeRate: 72,
       secondServeRate: 80,
-      serveMaxSpeed: 222,
+      serveMaxSpeed: 185,
     },
   },
 

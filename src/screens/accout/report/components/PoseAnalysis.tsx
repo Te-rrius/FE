@@ -10,7 +10,7 @@ import ShotIcon from '@/assets/images/report/shotIcon.svg';
 import ScoreIcon from '@/assets/images/report/scoreIcon.svg';
 import AnalysisStateCard from './AnalysisStateCard';
 import { useQuery } from '@tanstack/react-query';
-import { DUMMY_REPORT_ANALYSIS } from '@/constants/dummyReport';
+import { DUMMY_REPORT_ANALYSIS } from '@/constants/dummyReportAnalysis';
 
 const POSES = ['포핸드', '백핸드', '서브', '스매시'] as const;
 

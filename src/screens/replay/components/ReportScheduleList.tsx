@@ -5,7 +5,7 @@ import { hp, wp } from '@/utils/dimension';
 import RequestReportInfo from './RequestReportInfo';
 
 import TimeIcon from '@/assets/images/replay/timeIcon.svg';
-import { DUMMY_REPORT_SCHEDULES } from '@/constants/dummySchedule';
+import { DUMMY_SCHEDULES } from '@/constants/dummySchedule';
 import { useQuery } from '@tanstack/react-query';
 
 interface ReportScheduleListProps {
@@ -21,7 +21,8 @@ const GAME_TYPE_LABEL = {
 
 // 수정 예정
 // ReportDownloadTab 중복 분리
-const fetchReportSchedules = async (courtId: number) => DUMMY_REPORT_SCHEDULES[courtId] ?? [];
+const fetchDownloadSchedules = async (courtId: number) =>
+  (DUMMY_SCHEDULES[courtId] ?? []).filter((s) => s.isRequested && s.reportId);
 
 const ReportScheduleList = ({ selectedCourtId, selectedDate, onPress }: ReportScheduleListProps) => {
   // 선택된 리포트
@@ -36,8 +37,8 @@ const ReportScheduleList = ({ selectedCourtId, selectedDate, onPress }: ReportSc
   };
 
   const { data: allSchedules = [] } = useQuery({
-    queryKey: ['reportSchedules', selectedCourtId],
-    queryFn: () => fetchReportSchedules(selectedCourtId!),
+    queryKey: ['downloadSchedules', selectedCourtId],
+    queryFn: () => fetchDownloadSchedules(selectedCourtId!),
     enabled: selectedCourtId !== null,
   });
 

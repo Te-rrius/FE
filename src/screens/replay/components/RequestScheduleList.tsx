@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { hp, wp } from '@/utils/dimension';
-import { DUMMY_MATCH_SCHEDULES, MatchScheduleDto } from '@/constants/dummySchedule';
+import { DUMMY_SCHEDULES, ScheduleDto } from '@/constants/dummySchedule';
 import { useState } from 'react';
 import RequestModal from '@/components/modal/RequestModal';
 import useAuthStore from '@/store/authStore';
@@ -20,21 +20,21 @@ const formatToKoreanTime = (hours: string) => {
 };
 
 // 수정 예정
-const fetchMatchSchedules = async (courtId: number) => DUMMY_MATCH_SCHEDULES[courtId] ?? [];
+const fetchRequestSchedules = async (courtId: number) => (DUMMY_SCHEDULES[courtId] ?? []).filter((s) => !s.isRequested);
 
 const RequestScheduleList = ({ selectedCourtId, courtName, selectedDate }: RequestScheduleListProps) => {
   const { token, openLoginModal } = useAuthStore();
   const { requestedIds, addRequestedId } = useRequestStore();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedSchedule, setSelectedSchedule] = useState<MatchScheduleDto | null>(null);
+  const [selectedSchedule, setSelectedSchedule] = useState<ScheduleDto | null>(null);
 
   const toDateString = (date: Date) => date.toISOString().split('T')[0];
 
   // 선택된 코트의 경기 시간 목록 조회
   const { data: allSchedules = [] } = useQuery({
-    queryKey: ['matchSchedules', selectedCourtId],
-    queryFn: () => fetchMatchSchedules(selectedCourtId!),
+    queryKey: ['requestSchedules', selectedCourtId],
+    queryFn: () => fetchRequestSchedules(selectedCourtId!),
     enabled: selectedCourtId !== null,
   });
 

@@ -1,4 +1,4 @@
-import { MatchScheduleDto } from '@/constants/dummySchedule';
+import { ScheduleDto } from '@/constants/dummySchedule';
 import { hp, wp } from '@/utils/dimension';
 import { Modal, StyleSheet, Text, View } from 'react-native';
 import ButtonGroup from '../common/ButtonGroup';
@@ -10,7 +10,7 @@ import ScheduleIcon from '@/assets/images/replay/scheduleIcon.svg';
 import LineIcon from '@/assets/images/modal/lineIcon.svg';
 
 interface RequestModalProps {
-  schedule: MatchScheduleDto;
+  schedule: ScheduleDto;
   courtName: string;
   onClose: () => void;
   onConfirm: (scheduleId: number) => void;

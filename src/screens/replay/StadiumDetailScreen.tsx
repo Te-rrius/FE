@@ -1,13 +1,13 @@
 import Tab from '@/components/common/Tab';
 import Header from '@/components/layout/Header';
-import { DUMMY_COURTS } from '@/constants/dummyStadium';
 import { hp, wp } from '@/utils/dimension';
 import { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import ReportDownloadTab from './components/ReportDownloadTab';
 import RequestReportTab from './components/RequestReportTab';
-import { DUMMY_REPORT_COURTS } from '@/constants/dummySchedule';
 import { useQuery } from '@tanstack/react-query';
+import { DUMMY_STADIUMS } from '@/constants/dummyStadium';
+import { DUMMY_COURTS } from '@/constants/dummySchedule';
 
 interface StadiumDetailProps {
   stadiumId: string | string[];
@@ -15,24 +15,25 @@ interface StadiumDetailProps {
 
 // 수정 예정
 // 구장 상세 정보
-const fetchCourtDetail = async (id: number) => DUMMY_COURTS.find((c) => c.stadiumId === id) ?? null;
-// 해당 구장 코트 목록
-const fetchReportCourts = async (id: number) => DUMMY_REPORT_COURTS[id] ?? [];
+const fetchStadiumDetail = async (id: number) => DUMMY_STADIUMS.find((s) => s.stadiumId === id) ?? null;
+
+const fetchCourts = async (id: number) => DUMMY_COURTS[id] ?? [];
 
 const StadiumDetailScreen = ({ stadiumId }: StadiumDetailProps) => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTab, setSelectedTab] = useState('분석 리포트 다운');
 
   const id = Array.isArray(stadiumId) ? Number(stadiumId[0]) : Number(stadiumId);
+
   const { data: stadium } = useQuery({
-    queryKey: ['court', id],
-    queryFn: () => fetchCourtDetail(id),
+    queryKey: ['stadium', id],
+    queryFn: () => fetchStadiumDetail(id),
   });
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const { data: reportCourts = [] } = useQuery({
-    queryKey: ['reportCourts', id],
-    queryFn: () => fetchReportCourts(id),
-  });
+    queryKey: ['courts', id],
+    queryFn: () => fetchCourts(id),
+  }); // 해당 구장 코트 목록
 
   // 코트 목록 로드 후 첫 번째 코트를 기본 선택값으로 설정
   const [selectedCourtId, setSelectedCourtId] = useState<number | null>(null);

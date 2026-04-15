@@ -14,7 +14,7 @@ import ServeMaxSpeedIcon from '@/assets/images/report/serveMaxSpeedIcon.svg';
 import GameAnalysisCard from './GameAnalysisCard';
 import ServeDataCard from './ServeDataCard';
 import { useQuery } from '@tanstack/react-query';
-import { DUMMY_REPORT_ANALYSIS } from '@/constants/dummyReport';
+import { DUMMY_REPORT_ANALYSIS } from '@/constants/dummyReportAnalysis';
 
 const GameAnalysis = ({ player }: { player: 1 | 2 | null }) => {
   const { data } = useQuery({

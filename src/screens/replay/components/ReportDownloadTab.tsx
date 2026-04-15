@@ -11,8 +11,8 @@ import DownStep1Icon from '@/assets/images/common/downStep1Icon.svg';
 import DownStep2Icon from '@/assets/images/common/downStep2Icon.svg';
 import DownStep3Icon from '@/assets/images/common/downStep3Icon.svg';
 import ReportDownBanner from '@/assets/images/banner/reportDownBanner.svg';
-import { DUMMY_REPORT_COURTS, DUMMY_REPORT_SCHEDULES } from '@/constants/dummySchedule';
 import { useQuery } from '@tanstack/react-query';
+import { DUMMY_COURTS, DUMMY_SCHEDULES } from '@/constants/dummySchedule';
 
 interface ReportDownloadTabProps {
   stadiumId: number;
@@ -27,9 +27,11 @@ const DOWN_STEPS = [DownStep1Icon, DownStep2Icon, DownStep3Icon];
 
 // 수정 예정
 // 선택된 코드 일정
-const fetchReportSchedules = async (courtId: number) => DUMMY_REPORT_SCHEDULES[courtId] ?? [];
+const fetchCourts = async (id: number) => DUMMY_COURTS[id] ?? [];
+// 다운탭: isRequested && reportId 있는 것만
 // StadiumDetailScreen 중복 분리 예정
-const fetchReportCourts = async (id: number) => DUMMY_REPORT_COURTS[id] ?? [];
+const fetchDownloadSchedules = async (courtId: number) =>
+  (DUMMY_SCHEDULES[courtId] ?? []).filter((s) => s.isRequested && s.reportId);
 
 const ReportDownloadTab = ({
   stadiumId,
@@ -40,14 +42,14 @@ const ReportDownloadTab = ({
   goToRequestTab,
 }: ReportDownloadTabProps) => {
   const { data: courtList = [] } = useQuery({
-    queryKey: ['reportCourts', stadiumId],
-    queryFn: () => fetchReportCourts(stadiumId),
+    queryKey: ['courts', stadiumId],
+    queryFn: () => fetchCourts(stadiumId),
   });
 
   // 선택된 코트의 일정 목록
   const { data: schedules = [] } = useQuery({
-    queryKey: ['reportSchedules', selectedCourtId],
-    queryFn: () => fetchReportSchedules(selectedCourtId!),
+    queryKey: ['downloadSchedules', selectedCourtId],
+    queryFn: () => fetchDownloadSchedules(selectedCourtId!),
     enabled: selectedCourtId !== null,
   });
 

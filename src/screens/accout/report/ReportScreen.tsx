@@ -27,7 +27,7 @@ const ReportScreen = ({ reportId }: ReportScreenProps) => {
   const detail = getReportDetail(id);
 
   if (!detail) return null;
-  const { report, stadium, courts, schedule, matchSchedules } = detail;
+  const { report, stadium, court, schedule } = detail;
 
   return (
     <ScrollView>
@@ -36,7 +36,7 @@ const ReportScreen = ({ reportId }: ReportScreenProps) => {
           rightContent={
             <Pressable
               style={[styles.headerDownContainer, selectedPlayer !== null && styles.headerDownContainerActive]}
-              onPress={() => selectedPlayer !== null && }
+              // onPress={() => selectedPlayer !== null && }
               disabled={selectedPlayer === null}
             >
               <Text style={[styles.headerDownText, selectedPlayer !== null && styles.headerDownTextActive]}>
@@ -75,7 +75,7 @@ const ReportScreen = ({ reportId }: ReportScreenProps) => {
           <ReportInfo
             date={report.date}
             schedule={schedule}
-            courts={courts}
+            court={court}
             stadium={stadium}
             selectedPlayer={selectedPlayer}
           />
