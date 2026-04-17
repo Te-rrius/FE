@@ -84,10 +84,7 @@ const ReportScreen = ({ reportId }: ReportScreenProps) => {
       <View style={styles.analysisDetail}>
         <PoseAnalysis player={selectedPlayer} />
         <GameAnalysis player={selectedPlayer} />
-
-        {/* 영상 추가 시 플레이어 선택 관리 예정 */}
-        {/* <SceneAnalysis player={selectedPlayer} /> */}
-        <SceneAnalysis />
+        <SceneAnalysis player={selectedPlayer} />
       </View>
     </ScrollView>
   );
