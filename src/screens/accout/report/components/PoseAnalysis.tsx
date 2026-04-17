@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { VideoView, useVideoPlayer } from 'expo-video';
 
 import PoseAnalysisIcon from '@/assets/images/report/poseAnalysisIcon.svg';
 import ReportTitle from './ReportTitle';
 import { hp, wp } from '@/utils/dimension';
 import PoseButton from '@/screens/replay/components/PoseButton';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import PoseAnalysisCard from './PoseAnalysisCard';
 import ShotIcon from '@/assets/images/report/shotIcon.svg';
 import ScoreIcon from '@/assets/images/report/scoreIcon.svg';
@@ -14,12 +15,29 @@ import { DUMMY_REPORT_ANALYSIS } from '@/constants/dummyReportAnalysis';
 
 const POSES = ['포핸드', '백핸드', '서브', '스매시'] as const;
 
+const POSE_VIDEOS = [
+  { pose: '포핸드', source: require('@/assets/videos/sampleReportVideo.mp4') },
+  { pose: '백핸드', source: require('@/assets/videos/sampleReportVideo2.mp4') },
+  { pose: '서브', source: require('@/assets/videos/sampleReportVideo3.mp4') },
+  { pose: '스매시', source: require('@/assets/videos/sampleReportVideo4.mp4') },
+];
+
+const VideoItem = ({ source }: { source: number }) => {
+  const player = useVideoPlayer(source);
+  return (
+    <View style={styles.videoContainer}>
+      <VideoView player={player} style={styles.video} contentFit="cover" nativeControls />
+    </View>
+  );
+};
+
 type PoseAnalysisProps = {
   player: 1 | 2 | null;
 };
 
 const PoseAnalysis = ({ player }: PoseAnalysisProps) => {
   const [selectedPose, setSelectedPose] = useState<string | null>(null);
+  const flatListRef = useRef<FlatList>(null);
 
   const { data } = useQuery({
     queryKey: ['reportAnalysis', player],
@@ -37,10 +55,32 @@ const PoseAnalysis = ({ player }: PoseAnalysisProps) => {
               key={pose}
               text={pose}
               selected={selectedPose === pose}
-              onPress={() => player && setSelectedPose(pose)}
+              onPress={() => {
+                const index = POSES.indexOf(pose);
+                setSelectedPose(pose);
+                flatListRef.current?.scrollToIndex({ index, animated: true, viewPosition: 0.5 });
+              }}
             />
           ))}
         </View>
+        <FlatList
+          ref={flatListRef}
+          data={POSE_VIDEOS}
+          horizontal // 가로 스크롤
+          showsHorizontalScrollIndicator={false} // 스크롤바 숨김
+          keyExtractor={(item) => item.pose}
+          renderItem={({ item }) => <VideoItem source={item.source} />}
+          ItemSeparatorComponent={() => <View style={{ width: wp(10) }} />} // 아이템 사이 간격
+          snapToInterval={wp(350) + wp(10)} // 아이템 너비 + 갭 단위로 스냅
+          decelerationRate="fast" // 정확하게 한 칸씩 이동
+          contentContainerStyle={{ paddingHorizontal: wp(20) }}
+          style={{ marginHorizontal: -wp(20) }} // 부모 패딩 상쇄
+          onMomentumScrollEnd={(e) => {
+            // 스와이프 후 멈췄을 때
+            const index = Math.round(e.nativeEvent.contentOffset.x / (wp(350) + wp(10))); // 현재 인덱스 계산
+            setSelectedPose(POSES[index]); // 버튼 선택 상태 동기화
+          }}
+        />
         <View style={styles.allCard}>
           <View style={styles.generalCard}>
             <PoseAnalysisCard title="샷 유형" analysisText={data ? data.pose.shotType : '-'} icon={<ShotIcon />} />
@@ -125,5 +165,18 @@ const styles = StyleSheet.create({
 
   upgradeStrongText: {
     fontFamily: 'Pretendard600',
+  },
+
+  videoContainer: {
+    width: wp(350),
+    aspectRatio: 9 / 16,
+    backgroundColor: '#000',
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+
+  video: {
+    width: '100%',
+    height: '100%',
   },
 });
