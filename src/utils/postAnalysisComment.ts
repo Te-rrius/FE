@@ -13,6 +13,11 @@ export interface PoseData {
 
 type RotationKey = keyof PoseData;
 
+export interface ImprovePointResult {
+  text: string;
+  gainText: string;
+}
+
 const ROTATION_LABEL: Record<RotationKey, string> = {
   shoulderRotation: '어깨 회전',
   spineRotation: '척추 회전',
@@ -79,12 +84,12 @@ export function getTotalScore(pose: PoseData): number {
 }
 
 // 개선 포인트
-export function getImprovePoint(pose: PoseData): string {
+export function getImprovePoint(pose: PoseData): ImprovePointResult | { text: string; gainText: null } {
   const keys: RotationKey[] = ['shoulderRotation', 'spineRotation', 'waistRotation'];
   const scores = keys.map((key) => ({ key, score: getItemScore(pose[key]) }));
 
-  const allGood = scores.every(({ key }) => getStatus(pose[key]) === '양호');
-  if (allGood) return '전체적으로 좋은 자세예요!';
+  const allGood = keys.every((key) => getStatus(pose[key]) === '양호');
+  if (allGood) return { text: '전체적으로 좋은 자세예요!', gainText: null };
 
   const lowest = scores.reduce((acc, cur) => (cur.score < acc.score ? cur : acc));
   const others = scores.filter(({ key }) => key !== lowest.key);
@@ -92,5 +97,8 @@ export function getImprovePoint(pose: PoseData): string {
   const current = getTotalScore(pose);
   const gain = Math.round(improvedTotal - current);
 
-  return `${ROTATION_LABEL[lowest.key]}을 교정하면 점수가 약 +${gain}점 향상될 수 있어요`;
+  return {
+    text: `${ROTATION_LABEL[lowest.key]}을 교정하면 점수가 약 `,
+    gainText: `+${gain}점`,
+  };
 }

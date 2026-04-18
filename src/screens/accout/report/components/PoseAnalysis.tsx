@@ -40,15 +40,15 @@ const VideoItem = ({ source, data }: { source: number; data?: ShotPoseDto }) => 
     <View style={styles.videoContainer}>
       <VideoView player={player} style={styles.video} contentFit="cover" />
       <BlurView intensity={10} style={styles.overlay}>
-        <View style={styles.overlayLabel}>
+        <View>
           <Text style={styles.labelText}>어깨 회전각</Text>
           <Text style={styles.overlayValue}>{data?.shoulderRotation.value ?? '-'}°</Text>
         </View>
-        <View style={styles.overlayLabel}>
+        <View>
           <Text style={styles.labelText}>척추 회전각</Text>
           <Text style={styles.overlayValue}>{data?.spineRotation.value ?? '-'}°</Text>
         </View>
-        <View style={styles.overlayLabel}>
+        <View>
           <Text style={styles.labelText}>허리 회전각</Text>
           <Text style={styles.overlayValue}>{data?.waistRotation.value ?? '-'}°</Text>
         </View>
@@ -162,7 +162,17 @@ const PoseAnalysis = ({ player }: PoseAnalysisProps) => {
           />
           <View style={styles.upgradeContainer}>
             <Text style={styles.upgradeTitle}>개선 포인트</Text>
-            <Text style={styles.upgradeText}>{improvePoint ?? '-'}</Text>
+            <Text style={styles.upgradeText}>
+              {improvePoint?.gainText === null ? (
+                improvePoint.text
+              ) : (
+                <>
+                  {improvePoint?.text}
+                  <Text style={styles.upgradeStrongText}>{improvePoint?.gainText}</Text>
+                  {' 향상될 수 있어요'}
+                </>
+              )}
+            </Text>
           </View>
         </View>
       </View>
@@ -253,9 +263,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.06,
     shadowRadius: 12,
     overflow: 'hidden',
-  },
-
-  overlayLabel: {
     gap: hp(8),
   },
 
