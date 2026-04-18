@@ -12,26 +12,28 @@ import ShotIcon from '@/assets/images/report/shotIcon.svg';
 import ScoreIcon from '@/assets/images/report/scoreIcon.svg';
 import AnalysisStateCard from './AnalysisStateCard';
 import { useQuery } from '@tanstack/react-query';
-import { DUMMY_REPORT_ANALYSIS } from '@/constants/dummyReportAnalysis';
+import { DUMMY_REPORT_ANALYSIS, ShotPoseDto } from '@/constants/dummyReportAnalysis';
 import { LinearGradient } from 'expo-linear-gradient';
+import { getComment, getImprovePoint, getTotalScore } from '@/utils/postAnalysisComment';
 
-const POSES = ['포핸드', '백핸드', '서브', '스매시'] as const;
 const POSE_KEYS = ['forehand', 'backhand', 'serve', 'smash'] as const;
+type PoseKey = (typeof POSE_KEYS)[number];
 
-const POSE_VIDEOS = [
-  { pose: '포핸드', source: require('@/assets/videos/sampleReportVideo.mp4') },
-  { pose: '백핸드', source: require('@/assets/videos/sampleReportVideo3.mp4') },
-  { pose: '서브', source: require('@/assets/videos/sampleReportVideo4.mp4') },
-  { pose: '스매시', source: require('@/assets/videos/sampleReportVideo2.mp4') },
-];
-
-type PoseData = {
-  shoulderRotation: { value: number | null };
-  spineRotation: { value: number | null };
-  waistRotation: { value: number | null };
+const POSE_LABEL: Record<PoseKey, string> = {
+  forehand: '포핸드',
+  backhand: '백핸드',
+  serve: '서브',
+  smash: '스매시',
 };
 
-const VideoItem = ({ source, data }: { source: number; data?: PoseData }) => {
+const POSE_VIDEOS: Record<PoseKey, number> = {
+  forehand: require('@/assets/videos/sampleReportVideo.mp4'),
+  backhand: require('@/assets/videos/sampleReportVideo3.mp4'),
+  serve: require('@/assets/videos/sampleReportVideo4.mp4'),
+  smash: require('@/assets/videos/sampleReportVideo2.mp4'),
+};
+
+const VideoItem = ({ source, data }: { source: number; data?: ShotPoseDto }) => {
   const player = useVideoPlayer(source);
 
   return (
@@ -60,7 +62,7 @@ type PoseAnalysisProps = {
 };
 
 const PoseAnalysis = ({ player }: PoseAnalysisProps) => {
-  const [selectedPose, setSelectedPose] = useState<string | null>(null);
+  const [selectedPoseKey, setSelectedPoseKey] = useState<PoseKey | null>(null);
   const flatListRef = useRef<FlatList>(null);
 
   const { data } = useQuery({
@@ -69,31 +71,34 @@ const PoseAnalysis = ({ player }: PoseAnalysisProps) => {
     enabled: player !== null,
   });
 
-  const selectedPoseKey = POSE_KEYS[POSES.indexOf(selectedPose as (typeof POSES)[number])];
-  const selectedPoseData = data?.pose[selectedPoseKey];
+  const availablePoseKeys = POSE_KEYS.filter((key) => data?.pose[key] != null);
+  const selectedPoseData = selectedPoseKey ? data?.pose[selectedPoseKey] : undefined;
+
+  const totalScore = selectedPoseData ? getTotalScore(selectedPoseData) : null;
+  const improvePoint = selectedPoseData ? getImprovePoint(selectedPoseData) : null;
 
   useEffect(() => {
-    if (player !== null) {
-      setSelectedPose('포핸드');
+    if (data) {
+      setSelectedPoseKey(availablePoseKeys[0] ?? null);
     } else {
-      setSelectedPose(null);
+      setSelectedPoseKey(null);
     }
-  }, [player]);
+  }, [data]);
 
   return (
     <View style={styles.container}>
       <ReportTitle icon={<PoseAnalysisIcon />} title="경기 자세 분석" />
       <View style={styles.allPose}>
         <View style={styles.poseWrapper}>
-          {POSES.map((pose) => (
+          {availablePoseKeys.map((key) => (
             <PoseButton
-              key={pose}
-              text={pose}
-              selected={selectedPose === pose}
+              key={key}
+              text={POSE_LABEL[key]}
+              selected={selectedPoseKey === key}
               onPress={() => {
                 if (!player) return;
-                const index = POSES.indexOf(pose);
-                setSelectedPose(pose);
+                const index = availablePoseKeys.indexOf(key);
+                setSelectedPoseKey(key);
                 flatListRef.current?.scrollToIndex({ index, animated: true, viewPosition: 0.5 });
               }}
             />
@@ -110,51 +115,54 @@ const PoseAnalysis = ({ player }: PoseAnalysisProps) => {
             <BlurView intensity={10} style={styles.overlay} />
           </View>
         ) : (
-          <FlatList
+          <FlatList<PoseKey>
             ref={flatListRef}
-            data={POSE_VIDEOS}
-            horizontal // 가로 스크롤
-            showsHorizontalScrollIndicator={false} // 스크롤바 숨김
-            keyExtractor={(item) => item.pose}
-            renderItem={({ item, index }) => <VideoItem source={item.source} data={data?.pose[POSE_KEYS[index]]} />}
-            ItemSeparatorComponent={() => <View style={{ width: wp(10) }} />} // 아이템 사이 간격
-            snapToInterval={wp(350) + wp(10)} // 아이템 너비 + 갭 단위로 스냅
-            decelerationRate="fast" // 정확하게 한 칸씩 이동
+            data={availablePoseKeys}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(key) => key}
+            renderItem={({ item: key }) => <VideoItem source={POSE_VIDEOS[key]} data={data?.pose[key]} />}
+            ItemSeparatorComponent={() => <View style={{ width: wp(10) }} />}
+            snapToInterval={wp(350) + wp(10)}
+            decelerationRate="fast"
             contentContainerStyle={{ paddingHorizontal: wp(20) }}
-            style={{ marginHorizontal: -wp(20) }} // 부모 패딩 상쇄
+            style={{ marginHorizontal: -wp(20) }}
             onMomentumScrollEnd={(e) => {
-              // 스와이프 후 멈췄을 때
-              const index = Math.round(e.nativeEvent.contentOffset.x / (wp(350) + wp(10))); // 현재 인덱스 계산
-              setSelectedPose(POSES[index]); // 버튼 선택 상태 동기화
+              const index = Math.round(e.nativeEvent.contentOffset.x / (wp(350) + wp(10)));
+              setSelectedPoseKey(availablePoseKeys[index]);
             }}
           />
         )}
         <View style={styles.allCard}>
           <View style={styles.generalCard}>
-            <PoseAnalysisCard title="샷 유형" analysisText={data ? data.pose.shotType : '-'} icon={<ShotIcon />} />
-            <PoseAnalysisCard title="종합 점수" analysisText={data ? data.pose.totalScore : '-'} icon={<ScoreIcon />} />
+            <PoseAnalysisCard title="샷 유형" analysisText={data?.pose.shotType ?? '-'} icon={<ShotIcon />} />
+            <PoseAnalysisCard
+              title="종합 점수"
+              analysisText={totalScore != null ? `${totalScore.toFixed(1)}점` : '-'}
+              icon={<ScoreIcon />}
+            />
           </View>
           <AnalysisStateCard
             title="어깨 회전"
             value={selectedPoseData?.shoulderRotation.value ?? null}
-            recommended={80}
-            comment={selectedPoseData?.shoulderRotation.comment ?? ''}
+            recommended={selectedPoseData?.shoulderRotation.recommended ?? null}
+            comment={selectedPoseData ? getComment('shoulderRotation', selectedPoseData.shoulderRotation) : ''}
           />
           <AnalysisStateCard
             title="척추 회전"
             value={selectedPoseData?.spineRotation.value ?? null}
-            recommended={80}
-            comment={selectedPoseData?.spineRotation.comment ?? ''}
+            recommended={selectedPoseData?.spineRotation.recommended ?? null}
+            comment={selectedPoseData ? getComment('spineRotation', selectedPoseData.spineRotation) : ''}
           />
           <AnalysisStateCard
             title="허리 회전"
             value={selectedPoseData?.waistRotation.value ?? null}
-            recommended={80}
-            comment={selectedPoseData?.waistRotation.comment ?? ''}
+            recommended={selectedPoseData?.waistRotation.recommended ?? null}
+            comment={selectedPoseData ? getComment('waistRotation', selectedPoseData.waistRotation) : ''}
           />
           <View style={styles.upgradeContainer}>
             <Text style={styles.upgradeTitle}>개선 포인트</Text>
-            <Text style={styles.upgradeText}>{data?.pose.improvePoint ?? '-'}</Text>
+            <Text style={styles.upgradeText}>{improvePoint ?? '-'}</Text>
           </View>
         </View>
       </View>

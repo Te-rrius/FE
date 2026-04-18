@@ -1,4 +1,5 @@
 import { hp, wp } from '@/utils/dimension';
+import { getStatus } from '@/utils/postAnalysisComment';
 import { StyleSheet, Text, View } from 'react-native';
 
 type Status = '양호' | '보통' | '개선 필요';
@@ -6,15 +7,9 @@ type Status = '양호' | '보통' | '개선 필요';
 interface AnalysisStateCardProps {
   title: string;
   value: number | null;
-  recommended: number;
+  recommended: number | null;
   maxValue?: number;
   comment: string;
-}
-
-function getStatus(value: number): Status {
-  if (value >= 80) return '양호';
-  if (value >= 50) return '보통';
-  return '개선 필요';
 }
 
 const STATUS_CONFIG: Record<Status, { label: string; color: string; bg: string; barColor: string }> = {
@@ -24,15 +19,14 @@ const STATUS_CONFIG: Record<Status, { label: string; color: string; bg: string; 
 };
 
 const AnalysisStateCard = ({ title, value, recommended, maxValue = 100, comment }: AnalysisStateCardProps) => {
-  const status = value !== null ? getStatus(value) : null;
+  const status = value !== null && recommended !== null ? getStatus({ value, recommended }) : null;
   const config = status ? STATUS_CONFIG[status] : null;
 
   const fillRatio = value !== null ? Math.min(Math.max(value / maxValue, 0), 1) : 0;
-  const recommendedRatio = Math.min(Math.max(recommended / maxValue, 0), 1);
+  const recommendedRatio = recommended !== null ? Math.min(Math.max(recommended / maxValue, 0), 1) : 0;
 
   return (
     <View style={styles.container}>
-      {/* 헤더 */}
       <View style={styles.header}>
         <Text style={styles.titleText}>{title}</Text>
         {config && (
@@ -43,7 +37,6 @@ const AnalysisStateCard = ({ title, value, recommended, maxValue = 100, comment 
       </View>
 
       <View style={styles.stateContent}>
-        {/* 바 + 수치 */}
         <View style={styles.barRow}>
           <View style={styles.barTrack}>
             <View style={[styles.barFill, { flex: fillRatio, backgroundColor: config?.barColor ?? '#E5E7EB' }]} />
@@ -55,8 +48,6 @@ const AnalysisStateCard = ({ title, value, recommended, maxValue = 100, comment 
             {value !== null && <Text style={styles.recommendedText}>{` / 권장 ${recommended}°`}</Text>}
           </Text>
         </View>
-
-        {/* 코멘트 */}
         <Text style={styles.comment}>{comment}</Text>
       </View>
     </View>

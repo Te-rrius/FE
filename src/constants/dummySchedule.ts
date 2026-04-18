@@ -45,7 +45,7 @@ export const DUMMY_SCHEDULES: Record<number, ScheduleDto[]> = {
     {
       scheduleId: 2,
       courtId: 1,
-      date: '2026-04-14',
+      date: '2026-04-16',
       hours: '12:00~13:00',
       gameType: 'DOUBLE',
       isRequested: true,
@@ -59,7 +59,7 @@ export const DUMMY_SCHEDULES: Record<number, ScheduleDto[]> = {
     {
       scheduleId: 5,
       courtId: 2,
-      date: '2026-04-10',
+      date: '2026-04-13',
       hours: '10:00~12:00',
       gameType: 'SINGLE',
       isRequested: true,
@@ -72,7 +72,7 @@ export const DUMMY_SCHEDULES: Record<number, ScheduleDto[]> = {
     {
       scheduleId: 7,
       courtId: 3,
-      date: '2026-04-13',
+      date: '2026-04-15',
       hours: '11:00~12:00',
       gameType: 'SINGLE',
       isRequested: true,
@@ -82,8 +82,8 @@ export const DUMMY_SCHEDULES: Record<number, ScheduleDto[]> = {
   ],
   // B코트
   4: [
-    { scheduleId: 9, courtId: 4, date: '2026-04-10', hours: '11:00~12:00', gameType: 'SINGLE', isRequested: false },
-    { scheduleId: 10, courtId: 4, date: '2026-04-13', hours: '10:00~12:00', gameType: 'DOUBLE', isRequested: false },
+    { scheduleId: 9, courtId: 4, date: '2026-04-15', hours: '11:00~12:00', gameType: 'SINGLE', isRequested: false },
+    { scheduleId: 10, courtId: 4, date: '2026-04-18', hours: '10:00~12:00', gameType: 'DOUBLE', isRequested: false },
   ],
 };
 
@@ -98,10 +98,10 @@ export interface ReportDto {
 
 // reportId → 리포트
 export const DUMMY_REPORTS: Record<number, ReportDto> = {
-  1: { reportId: 1, scheduleId: 1, stadiumId: 1, courtId: 1, date: '2026. 04. 03.' },
-  2: { reportId: 2, scheduleId: 2, stadiumId: 1, courtId: 1, date: '2026. 04. 04.' },
-  3: { reportId: 3, scheduleId: 5, stadiumId: 1, courtId: 2, date: '2026. 04. 06.' },
-  4: { reportId: 4, scheduleId: 7, stadiumId: 2, courtId: 3, date: '2026. 04. 03.' },
+  1: { reportId: 1, scheduleId: 1, stadiumId: 1, courtId: 1, date: '2026. 04. 13.' },
+  2: { reportId: 2, scheduleId: 2, stadiumId: 1, courtId: 1, date: '2026. 04. 14.' },
+  3: { reportId: 3, scheduleId: 5, stadiumId: 1, courtId: 2, date: '2026. 04. 16.' },
+  4: { reportId: 4, scheduleId: 7, stadiumId: 2, courtId: 3, date: '2026. 04. 18.' },
 };
 
 // 추후 변경 예정
