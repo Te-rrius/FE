@@ -8,6 +8,7 @@ import TimeIcon from '@/assets/images/replay/timeIcon.svg';
 import { DUMMY_SCHEDULES } from '@/constants/dummySchedule';
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
+import useAuthStore from '@/store/authStore';
 
 interface ReportScheduleListProps {
   selectedCourtId: number | null;
@@ -26,6 +27,8 @@ const fetchDownloadSchedules = async (courtId: number) =>
   (DUMMY_SCHEDULES[courtId] ?? []).filter((s) => s.isRequested && s.reportId);
 
 const ReportScheduleList = ({ selectedCourtId, selectedDate, onPress }: ReportScheduleListProps) => {
+  const { token, openLoginModal } = useAuthStore();
+
   // 선택된 리포트
   const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
 
@@ -63,6 +66,11 @@ const ReportScheduleList = ({ selectedCourtId, selectedDate, onPress }: ReportSc
                 key={schedule.scheduleId}
                 style={[styles.scheduleCard, selectedScheduleId === schedule.scheduleId && styles.scheduleCardActive]}
                 onPress={() => {
+                  if (!token) {
+                    router.replace('/');
+                    openLoginModal();
+                    return;
+                  }
                   setSelectedScheduleId(schedule.scheduleId);
                   router.push({ pathname: '/report/[reportId]', params: { reportId: schedule.reportId } });
                 }}
