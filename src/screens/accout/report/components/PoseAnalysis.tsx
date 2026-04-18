@@ -5,7 +5,6 @@ import { BlurView } from 'expo-blur';
 import PoseAnalysisIcon from '@/assets/images/report/poseAnalysisIcon.svg';
 import ReportTitle from './ReportTitle';
 import { hp, wp } from '@/utils/dimension';
-import PoseButton from '@/screens/replay/components/PoseButton';
 import { useEffect, useRef, useState } from 'react';
 import PoseAnalysisCard from './PoseAnalysisCard';
 import ShotIcon from '@/assets/images/report/shotIcon.svg';
@@ -15,6 +14,7 @@ import { useQuery } from '@tanstack/react-query';
 import { DUMMY_REPORT_ANALYSIS, ShotPoseDto } from '@/constants/dummyReportAnalysis';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getComment, getImprovePoint, getTotalScore } from '@/utils/postAnalysisComment';
+import PoseButton from './PoseButton';
 
 const POSE_KEYS = ['forehand', 'backhand', 'serve', 'smash'] as const;
 type PoseKey = (typeof POSE_KEYS)[number];
