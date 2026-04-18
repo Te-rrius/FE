@@ -29,12 +29,12 @@ const StepScroll = ({ images }: StepScrollProps) => {
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetX = e.nativeEvent.contentOffset.x;
-    const index = Math.round(offsetX / (wp(330) + 12));
+    const index = Math.round(offsetX / (wp(330) + wp(12)));
     setCurrentIndex(Math.min(Math.max(index, 0), total - 1));
   };
 
   const onDotPress = (index: number) => {
-    scrollRef.current?.scrollTo({ x: (wp(330) + 12) * index, animated: true });
+    scrollRef.current?.scrollTo({ x: (wp(330) + wp(12)) * index, animated: true });
   };
 
   return (
@@ -43,7 +43,7 @@ const StepScroll = ({ images }: StepScrollProps) => {
         ref={scrollRef}
         horizontal
         showsHorizontalScrollIndicator={false}
-        snapToInterval={wp(330) + 12}
+        snapToInterval={wp(330) + wp(12)}
         snapToAlignment="start"
         decelerationRate="fast"
         disableIntervalMomentum
