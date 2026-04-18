@@ -8,6 +8,7 @@ import WorstSceneIcon from '@/assets/images/report/worstSceneIcon.svg';
 import { hp, wp } from '@/utils/dimension';
 import { useState } from 'react';
 import PlayButtonIcon from '@/assets/images/report/playButtonIcon.svg';
+import { LinearGradient } from 'expo-linear-gradient';
 
 type SceneAnalysisProps = {
   player: 1 | 2 | null;
@@ -53,9 +54,14 @@ const SceneAnalysis = ({ player }: SceneAnalysisProps) => {
             )}
           </View>
         ) : (
-          <View style={styles.placeholder}>
+          <LinearGradient
+            colors={['#E9E9E9', '#FCFCFC']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={styles.placeholder}
+          >
             <PlayButtonIcon />
-          </View>
+          </LinearGradient>
         )}
       </View>
       <View style={styles.sceneWrapper}>
@@ -76,9 +82,14 @@ const SceneAnalysis = ({ player }: SceneAnalysisProps) => {
             )}
           </View>
         ) : (
-          <View style={styles.placeholder}>
+          <LinearGradient
+            colors={['#E9E9E9', '#FCFCFC']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={styles.placeholder}
+          >
             <PlayButtonIcon />
-          </View>
+          </LinearGradient>
         )}
       </View>
     </View>
