@@ -6,13 +6,14 @@ import PoseAnalysisIcon from '@/assets/images/report/poseAnalysisIcon.svg';
 import ReportTitle from './ReportTitle';
 import { hp, wp } from '@/utils/dimension';
 import PoseButton from '@/screens/replay/components/PoseButton';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PoseAnalysisCard from './PoseAnalysisCard';
 import ShotIcon from '@/assets/images/report/shotIcon.svg';
 import ScoreIcon from '@/assets/images/report/scoreIcon.svg';
 import AnalysisStateCard from './AnalysisStateCard';
 import { useQuery } from '@tanstack/react-query';
 import { DUMMY_REPORT_ANALYSIS } from '@/constants/dummyReportAnalysis';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const POSES = ['포핸드', '백핸드', '서브', '스매시'] as const;
 const POSE_KEYS = ['forehand', 'backhand', 'serve', 'smash'] as const;
@@ -59,7 +60,7 @@ type PoseAnalysisProps = {
 };
 
 const PoseAnalysis = ({ player }: PoseAnalysisProps) => {
-  const [selectedPose, setSelectedPose] = useState<string | null>('포핸드');
+  const [selectedPose, setSelectedPose] = useState<string | null>(null);
   const flatListRef = useRef<FlatList>(null);
 
   const { data } = useQuery({
@@ -70,6 +71,14 @@ const PoseAnalysis = ({ player }: PoseAnalysisProps) => {
 
   const selectedPoseKey = POSE_KEYS[POSES.indexOf(selectedPose as (typeof POSES)[number])];
   const selectedPoseData = data?.pose[selectedPoseKey];
+
+  useEffect(() => {
+    if (player !== null) {
+      setSelectedPose('포핸드');
+    } else {
+      setSelectedPose(null);
+    }
+  }, [player]);
 
   return (
     <View style={styles.container}>
@@ -82,6 +91,7 @@ const PoseAnalysis = ({ player }: PoseAnalysisProps) => {
               text={pose}
               selected={selectedPose === pose}
               onPress={() => {
+                if (!player) return;
                 const index = POSES.indexOf(pose);
                 setSelectedPose(pose);
                 flatListRef.current?.scrollToIndex({ index, animated: true, viewPosition: 0.5 });
@@ -90,7 +100,15 @@ const PoseAnalysis = ({ player }: PoseAnalysisProps) => {
           ))}
         </View>
         {!player ? (
-          <View style={styles.nullBox} />
+          <View style={styles.videoContainer}>
+            <LinearGradient
+              colors={['#E9E9E9', '#FCFCFC']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+              style={StyleSheet.absoluteFill}
+            />
+            <BlurView intensity={10} style={styles.overlay} />
+          </View>
         ) : (
           <FlatList
             ref={flatListRef}
@@ -218,7 +236,7 @@ const styles = StyleSheet.create({
     right: wp(15),
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
     borderWidth: 1,
-    borderColor: '#FFFFFFCC',
+    borderColor: 'rgba(255, 255, 255, 0.10)',
     borderRadius: 12,
     paddingVertical: hp(16),
     paddingHorizontal: wp(12),
@@ -249,10 +267,15 @@ const styles = StyleSheet.create({
     letterSpacing: wp(-0.45),
   },
 
-  nullBox: {
+  placeholderWrapper: {
     width: wp(350),
     height: hp(620),
-    backgroundColor: '#E9E9E9',
+    borderRadius: 8,
+  },
+
+  placeholder: {
+    width: '100%',
+    height: '100%',
     borderRadius: 8,
   },
 });
