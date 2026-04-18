@@ -29,7 +29,12 @@ const RequestScheduleList = ({ selectedCourtId, courtName, selectedDate }: Reque
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState<ScheduleDto | null>(null);
 
-  const toDateString = (date: Date) => date.toISOString().split('T')[0];
+  const toDateString = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   // 선택된 코트의 경기 시간 목록 조회
   const { data: allSchedules = [] } = useQuery({
