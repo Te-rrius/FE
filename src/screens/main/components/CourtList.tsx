@@ -1,17 +1,18 @@
-import { CourtDto } from '@/constants/dummyCourt';
+import { StadiumDto } from '@/constants/dummyStadium';
 import { hp, wp } from '@/utils/dimension';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import React from 'react';
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 
-interface CourtListProps {
-  courtList: CourtDto[];
+interface StadiumListProps {
+  stadiumList: StadiumDto[];
   searchValue: string;
   selectedCity: string;
   selectedRegion: string;
 }
 
-const CourtList = ({ courtList, searchValue, selectedCity, selectedRegion }: CourtListProps) => {
+const StadiumList = ({ stadiumList, searchValue, selectedCity, selectedRegion }: StadiumListProps) => {
   const getDisplayLocation = (location: string) => {
     if (location.startsWith('서울시') || location.startsWith('인천광역시')) {
       return { city: location.split(' ')[0], region: location.split(' ')[1] };
@@ -24,10 +25,10 @@ const CourtList = ({ courtList, searchValue, selectedCity, selectedRegion }: Cou
     filterRegion: location.split(' ')[1],
   });
 
-  const filteredList = courtList.filter((court) => {
-    const { filterCity, filterRegion } = getFilterLocation(court.location);
+  const filteredList = stadiumList.filter((stadium) => {
+    const { filterCity, filterRegion } = getFilterLocation(stadium.location);
 
-    const matchName = searchValue ? court.name.includes(searchValue) : true;
+    const matchName = searchValue ? stadium.name.includes(searchValue) : true;
     const matchCity = selectedCity !== '도시' ? filterCity === selectedCity : true;
     const matchRegion = selectedRegion !== '지역' ? filterRegion === selectedRegion : true;
 
@@ -48,13 +49,18 @@ const CourtList = ({ courtList, searchValue, selectedCity, selectedRegion }: Cou
 
   return (
     <View style={styles.listGridContainer}>
-      {filteredList.map((court) => {
-        const { city, region } = getDisplayLocation(court.location);
+      {filteredList.map((stadium) => {
+        const { city, region } = getDisplayLocation(stadium.location);
 
         return (
-          <View key={String(court.courtId)} style={styles.cardWrapper}>
-            <Pressable style={styles.cardContainer}>
-              <Image source={{ uri: court.image }} style={styles.courtImg} resizeMode="cover" />
+          <View key={String(stadium.stadiumId)} style={styles.cardWrapper}>
+            <Pressable
+              style={styles.cardContainer}
+              onPress={() =>
+                router.push({ pathname: '/stadium/[stadiumId]', params: { stadiumId: stadium.stadiumId } })
+              }
+            >
+              <Image source={{ uri: stadium.image }} style={styles.stadiumImg} resizeMode="cover" />
               <LinearGradient colors={['transparent', 'rgba(17, 17, 17, 0.80)']} style={styles.imgCover} />
               <View style={styles.infoContainer}>
                 <View style={styles.badgeRow}>
@@ -66,8 +72,8 @@ const CourtList = ({ courtList, searchValue, selectedCity, selectedRegion }: Cou
                   </View>
                 </View>
                 <View>
-                  <Text style={styles.courtNameText}>{court.name}</Text>
-                  <Text style={styles.courtLocationText}>{court.location}</Text>
+                  <Text style={styles.stadiumNameText}>{stadium.name}</Text>
+                  <Text style={styles.stadiumLocationText}>{stadium.location}</Text>
                 </View>
               </View>
             </Pressable>
@@ -99,7 +105,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
 
-  courtImg: {
+  stadiumImg: {
     width: '100%',
     height: '100%',
   },
@@ -143,7 +149,7 @@ const styles = StyleSheet.create({
     lineHeight: hp(10),
   },
 
-  courtNameText: {
+  stadiumNameText: {
     color: '#FFFFFF',
     fontFamily: 'Pretendard600',
     fontSize: wp(14),
@@ -151,7 +157,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
 
-  courtLocationText: {
+  stadiumLocationText: {
     color: '#CACACA',
     fontSize: wp(8),
     fontFamily: 'Pretendard400',
@@ -193,4 +199,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CourtList;
+export default StadiumList;

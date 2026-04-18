@@ -3,7 +3,9 @@ import PageHeader from '@/components/layout/PageHeader';
 import { hp, wp } from '@/utils/dimension';
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import ReportCard from './components/ReportCard';
+import ReportList from './components/ReportList';
+import { router } from 'expo-router';
+import { DUMMY_REPORTS } from '@/constants/dummySchedule';
 
 const dummyReports = [
   { id: 1, date: '2025. 12. 01.' },
@@ -16,8 +18,10 @@ const MyReportScreen = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selected, setSelected] = useState('최신 순');
 
-  const sortedReports = [...dummyReports].sort((a, b) => (selected === '최신 순' ? b.id - a.id : a.id - b.id));
-
+  const reports = Object.values(DUMMY_REPORTS);
+  const sortedReports = [...reports].sort((a, b) =>
+    selected === '최신 순' ? b.reportId - a.reportId : a.reportId - b.reportId,
+  );
   return (
     <View style={styles.container}>
       <PageHeader title="내 리포트" />
@@ -45,7 +49,11 @@ const MyReportScreen = () => {
           />
           <View style={styles.listWrapper}>
             {sortedReports.map((report) => (
-              <ReportCard key={report.id} date={report.date} />
+              <ReportList
+                key={report.reportId}
+                date={report.date}
+                onPress={() => router.push({ pathname: '/report/[reportId]', params: { reportId: report.reportId } })}
+              />
             ))}
           </View>
         </View>

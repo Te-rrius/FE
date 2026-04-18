@@ -1,15 +1,16 @@
 import { hp, wp } from '@/utils/dimension';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import CardGradient from './CardGradient';
 import TennisCardIcon from '@/assets/images/account/tennisCardIcon.svg';
 
-type ReportCardProps = {
+type ReportListProps = {
   date: string;
+  onPress: () => void;
 };
 
-const ReportCard = ({ date }: ReportCardProps) => {
+const ReportList = ({ date, onPress }: ReportListProps) => {
   return (
-    <View style={styles.container}>
+    <Pressable style={styles.container} onPress={onPress}>
       <View style={styles.cardHeader}>
         <View style={styles.gradientWrapper}>
           <CardGradient />
@@ -24,11 +25,11 @@ const ReportCard = ({ date }: ReportCardProps) => {
         <Text style={styles.dateText}>{date}</Text>
         <Text style={styles.titleText}>{`테니스\n분석 리포트`}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
-export default ReportCard;
+export default ReportList;
 
 const styles = StyleSheet.create({
   container: {

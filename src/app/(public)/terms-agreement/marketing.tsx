@@ -1,10 +1,10 @@
 import ScreenContainer from '@/components/layout/ScreenContainer';
-import MarketingAgreeScreen from '@/screens/accout/setting/terms-agreement/MarketingAgreeScreen';
+import TermsAgreementDetail from '@/screens/accout/setting/terms-agreement/TermsAgreementDetail';
 
 const MarketingDetail = () => {
   return (
     <ScreenContainer>
-      <MarketingAgreeScreen />
+      <TermsAgreementDetail category="marketing" />
     </ScreenContainer>
   );
 };

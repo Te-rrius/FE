@@ -7,15 +7,18 @@ import MainBanner from '@/assets/images/banner/mainBanner.svg';
 import Divider from '@/components/common/Divider';
 import SearchBar from '@/components/common/SearchBar';
 import Dropdown from '@/components/common/Dropdown';
-import CourtList from './components/CourtList';
-import { DUMMY_COURTS } from '@/constants/dummyCourt';
 import useBannerSize from '@/utils/bannerSize';
+import StadiumList from './components/CourtList';
+import { useQuery } from '@tanstack/react-query';
+import { DUMMY_STADIUMS } from '@/constants/dummyStadium';
 
 const tabs = [
   { key: 'GENERAL', label: '구장' },
   { key: 'ACADEMY', label: '아카데미' },
   { key: 'PRO', label: '프로구장' },
 ];
+
+const fetchCourts = async () => DUMMY_STADIUMS; // 수정 예정
 
 const MainScreen = () => {
   const [activeTab, setActiveTab] = useState('GENERAL');
@@ -59,12 +62,17 @@ const MainScreen = () => {
     setRegionDropdownOpen(false);
   };
 
-  const filteredType = DUMMY_COURTS.filter((court) => court.type === activeTab);
+  const { data: courts = [] } = useQuery({
+    queryKey: ['courts'],
+    queryFn: fetchCourts,
+  });
 
-  const cityDropdownList = ['전체 보기', ...new Set(filteredType.map((court) => court.location.split(' ')[0]))];
+  const filteredType = courts.filter((stadium) => stadium.type === activeTab);
 
-  const regionDropdownList = filteredType.reduce<Record<string, string[]>>((acc, court) => {
-    const parts = court.location.split(' ');
+  const cityDropdownList = ['전체 보기', ...new Set(filteredType.map((stadium) => stadium.location.split(' ')[0]))];
+
+  const regionDropdownList = filteredType.reduce<Record<string, string[]>>((acc, stadium) => {
+    const parts = stadium.location.split(' ');
     const city = parts[0];
     const region = parts[1];
     if (!acc[city]) acc[city] = [];
@@ -111,9 +119,9 @@ const MainScreen = () => {
               />
             </View>
 
-            <View style={styles.courtListWrapper}>
-              <CourtList
-                courtList={filteredType}
+            <View style={styles.stadiumListWrapper}>
+              <StadiumList
+                stadiumList={filteredType}
                 searchValue={searchValue}
                 selectedCity={city}
                 selectedRegion={region}
@@ -178,7 +186,7 @@ const styles = StyleSheet.create({
     gap: wp(8),
   },
 
-  courtListWrapper: {
+  stadiumListWrapper: {
     paddingTop: hp(11),
     gap: hp(4),
   },
