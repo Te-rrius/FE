@@ -13,6 +13,7 @@
     "@react-native-kakao/core": "^2.4.5",
     "@react-native-kakao/user": "^2.4.5",
     "@tanstack/react-query": "^5.97.0",
+    "axios": "^1.16.1",
     "expo": "~55.0.5",
     "expo-blur": "^55.0.14",
     "expo-build-properties": "~55.0.9",
