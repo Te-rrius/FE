@@ -1,7 +1,7 @@
 export default {
   expo: {
-    name: "FE",
-    slug: "FE",
+    name: "Terrius",
+    slug: "terrius",
     scheme: "terrius",
     version: "1.0.0",
     orientation: "portrait",
