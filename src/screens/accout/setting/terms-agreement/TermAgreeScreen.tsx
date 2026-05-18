@@ -6,7 +6,7 @@ import Divider from '@/components/common/Divider';
 import { StyleSheet, View } from 'react-native';
 import { hp } from '@/utils/dimension';
 import { router } from 'expo-router';
-import { useTermAgreeStore } from '@/store/termAgreeStore';
+import { useTermAgreeStore } from '@/stores/termAgreeStore';
 
 const TermAgreeScreen = () => {
   const { isPrivacyAgreed, isMarketingAgreed, setPrivacyAgreed, setMarketingAgreed } = useTermAgreeStore();

@@ -4,7 +4,7 @@ import MainLogoIcon from '@/assets/images/mainLogoIcon.svg';
 import TennisIcon from '@/assets/images/header/tennisIcon.svg';
 import AuthIcon from '@/assets/images/header/authIcon.svg';
 import { hp, wp } from '@/utils/dimension';
-import useAuthStore from '@/store/authStore';
+import useAuthStore from '@/stores/authStore';
 import { router } from 'expo-router';
 
 const Header = () => {

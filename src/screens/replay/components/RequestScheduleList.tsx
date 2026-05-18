@@ -3,8 +3,8 @@ import { hp, wp } from '@/utils/dimension';
 import { DUMMY_SCHEDULES, ScheduleDto } from '@/constants/dummySchedule';
 import { useState } from 'react';
 import RequestModal from '@/components/modal/RequestModal';
-import useAuthStore from '@/store/authStore';
-import useRequestStore from '@/store/requestStore';
+import useAuthStore from '@/stores/authStore';
+import useRequestStore from '@/stores/requestStore';
 import { useQuery } from '@tanstack/react-query';
 
 interface RequestScheduleListProps {

@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { Modal, StyleSheet, View } from 'react-native';
-import useAuthStore from '@/store/authStore';
+import useAuthStore from '@/stores/authStore';
 import LoginModal from '@/components/auth/LoginModal';
 import { useEffect } from 'react';
 import { initializeKakaoSDK } from '@react-native-kakao/core';

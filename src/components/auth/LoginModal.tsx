@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { hp, wp } from '@/utils/dimension';
 import { login } from '@react-native-kakao/user';
-import useAuthStore from '@/store/authStore';
+import useAuthStore from '@/stores/authStore';
 
 import MainLogoIcon from '@/assets/images/mainLogoIcon.svg';
 import LoginModalCloseIcon from '@/assets/images/modal/loginModalCloseIcon.svg';

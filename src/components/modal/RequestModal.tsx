@@ -2,7 +2,7 @@ import { ScheduleDto } from '@/constants/dummySchedule';
 import { hp, wp } from '@/utils/dimension';
 import { Modal, StyleSheet, Text, View } from 'react-native';
 import ButtonGroup from '../common/ButtonGroup';
-import useAuthStore from '@/store/authStore';
+import useAuthStore from '@/stores/authStore';
 
 import LocationIcon from '@/assets/images/replay/locationIcon.svg';
 import ScheduleIcon from '@/assets/images/replay/scheduleIcon.svg';

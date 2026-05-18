@@ -8,7 +8,7 @@ import TimeIcon from '@/assets/images/replay/timeIcon.svg';
 import { DUMMY_SCHEDULES } from '@/constants/dummySchedule';
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import useAuthStore from '@/store/authStore';
+import useAuthStore from '@/stores/authStore';
 
 interface ReportScheduleListProps {
   selectedCourtId: number | null;
