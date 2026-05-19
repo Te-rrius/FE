@@ -8,7 +8,7 @@ interface AuthStore {
   showAgreeModal: boolean;
   openAgreeModal: () => void;
   closeAgreeModal: () => void;
-  login: () => void;
+  login: (token: string) => void;
   logout: () => void;
   isLoggingOut: boolean;
   returnPath: string;
@@ -23,11 +23,7 @@ const useAuthStore = create<AuthStore>()(
       showLoginModal: false,
       showAgreeModal: false,
       returnPath: '/',
-      login: () =>
-        set({
-          token: 'tempToken',
-          showLoginModal: false,
-        }),
+      login: (token: string) => set({ token, showLoginModal: false }),
       isLoggingOut: false,
       logout: () => {
         set({ token: null, showLoginModal: false, isLoggingOut: true });
