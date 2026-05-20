@@ -11,6 +11,9 @@ export interface ReportDetailResponse {
   reportId: number;
   matchVideoId: number;
   matchDate: string;
+  startTime: string;
+  endTime: string;
+  stadiumName: string;
   target: PlayerTarget;
   targetName: string;
   shotType: string;
