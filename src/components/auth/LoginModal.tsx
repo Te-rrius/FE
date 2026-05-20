@@ -20,6 +20,7 @@ const LoginModal = () => {
       console.error('카카오 로그인 실패', e);
     }
   };
+
   return (
     <View style={styles.modalContainer}>
       <View style={styles.topWrapper}>

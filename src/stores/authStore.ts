@@ -26,6 +26,7 @@ const useAuthStore = create<AuthStore>()(
       login: (token: string) => set({ token, showLoginModal: false }),
       isLoggingOut: false,
       logout: () => {
+        AsyncStorage.removeItem('authToken');
         set({ token: null, showLoginModal: false, isLoggingOut: true });
         setTimeout(() => set({ isLoggingOut: false }), 0);
       },
