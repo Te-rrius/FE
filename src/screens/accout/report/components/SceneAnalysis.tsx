@@ -1,22 +1,27 @@
+import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
-
+import { LinearGradient } from 'expo-linear-gradient';
 import ReportTitle from './ReportTitle';
+import { hp, wp } from '@/utils/dimension';
+import { ReportDetailResponse } from '@/types/report/reportDetail';
+
 import SceneAnalysisIcon from '@/assets/images/report/sceneAnalysisIcon.svg';
 import BestSceneIcon from '@/assets/images/report/bestSceneIcon.svg';
 import WorstSceneIcon from '@/assets/images/report/worstSceneIcon.svg';
-import { hp, wp } from '@/utils/dimension';
-import { useState } from 'react';
 import PlayButtonIcon from '@/assets/images/report/playButtonIcon.svg';
-import { LinearGradient } from 'expo-linear-gradient';
 
 type SceneAnalysisProps = {
   player: 1 | 2 | null;
+  report: ReportDetailResponse | undefined;
 };
 
-const SceneAnalysis = ({ player }: SceneAnalysisProps) => {
-  const bestScene = useVideoPlayer(require('@/assets/videos/bestSceneVideo.mp4'));
-  const worstScene = useVideoPlayer(require('@/assets/videos/worstSceneVideo.mp4'));
+const SceneAnalysis = ({ player, report }: SceneAnalysisProps) => {
+  const winningUrl = report?.materials.find((m) => m.materialType === 'WINNING_SHOT')?.videoUrl;
+  const worstUrl = report?.materials.find((m) => m.materialType === 'WORST_SHOT')?.videoUrl;
+
+  const bestScene = useVideoPlayer(winningUrl ? { uri: winningUrl } : null);
+  const worstScene = useVideoPlayer(worstUrl ? { uri: worstUrl } : null);
   const [bestPlaying, setBestPlaying] = useState(false);
   const [worstPlaying, setWorstPlaying] = useState(false);
 
@@ -43,8 +48,7 @@ const SceneAnalysis = ({ player }: SceneAnalysisProps) => {
             <Text style={styles.bestText}>최고</Text>의 장면
           </Text>
         </View>
-        {/* 베스트 영상 추가 예정 */}
-        {player !== null ? (
+        {player !== null && winningUrl ? (
           <View style={styles.videoContainer}>
             <VideoView player={bestScene} style={styles.video} contentFit="cover" />
             {!bestPlaying && (
@@ -71,8 +75,7 @@ const SceneAnalysis = ({ player }: SceneAnalysisProps) => {
             <Text style={styles.worstText}>아쉬운</Text> 장면
           </Text>
         </View>
-        {/* 워스트 영상 추가 예정 */}
-        {player !== null ? (
+        {player !== null && worstUrl ? (
           <View style={styles.videoContainer}>
             <VideoView player={worstScene} style={styles.video} contentFit="cover" />
             {!worstPlaying && (

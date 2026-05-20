@@ -3,6 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import PoseAnalysis from './components/PoseAnalysis';
 import GameAnalysis from './components/GameAnalysis';
 import SceneAnalysis from './components/SceneAnalysis';
+import ReportInfo from './components/ReportInfo';
 import { useReportDetailQuery } from './services/useReportDetailQuery';
 import PageHeader from '@/components/layout/PageHeader';
 import Divider from '@/components/common/Divider';
@@ -75,13 +76,13 @@ const ReportScreen = ({ matchVideoId }: ReportScreenProps) => {
         </View>
         <Divider />
         <View style={styles.reportInfoWrapper}>
-          {/* <ReportInfo
+          <ReportInfo
             date={report?.matchDate ?? ''}
-            schedule={schedule}
-            court={court}
-            stadium={stadium}
+            startTime={report?.startTime}
+            endTime={report?.endTime}
+            stadiumName={report?.stadiumName}
             selectedPlayer={selectedPlayer}
-          /> */}
+          />
         </View>
       </View>
       <View style={styles.analysisDetail}>
