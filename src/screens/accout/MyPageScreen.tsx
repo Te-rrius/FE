@@ -1,42 +1,43 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
 import { hp, wp } from '@/utils/dimension';
 import PageHeader from '@/components/layout/PageHeader';
+import { useUserQuery } from './services/useUserQuery';
 
 import SettingIcon from '@/assets/images/header/settingIcon.svg';
-import ProfileIcon from '@/assets/images/account/profileIcon.svg';
 import ReportIcon from '@/assets/images/account/reportIcon.svg';
-import { router } from 'expo-router';
 
-const ROLE_LABEL: Record<string, string> = {
-  BASIC: '일반 회원',
-  MANAGER: '매니저',
+const GRADE_LABEL: Record<string, string> = {
+  일반회원: '일반 회원',
+  매니저: '매니저',
 };
 
 const MyPageScreen = () => {
-  const user = {
-    name: '홍길동',
-    role: 'BASIC',
-  };
+  const { data: user } = useUserQuery();
 
   return (
     <>
       <PageHeader title="내 정보" rightContent={<SettingIcon />} onRightPress={() => router.push('/account/setting')} />
-      <View style={styles.profileContainer}>
-        <View style={styles.userInfo}>
-          <ProfileIcon />
-          <Text style={styles.nameText}>{user.name}</Text>
-        </View>
-        <View style={styles.userTag}>
-          <Text style={styles.tagText}>{ROLE_LABEL[user.role]}</Text>
-        </View>
-      </View>
-      <View style={styles.menuContainer}>
-        <Text style={styles.nameText}>내 활동</Text>
-        <Pressable style={styles.reportSection} onPress={() => router.push('/account/myreport')}>
-          <ReportIcon />
-          <Text style={styles.reportText}>내 리포트</Text>
-        </Pressable>
-      </View>
+      {user && (
+        <>
+          <View style={styles.profileContainer}>
+            <View style={styles.userInfo}>
+              <Image source={{ uri: user.profileImageUrl.replace('http://', 'https://') }} style={styles.profileIcon} />
+              <Text style={styles.nameText}>{user.nickname}</Text>
+            </View>
+            <View style={styles.userTag}>
+              <Text style={styles.tagText}>{GRADE_LABEL[user.userGrade] ?? user.userGrade}</Text>
+            </View>
+          </View>
+          <View style={styles.menuContainer}>
+            <Text style={styles.nameText}>내 활동</Text>
+            <Pressable style={styles.reportSection} onPress={() => router.push('/account/myreport')}>
+              <ReportIcon />
+              <Text style={styles.reportText}>내 리포트</Text>
+            </Pressable>
+          </View>
+        </>
+      )}
     </>
   );
 };
@@ -56,6 +57,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp(12),
+  },
+
+  profileIcon: {
+    width: wp(66),
+    height: hp(66),
+    borderRadius: 100,
   },
 
   nameText: {

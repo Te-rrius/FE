@@ -1,6 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native';
 import ReportTitle from './ReportTitle';
 import GameAnalysisIcon from '@/assets/images/report/gameAnalysisIcon.svg';
+import GameAnalysisCard from './GameAnalysisCard';
+import ServeDataCard from './ServeDataCard';
+import { ReportDetailResponse } from '@/types/report/reportDetail';
 import { hp, wp } from '@/utils/dimension';
 
 import AvgRallyIcon from '@/assets/images/report/avgRallyIcon.svg';
@@ -11,18 +14,7 @@ import FirstServeIcon from '@/assets/images/report/firstServeIcon.svg';
 import SecondServeIcon from '@/assets/images/report/secondServeIcon.svg';
 import ServeMaxSpeedIcon from '@/assets/images/report/serveMaxSpeedIcon.svg';
 
-import GameAnalysisCard from './GameAnalysisCard';
-import ServeDataCard from './ServeDataCard';
-import { useQuery } from '@tanstack/react-query';
-import { DUMMY_REPORT_ANALYSIS } from '@/constants/dummyReportAnalysis';
-
-const GameAnalysis = ({ player }: { player: 1 | 2 | null }) => {
-  const { data } = useQuery({
-    queryKey: ['reportAnalysis', player],
-    queryFn: () => DUMMY_REPORT_ANALYSIS[player!],
-    enabled: player !== null,
-  });
-
+const GameAnalysis = ({ player, report }: { player: 1 | 2 | null; report: ReportDetailResponse | undefined }) => {
   return (
     <View style={styles.container}>
       <ReportTitle icon={<GameAnalysisIcon />} title="경기 단위 분석" />
@@ -36,13 +28,13 @@ const GameAnalysis = ({ player }: { player: 1 | 2 | null }) => {
             <GameAnalysisCard
               title="평균 랠리 횟수"
               icon={<AvgRallyIcon />}
-              analysisText={data ? String(data.game.avgRally) : '-'}
+              analysisText={report ? String(report.averageRallyCount) : '-'}
               unit="회"
             />
             <GameAnalysisCard
               title="최대 랠리 횟수"
               icon={<MaxRallyIcon />}
-              analysisText={data ? String(data.game.maxRally) : '-'}
+              analysisText={report ? String(report.maxRallyCount) : '-'}
               unit="회"
             />
           </View>
@@ -51,42 +43,45 @@ const GameAnalysis = ({ player }: { player: 1 | 2 | null }) => {
               status="active"
               title="총 샷 수"
               icon={<TotalShotIcon />}
-              analysisText={data ? String(data.game.totalShot) : '-'}
+              analysisText={report ? String(report.totalShotCount) : '-'}
               unit="개"
             />
             <GameAnalysisCard
               title="최소 랠리 횟수"
               icon={<MinRallyIcon />}
-              analysisText={data ? String(data.game.minRally) : '-'}
+              analysisText={report ? String(report.minRallyCount) : '-'}
               unit="회"
             />
           </View>
         </View>
       </View>
-
       <View style={styles.dataContainer}>
         <View style={styles.containerTitle}>
           <View style={styles.titleLine} />
           <Text style={styles.titleText}>서브 데이터</Text>
         </View>
         <View style={styles.serveGrid}>
-          {data ? (
+          {report ? (
             <>
               <View style={styles.serveRow}>
-                <ServeDataCard title="퍼스트 서브 성공률" icon={<FirstServeIcon />} value={data.game.firstServeRate} />
-                <View style={{ flex: 100 - data.game.firstServeRate }} />
+                <ServeDataCard
+                  title="퍼스트 서브 성공률"
+                  icon={<FirstServeIcon />}
+                  value={report.firstServeSuccessRate}
+                />
+                <View style={{ flex: 100 - report.firstServeSuccessRate }} />
               </View>
               <View style={styles.serveRow}>
                 <ServeDataCard
                   title="세컨드 서브 성공률"
                   icon={<SecondServeIcon />}
-                  value={data.game.secondServeRate}
+                  value={report.secondServeSuccessRate}
                   status="active"
                 />
-                <View style={{ flex: 100 - data.game.secondServeRate }} />
+                <View style={{ flex: 100 - report.secondServeSuccessRate }} />
               </View>
               <View style={styles.serveRow}>
-                <ServeDataCard title="서브 최고 속도" icon={<ServeMaxSpeedIcon />} value={data.game.serveMaxSpeed} />
+                <ServeDataCard title="서브 최고 속도" icon={<ServeMaxSpeedIcon />} value={report.maxSpeed} />
                 <View style={{ flex: 90 }} />
               </View>
             </>

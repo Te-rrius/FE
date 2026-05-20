@@ -1,27 +1,24 @@
+import { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
+import ReportList from './components/ReportList';
 import Dropdown from '@/components/common/Dropdown';
 import PageHeader from '@/components/layout/PageHeader';
 import { hp, wp } from '@/utils/dimension';
-import { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import ReportList from './components/ReportList';
-import { router } from 'expo-router';
-import { DUMMY_REPORTS } from '@/constants/dummySchedule';
+import { useMyReportsQuery } from './services/useMyReportsQuery';
+import { SortOption } from '@/types/report/report';
 
-const dummyReports = [
-  { id: 1, date: '2025. 12. 01.' },
-  { id: 2, date: '2025. 12. 17.' },
-  { id: 3, date: '2026. 03. 06.' },
-  { id: 4, date: '2026. 03. 27.' },
-];
+const SORT_LABEL: Record<string, SortOption> = {
+  '최신 순': 'LATEST',
+  '오래된 순': 'OLDEST',
+};
 
 const MyReportScreen = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selected, setSelected] = useState('최신 순');
+  const [selected, setSelected] = useState<string>('최신 순');
 
-  const reports = Object.values(DUMMY_REPORTS);
-  const sortedReports = [...reports].sort((a, b) =>
-    selected === '최신 순' ? b.reportId - a.reportId : a.reportId - b.reportId,
-  );
+  const { data: reports = [] } = useMyReportsQuery(SORT_LABEL[selected]);
+
   return (
     <View style={styles.container}>
       <PageHeader title="내 리포트" />
@@ -47,12 +44,18 @@ const MyReportScreen = () => {
               setIsDropdownOpen(false);
             }}
           />
+
           <View style={styles.listWrapper}>
-            {sortedReports.map((report) => (
+            {reports.map((report) => (
               <ReportList
                 key={report.reportId}
-                date={report.date}
-                onPress={() => router.push({ pathname: '/report/[reportId]', params: { reportId: report.reportId } })}
+                date={report.matchDate}
+                onPress={() =>
+                  router.push({
+                    pathname: '/report/[matchVideoId]',
+                    params: { matchVideoId: report.matchVideoId },
+                  })
+                }
               />
             ))}
           </View>

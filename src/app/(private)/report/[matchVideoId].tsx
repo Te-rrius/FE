@@ -4,11 +4,11 @@ import ReportScreen from '@/screens/accout/report/ReportScreen';
 import { useLocalSearchParams } from 'expo-router';
 
 const Report = () => {
-  const { reportId } = useLocalSearchParams();
+  const { matchVideoId } = useLocalSearchParams();
 
   return (
     <ScreenContainer>
-      <ReportScreen reportId={reportId} />
+      <ReportScreen matchVideoId={matchVideoId} />
     </ScreenContainer>
   );
 };

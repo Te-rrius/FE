@@ -6,20 +6,20 @@ import LineIcon from '@/assets/images/modal/lineIcon.svg';
 import DefaultProfileIcon from '@/assets/images/report/defaultProfileIcon.svg';
 
 import { hp, wp } from '@/utils/dimension';
-import { CourtDto, ScheduleDto } from '@/constants/dummySchedule';
-import { StadiumDto } from '@/constants/dummyStadium';
 import { LinearGradient } from 'expo-linear-gradient';
 
 interface ReportInfoProps {
   date: string;
-  schedule: ScheduleDto | undefined;
-  court: CourtDto | undefined;
-  stadium: StadiumDto | undefined;
+  startTime: string | undefined;
+  endTime: string | undefined;
+  stadiumName: string | undefined;
   selectedPlayer: 1 | 2 | null;
 }
 
-const ReportInfo = ({ date, schedule, court, stadium, selectedPlayer }: ReportInfoProps) => {
-  const courtName = court?.name ?? '구역명';
+const formatTime = (time: string) => time.slice(0, 5);
+
+const ReportInfo = ({ date, startTime, endTime, stadiumName, selectedPlayer }: ReportInfoProps) => {
+  const timeText = startTime && endTime ? `${formatTime(startTime)}~${formatTime(endTime)}` : '-';
 
   const content = (
     <>
@@ -28,17 +28,17 @@ const ReportInfo = ({ date, schedule, court, stadium, selectedPlayer }: ReportIn
         <View style={styles.infoRow}>
           <GrayCalendarIcon />
           <View style={styles.infoDetailWrapper}>
-            <Text style={styles.infoDetailText}>{date}</Text>
+            <Text style={styles.infoDetailText}>{date || '-'}</Text>
             <LineIcon />
-            <Text style={styles.infoDetailText}>{schedule?.hours ?? '00:00~00:00'}</Text>
+            <Text style={styles.infoDetailText}>{timeText}</Text>
           </View>
         </View>
         <View style={styles.infoRow}>
           <GrayLocationIcon />
           <View style={styles.infoDetailWrapper}>
-            <Text style={styles.infoDetailText}>{stadium?.name ?? '구장명'}</Text>
-            <LineIcon />
-            <Text style={styles.infoDetailText}>{courtName}</Text>
+            <Text style={styles.infoDetailText}>{stadiumName ?? '-'}</Text>
+            {/* <LineIcon />
+            <Text style={styles.infoDetailText}>{courtName}</Text> */}
           </View>
         </View>
       </View>
