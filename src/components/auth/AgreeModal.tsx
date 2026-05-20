@@ -4,8 +4,8 @@ import Checkbox from '@/components/common/Checkbox';
 import Divider from '../common/Divider';
 import AgreeModalOption from '../common/AgreeModalOption';
 import Button from '../common/Button';
-import { useTermAgreeStore } from '@/store/termAgreeStore';
-import useAuthStore from '@/store/authStore';
+import { useTermAgreeStore } from '@/stores/termAgreeStore';
+import useAuthStore from '@/stores/authStore';
 
 const AgreeModal = () => {
   const { closeAgreeModal } = useAuthStore();

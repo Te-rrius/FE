@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { usePathname } from 'expo-router';
-import useAuthStore from '@/store/authStore';
+import useAuthStore from '@/stores/authStore';
 
 const AuthCheck = ({ children }: any) => {
   const { token, openLoginModal, isLoggingOut } = useAuthStore();

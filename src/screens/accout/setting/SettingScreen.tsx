@@ -6,7 +6,7 @@ import Divider from '@/components/common/Divider';
 import { StyleSheet, View } from 'react-native';
 import { hp } from '@/utils/dimension';
 import { router } from 'expo-router';
-import useAuthStore from '@/store/authStore';
+import useAuthStore from '@/stores/authStore';
 
 const SettingScreen = () => {
   const { logout } = useAuthStore();

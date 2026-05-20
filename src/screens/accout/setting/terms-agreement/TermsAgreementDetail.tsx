@@ -4,7 +4,7 @@ import CircleIcon from '@/assets/images/account/circleIcon.svg';
 import { hp, wp } from '@/utils/dimension';
 import Button from '@/components/common/Button';
 import Divider from '@/components/common/Divider';
-import { useTermAgreeStore } from '@/store/termAgreeStore';
+import { useTermAgreeStore } from '@/stores/termAgreeStore';
 import { router } from 'expo-router';
 
 type TermsAgreementDetailType = 'privacy' | 'marketing';
