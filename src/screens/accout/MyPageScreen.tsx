@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { hp, wp } from '@/utils/dimension';
 import PageHeader from '@/components/layout/PageHeader';
@@ -6,6 +6,11 @@ import { useUserQuery } from './services/useUserQuery';
 
 import SettingIcon from '@/assets/images/header/settingIcon.svg';
 import ReportIcon from '@/assets/images/account/reportIcon.svg';
+
+const GRADE_LABEL: Record<string, string> = {
+  일반회원: '일반 회원',
+  매니저: '매니저',
+};
 
 const MyPageScreen = () => {
   const { data: user } = useUserQuery();
@@ -22,7 +27,7 @@ const MyPageScreen = () => {
               <Text style={styles.nameText}>{user.nickname}</Text>
             </View>
             <View style={styles.userTag}>
-              <Text style={styles.tagText}>{user.userGrade}</Text>
+              <Text style={styles.tagText}>{GRADE_LABEL[user.userGrade] ?? user.userGrade}</Text>입력 내용: 바뀜~~{' '}
             </View>
           </View>
           <View style={styles.menuContainer}>
