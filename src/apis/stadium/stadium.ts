@@ -1,5 +1,5 @@
-import type { StadiumResponse, StadiumQueryParams } from '@/types/main/stadium';
-import { instance } from './instance';
+import type { StadiumResponse, StadiumQueryParams } from '@/types/stadium/stadium';
+import { instance } from '../instance';
 import { ApiEnvelope } from '@/types/api.type';
 
 // 구장 목록 전체 조회

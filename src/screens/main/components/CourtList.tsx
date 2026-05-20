@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { hp, wp } from '@/utils/dimension';
-import { StadiumResponse } from '@/types/main/stadium';
+import { StadiumResponse } from '@/types/stadium/stadium';
 
 interface StadiumListProps {
   stadiumList: StadiumResponse[];

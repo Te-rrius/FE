@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { getStadiums } from '@/apis/stadium';
+import { getStadiums } from '@/apis/stadium/stadium';
 import { queryKeys } from '@/services/queryKeys';
-import type { StadiumQueryParams } from '@/types/main/stadium';
+import type { StadiumQueryParams } from '@/types/stadium/stadium';
 
 export const useStadiumsQuery = (params?: StadiumQueryParams) => {
   return useQuery({
