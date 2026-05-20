@@ -1,7 +1,13 @@
+import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import PoseAnalysis from './components/PoseAnalysis';
+import GameAnalysis from './components/GameAnalysis';
+import SceneAnalysis from './components/SceneAnalysis';
+import { useReportDetailQuery } from './services/useReportDetailQuery';
 import PageHeader from '@/components/layout/PageHeader';
 import Divider from '@/components/common/Divider';
-import ReportInfo from './components/ReportInfo';
+import { hp, wp } from '@/utils/dimension';
+import { PlayerTarget } from '@/types/report/reportDetail';
 
 import ActiveDownloadIcon from '@/assets/images/report/activeDownloadIcon.svg';
 import InactiveDownloadIcon from '@/assets/images/report/inactiveDownloadIcon.svg';
@@ -9,25 +15,22 @@ import SelectArrowIcon from '@/assets/images/report/selectArrowIcon.svg';
 import Player1Icon from '@/assets/images/report/player1Icon.svg';
 import Player2Icon from '@/assets/images/report/player2Icon.svg';
 
-import { hp, wp } from '@/utils/dimension';
-import PoseAnalysis from './components/PoseAnalysis';
-import GameAnalysis from './components/GameAnalysis';
-import { getReportDetail } from '@/constants/dummySchedule';
-import SceneAnalysis from './components/SceneAnalysis';
-import { useState } from 'react';
-
-type ReportScreenProps = {
-  reportId: string | string[];
+const PLAYER_TARGET: Record<1 | 2, PlayerTarget> = {
+  1: 'PLAYER_ONE',
+  2: 'PLAYER_TWO',
 };
 
-const ReportScreen = ({ reportId }: ReportScreenProps) => {
+type ReportScreenProps = {
+  matchVideoId: string | string[];
+};
+
+const ReportScreen = ({ matchVideoId }: ReportScreenProps) => {
   const [selectedPlayer, setSelectedPlayer] = useState<1 | 2 | null>(null);
 
-  const id = Number(Array.isArray(reportId) ? reportId[0] : reportId);
-  const detail = getReportDetail(id);
+  const id = Number(Array.isArray(matchVideoId) ? matchVideoId[0] : matchVideoId);
+  const target = selectedPlayer !== null ? PLAYER_TARGET[selectedPlayer] : null;
 
-  if (!detail) return null;
-  const { report, stadium, court, schedule } = detail;
+  const { data: report } = useReportDetailQuery(id, target);
 
   return (
     <ScrollView>
@@ -72,19 +75,19 @@ const ReportScreen = ({ reportId }: ReportScreenProps) => {
         </View>
         <Divider />
         <View style={styles.reportInfoWrapper}>
-          <ReportInfo
-            date={report.date}
+          {/* <ReportInfo
+            date={report?.matchDate ?? ''}
             schedule={schedule}
             court={court}
             stadium={stadium}
             selectedPlayer={selectedPlayer}
-          />
+          /> */}
         </View>
       </View>
       <View style={styles.analysisDetail}>
-        <PoseAnalysis player={selectedPlayer} />
-        <GameAnalysis player={selectedPlayer} />
-        <SceneAnalysis player={selectedPlayer} />
+        <PoseAnalysis player={selectedPlayer} report={report} />
+        <GameAnalysis player={selectedPlayer} report={report} />
+        <SceneAnalysis player={selectedPlayer} report={report} />
       </View>
     </ScrollView>
   );
