@@ -51,6 +51,12 @@ const MyReportScreen = () => {
                 key={report.reportId}
                 date={report.matchDate}
                 onPress={() => router.push({ pathname: '/report/[reportId]', params: { reportId: report.reportId } })}
+                // onPress={() =>
+                //   router.push({
+                //     pathname: '/report/[matchVideoId]',
+                //     params: { matchVideoId: report.matchVideoId },
+                //   })
+                // }
               />
             ))}
           </View>
