@@ -22,12 +22,11 @@ const MyPageScreen = () => {
         <>
           <View style={styles.profileContainer}>
             <View style={styles.userInfo}>
-              {/* <Image source={{ uri: user.profileImageUrl }} style={styles.profileIcon} /> 빌드 시 교체 */}
               <Image source={{ uri: user.profileImageUrl.replace('http://', 'https://') }} style={styles.profileIcon} />
               <Text style={styles.nameText}>{user.nickname}</Text>
             </View>
             <View style={styles.userTag}>
-              <Text style={styles.tagText}>{GRADE_LABEL[user.userGrade] ?? user.userGrade}</Text>입력 내용: 바뀜~~{' '}
+              <Text style={styles.tagText}>{GRADE_LABEL[user.userGrade] ?? user.userGrade}</Text>
             </View>
           </View>
           <View style={styles.menuContainer}>

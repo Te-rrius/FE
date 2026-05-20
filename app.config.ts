@@ -17,11 +17,6 @@ export default {
     ios: {
       supportsTablet: true,
       bundleIdentifier: 'com.terrius.app',
-      infoPlist: {
-        NSAppTransportSecurity: {
-          NSAllowsArbitraryLoads: true,
-        },
-      },
     },
 
     android: {
