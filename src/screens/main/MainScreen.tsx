@@ -9,8 +9,7 @@ import SearchBar from '@/components/common/SearchBar';
 import Dropdown from '@/components/common/Dropdown';
 import useBannerSize from '@/utils/bannerSize';
 import StadiumList from './components/CourtList';
-import { useQuery } from '@tanstack/react-query';
-import { DUMMY_STADIUMS } from '@/constants/dummyStadium';
+import { useStadiumsQuery } from './services/useStadiumsQuery';
 
 const tabs = [
   { key: 'GENERAL', label: '구장' },
@@ -18,67 +17,61 @@ const tabs = [
   { key: 'PRO', label: '프로구장' },
 ];
 
-const fetchCourts = async () => DUMMY_STADIUMS; // 수정 예정
-
 const MainScreen = () => {
   const [activeTab, setActiveTab] = useState('GENERAL');
   const [searchValue, setSearchValue] = useState('');
-  const [cityDropdownOpen, setCityDropdownOpen] = useState<boolean>(false);
-  const [regionDropdownOpen, setRegionDropdownOpen] = useState<boolean>(false);
-  const [city, setCity] = useState('도시');
-  const [region, setRegion] = useState('지역');
+  const [provinceDropdownOpen, setProvinceDropdownOpen] = useState(false);
+  const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
+  const [province, setProvince] = useState('도시');
+  const [city, setCity] = useState('지역');
 
   const bannerSize = useBannerSize(350, 160);
 
   const switchTab = (key: string) => {
     setActiveTab(key);
     setSearchValue('');
-    setCity('도시');
-    setRegion('지역');
+    setProvince('도시');
+    setCity('지역');
+    setProvinceDropdownOpen(false);
     setCityDropdownOpen(false);
-    setRegionDropdownOpen(false);
   };
 
   // 도시 선택
-  const selectCity = (option: string) => {
+  const selectProvince = (option: string) => {
     if (option === '전체 보기') {
-      setCity('도시');
+      setProvince('도시');
     } else {
-      setCity(option);
+      setProvince(option);
     }
-
-    if (region !== '지역') {
-      setRegion('지역');
-    }
-
-    setSearchValue('');
-    setCityDropdownOpen(false);
+    setCity('지역');
+    setProvinceDropdownOpen(false);
   };
 
   // 지역 선택
-  const selectRegion = (option: string) => {
-    if (city === '도시') return;
-    setRegion(option);
-    setRegionDropdownOpen(false);
+  const selectCity = (option: string) => {
+    if (province === '도시') return;
+    setCity(option);
+    setCityDropdownOpen(false);
   };
 
-  const { data: courts = [] } = useQuery({
-    queryKey: ['courts'],
-    queryFn: fetchCourts,
+  // 전체 드롭다운
+  const { data: allStadiums = [] } = useStadiumsQuery();
+
+  // 필터 적용 리스트
+  const { data: stadiums = [] } = useStadiumsQuery({
+    province: province !== '도시' ? province : undefined,
+    city: city !== '지역' ? city : undefined,
+    name: searchValue || undefined,
   });
 
-  const filteredType = courts.filter((stadium) => stadium.type === activeTab);
-
-  const cityDropdownList = ['전체 보기', ...new Set(filteredType.map((stadium) => stadium.location.split(' ')[0]))];
-
-  const regionDropdownList = filteredType.reduce<Record<string, string[]>>((acc, stadium) => {
-    const parts = stadium.location.split(' ');
-    const city = parts[0];
-    const region = parts[1];
-    if (!acc[city]) acc[city] = [];
-    if (!acc[city].includes(region)) acc[city].push(region);
-    return acc;
-  }, {});
+  // 드롭다운 목록
+  const provinceDropdownList = ['전체 보기', ...new Set(allStadiums.map((s) => s.province))];
+  const cityDropdownList = allStadiums
+    .filter((s) => s.province === province)
+    .reduce<string[]>((acc, s) => {
+      if (!acc.includes(s.city)) acc.push(s.city);
+      return acc;
+    }, []);
 
   return (
     <>
@@ -103,29 +96,24 @@ const MainScreen = () => {
 
             <View style={styles.placeWrapper}>
               <Dropdown
+                selectedText={province}
+                dropdownList={provinceDropdownList}
+                isDropdownOpen={provinceDropdownOpen}
+                setIsDropdownOpen={setProvinceDropdownOpen}
+                selectDropdownHandler={selectProvince}
+              />
+              <Dropdown
                 selectedText={city}
                 dropdownList={cityDropdownList}
                 isDropdownOpen={cityDropdownOpen}
                 setIsDropdownOpen={setCityDropdownOpen}
                 selectDropdownHandler={selectCity}
-              />
-              <Dropdown
-                selectedText={region}
-                dropdownList={regionDropdownList[city] ?? []}
-                isDropdownOpen={regionDropdownOpen}
-                setIsDropdownOpen={setRegionDropdownOpen}
-                selectDropdownHandler={selectRegion}
-                disabled={city === '도시'}
+                disabled={province === '도시'}
               />
             </View>
 
             <View style={styles.stadiumListWrapper}>
-              <StadiumList
-                stadiumList={filteredType}
-                searchValue={searchValue}
-                selectedCity={city}
-                selectedRegion={region}
-              />
+              <StadiumList stadiumList={stadiums} />
             </View>
           </View>
         </View>

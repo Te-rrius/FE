@@ -1,45 +1,19 @@
-import { StadiumDto } from '@/constants/dummyStadium';
-import { hp, wp } from '@/utils/dimension';
-import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
 import React from 'react';
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
+import { hp, wp } from '@/utils/dimension';
+import { StadiumResponse } from '@/types/stadium/stadium';
 
 interface StadiumListProps {
-  stadiumList: StadiumDto[];
-  searchValue: string;
-  selectedCity: string;
-  selectedRegion: string;
+  stadiumList: StadiumResponse[];
 }
 
-const StadiumList = ({ stadiumList, searchValue, selectedCity, selectedRegion }: StadiumListProps) => {
-  const getDisplayLocation = (location: string) => {
-    if (location.startsWith('서울시') || location.startsWith('인천광역시')) {
-      return { city: location.split(' ')[0], region: location.split(' ')[1] };
-    }
-    return { city: location.split(' ')[1], region: location.split(' ')[2] };
-  };
-
-  const getFilterLocation = (location: string) => ({
-    filterCity: location.split(' ')[0],
-    filterRegion: location.split(' ')[1],
-  });
-
-  const filteredList = stadiumList.filter((stadium) => {
-    const { filterCity, filterRegion } = getFilterLocation(stadium.location);
-
-    const matchName = searchValue ? stadium.name.includes(searchValue) : true;
-    const matchCity = selectedCity !== '도시' ? filterCity === selectedCity : true;
-    const matchRegion = selectedRegion !== '지역' ? filterRegion === selectedRegion : true;
-
-    return matchName && matchCity && matchRegion;
-  });
-
-  if (filteredList.length === 0) {
+const StadiumList = ({ stadiumList }: StadiumListProps) => {
+  if (stadiumList.length === 0) {
     return (
       <View style={styles.emptyContainer}>
         <View style={styles.emptyText}>
-          {searchValue ? <Text style={styles.searchedName}>"{searchValue}"</Text> : null}
           <Text style={styles.noResultText}>검색 결과가 없습니다.</Text>
         </View>
         <Text style={styles.hintText}>다른 검색어를 입력해 보세요.</Text>
@@ -49,37 +23,31 @@ const StadiumList = ({ stadiumList, searchValue, selectedCity, selectedRegion }:
 
   return (
     <View style={styles.listGridContainer}>
-      {filteredList.map((stadium) => {
-        const { city, region } = getDisplayLocation(stadium.location);
-
-        return (
-          <View key={String(stadium.stadiumId)} style={styles.cardWrapper}>
-            <Pressable
-              style={styles.cardContainer}
-              onPress={() =>
-                router.push({ pathname: '/stadium/[stadiumId]', params: { stadiumId: stadium.stadiumId } })
-              }
-            >
-              <Image source={{ uri: stadium.image }} style={styles.stadiumImg} resizeMode="cover" />
-              <LinearGradient colors={['transparent', 'rgba(17, 17, 17, 0.80)']} style={styles.imgCover} />
-              <View style={styles.infoContainer}>
-                <View style={styles.badgeRow}>
-                  <View style={styles.badgeContainer}>
-                    <Text style={styles.badgeText}>{city}</Text>
-                  </View>
-                  <View style={styles.badgeContainer}>
-                    <Text style={styles.badgeText}>{region}</Text>
-                  </View>
+      {stadiumList.map((stadium) => (
+        <View key={stadium.name} style={styles.cardWrapper}>
+          <Pressable
+            style={styles.cardContainer}
+            onPress={() => router.push({ pathname: '/stadium/[stadiumId]', params: { stadiumId: stadium.name } })}
+          >
+            <Image source={{ uri: stadium.imageUrl }} style={styles.stadiumImg} resizeMode="cover" />
+            <LinearGradient colors={['transparent', 'rgba(17, 17, 17, 0.80)']} style={styles.imgCover} />
+            <View style={styles.infoContainer}>
+              <View style={styles.badgeRow}>
+                <View style={styles.badgeContainer}>
+                  <Text style={styles.badgeText}>{stadium.province}</Text>
                 </View>
-                <View>
-                  <Text style={styles.stadiumNameText}>{stadium.name}</Text>
-                  <Text style={styles.stadiumLocationText}>{stadium.location}</Text>
+                <View style={styles.badgeContainer}>
+                  <Text style={styles.badgeText}>{stadium.city}</Text>
                 </View>
               </View>
-            </Pressable>
-          </View>
-        );
-      })}
+              <View>
+                <Text style={styles.stadiumNameText}>{stadium.name}</Text>
+                <Text style={styles.stadiumLocationText}>{stadium.address}</Text>
+              </View>
+            </View>
+          </Pressable>
+        </View>
+      ))}
     </View>
   );
 };
