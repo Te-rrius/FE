@@ -20,27 +20,20 @@ const tabs = [
 const MainScreen = () => {
   const [activeTab, setActiveTab] = useState('GENERAL');
   const [searchValue, setSearchValue] = useState('');
+  const [provinceDropdownOpen, setProvinceDropdownOpen] = useState(false);
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
-  const [regionDropdownOpen, setRegionDropdownOpen] = useState(false);
   const [province, setProvince] = useState('도시');
   const [city, setCity] = useState('지역');
 
   const bannerSize = useBannerSize(350, 160);
-
-  // '도시'/'지역' 기본값이면 파라미터 미전달
-  const { data: stadiums = [] } = useStadiumsQuery({
-    province: province !== '도시' ? province : undefined,
-    city: city !== '지역' ? city : undefined,
-    name: searchValue || undefined,
-  });
 
   const switchTab = (key: string) => {
     setActiveTab(key);
     setSearchValue('');
     setProvince('도시');
     setCity('지역');
+    setProvinceDropdownOpen(false);
     setCityDropdownOpen(false);
-    setRegionDropdownOpen(false);
   };
 
   // 도시 선택
@@ -51,24 +44,35 @@ const MainScreen = () => {
       setProvince(option);
     }
     setCity('지역');
-    setCityDropdownOpen(false);
+    setProvinceDropdownOpen(false);
   };
 
   // 지역 선택
   const selectCity = (option: string) => {
     if (province === '도시') return;
     setCity(option);
-    setRegionDropdownOpen(false);
+    setCityDropdownOpen(false);
   };
 
-  const provinceDropdownList = ['전체 보기', ...new Set(stadiums.map((s) => s.province))];
+  // 전체 드롭다운
+  const { data: allStadiums = [] } = useStadiumsQuery();
 
-  const cityDropdownList = stadiums
+  // 필터 적용 리스트
+  const { data: stadiums = [] } = useStadiumsQuery({
+    province: province !== '도시' ? province : undefined,
+    city: city !== '지역' ? city : undefined,
+    name: searchValue || undefined,
+  });
+
+  // 드롭다운 목록
+  const provinceDropdownList = ['전체 보기', ...new Set(allStadiums.map((s) => s.province))];
+  const cityDropdownList = allStadiums
     .filter((s) => s.province === province)
     .reduce<string[]>((acc, s) => {
       if (!acc.includes(s.city)) acc.push(s.city);
       return acc;
     }, []);
+
   return (
     <>
       <Header />
@@ -94,15 +98,15 @@ const MainScreen = () => {
               <Dropdown
                 selectedText={province}
                 dropdownList={provinceDropdownList}
-                isDropdownOpen={cityDropdownOpen}
-                setIsDropdownOpen={setCityDropdownOpen}
+                isDropdownOpen={provinceDropdownOpen}
+                setIsDropdownOpen={setProvinceDropdownOpen}
                 selectDropdownHandler={selectProvince}
               />
               <Dropdown
                 selectedText={city}
                 dropdownList={cityDropdownList}
-                isDropdownOpen={regionDropdownOpen}
-                setIsDropdownOpen={setRegionDropdownOpen}
+                isDropdownOpen={cityDropdownOpen}
+                setIsDropdownOpen={setCityDropdownOpen}
                 selectDropdownHandler={selectCity}
                 disabled={province === '도시'}
               />
