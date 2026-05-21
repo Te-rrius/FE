@@ -1,5 +1,5 @@
 import { instance } from '@/apis/instance';
-import { ApiEnvelope } from '@/types/api.type';
+import { ApiEnvelope, ApiEnvelopeNullable } from '@/types/api.type';
 import { ScheduleResponse } from '@/types/stadium/stadiumDetail';
 
 export interface ScheduleParams {
@@ -13,5 +13,14 @@ export const getSchedule = async (
   params?: ScheduleParams,
 ): Promise<ApiEnvelope<ScheduleResponse>> => {
   const res = await instance.get(`/stadiums/${stadiumId}/report-requests`, { params });
+  return res.data;
+};
+
+// 리포트 신청
+export const postReportRequest = async (
+  stadiumId: number,
+  matchVideoId: number,
+): Promise<ApiEnvelopeNullable<null>> => {
+  const res = await instance.post(`/stadiums/${stadiumId}/report-requests/${matchVideoId}`);
   return res.data;
 };

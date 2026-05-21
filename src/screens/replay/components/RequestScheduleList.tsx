@@ -7,7 +7,7 @@ import { ScheduleTimeResponse } from '@/types/stadium/stadiumDetail';
 
 interface RequestScheduleListProps {
   times: ScheduleTimeResponse[];
-  stadiumId: number;
+  stadiumId: number; // 추가
   stadiumName: string;
   selectedDate: Date;
   selectedCourtId: number | null;
@@ -20,7 +20,13 @@ const formatAmPm = (time: string): string => {
 
 const formatTime = (time: string): string => time.slice(0, 5);
 
-const RequestScheduleList = ({ times, stadiumName, selectedDate, selectedCourtId }: RequestScheduleListProps) => {
+const RequestScheduleList = ({
+  times,
+  stadiumId,
+  stadiumName,
+  selectedDate,
+  selectedCourtId,
+}: RequestScheduleListProps) => {
   const { token, openLoginModal } = useAuthStore();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -68,8 +74,9 @@ const RequestScheduleList = ({ times, stadiumName, selectedDate, selectedCourtId
       {isModalVisible && selectedItem && (
         <RequestModal
           item={selectedItem}
-          selectedDate={selectedDate}
+          stadiumId={stadiumId}
           stadiumName={stadiumName}
+          selectedDate={selectedDate}
           onClose={() => setIsModalVisible(false)}
           onConfirm={() => setIsModalVisible(false)}
         />

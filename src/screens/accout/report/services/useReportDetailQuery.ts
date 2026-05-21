@@ -3,6 +3,7 @@ import { getReportDetail } from '@/apis/report/reportDetail';
 import { queryKeys } from '@/services/queryKeys';
 import { PlayerTarget } from '@/types/report/reportDetail';
 
+// 리포트 상세 조회
 export const useReportDetailQuery = (matchVideoId: number, target: PlayerTarget | null) => {
   return useQuery({
     queryKey: queryKeys.reportDetail(matchVideoId, target),

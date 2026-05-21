@@ -1,9 +1,11 @@
 import { Modal, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { useMutation } from '@tanstack/react-query';
 import ButtonGroup from '../common/ButtonGroup';
-import useAuthStore from '@/stores/authStore';
-import { hp, wp } from '@/utils/dimension';
+import { postReportRequest } from '@/apis/stadium/stadiumDetail';
 import { ScheduleTimeResponse } from '@/types/stadium/stadiumDetail';
+import { hp, wp } from '@/utils/dimension';
+import useAuthStore from '@/stores/authStore';
 
 import LocationIcon from '@/assets/images/replay/locationIcon.svg';
 import ScheduleIcon from '@/assets/images/replay/scheduleIcon.svg';
@@ -11,6 +13,7 @@ import LineIcon from '@/assets/images/modal/lineIcon.svg';
 
 interface RequestModalProps {
   item: ScheduleTimeResponse;
+  stadiumId: number;
   stadiumName: string;
   selectedDate: Date;
   onClose: () => void;
@@ -18,25 +21,31 @@ interface RequestModalProps {
 }
 
 const formatDate = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}.${month}.${day}`;
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}.${m}.${d}`;
 };
 
 const formatTime = (time: string): string => time.slice(0, 5);
 
-const RequestModal = ({ item, selectedDate, stadiumName, onClose, onConfirm }: RequestModalProps) => {
+const RequestModal = ({ item, stadiumId, stadiumName, selectedDate, onClose, onConfirm }: RequestModalProps) => {
   const { token } = useAuthStore();
+
+  const { mutate: requestReport, isPending } = useMutation({
+    mutationFn: () => postReportRequest(stadiumId, item.matchVideoId),
+    onSuccess: () => {
+      onConfirm();
+      router.push('/replay/request-complete');
+    },
+  });
 
   const handleRequest = () => {
     if (!token) {
       onClose();
-    } else {
-      // 신청 로직 추가 예정
-      onConfirm();
-      router.push('/replay/request-complete');
+      return;
     }
+    requestReport();
   };
 
   return (
