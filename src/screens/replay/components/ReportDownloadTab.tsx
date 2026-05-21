@@ -1,18 +1,18 @@
+import { StyleSheet, View } from 'react-native';
+import ReportScheduleList from './ReportScheduleList';
+import { useReportDates } from '../services/useReportDates';
 import DatePicker from '@/components/common/DatePicker';
 import DetailToggle from '@/components/common/DetailToggle';
 import Divider from '@/components/common/Divider';
 import StepScroll from '@/components/common/StepScroll';
-import { StyleSheet, View } from 'react-native';
 import { hp, wp } from '@/utils/dimension';
-import ReportScheduleList from './ReportScheduleList';
-import CourtSelector from './CourtSelector';
 
 import DownStep1Icon from '@/assets/images/common/downStep1Icon.svg';
 import DownStep2Icon from '@/assets/images/common/pngIcon/downStep2Icon.png';
 import DownStep3Icon from '@/assets/images/common/pngIcon/downStep3Icon.png';
 import ReportDownBanner from '@/assets/images/banner/reportDownBanner.svg';
-import { useQuery } from '@tanstack/react-query';
-import { DUMMY_COURTS, DUMMY_SCHEDULES } from '@/constants/dummySchedule';
+
+const DOWN_STEPS = [DownStep1Icon, DownStep2Icon, DownStep3Icon];
 
 interface ReportDownloadTabProps {
   stadiumId: number;
@@ -23,38 +23,16 @@ interface ReportDownloadTabProps {
   goToRequestTab: () => void;
 }
 
-const DOWN_STEPS = [DownStep1Icon, DownStep2Icon, DownStep3Icon];
-
-// 수정 예정
-// 선택된 코드 일정
-const fetchCourts = async (id: number) => DUMMY_COURTS[id] ?? [];
-// 다운탭: isRequested && reportId 있는 것만
-// StadiumDetailScreen 중복 분리 예정
-const fetchDownloadSchedules = async (courtId: number) =>
-  (DUMMY_SCHEDULES[courtId] ?? []).filter((s) => s.isRequested && s.reportId);
-
 const ReportDownloadTab = ({
   stadiumId,
   selectedDate,
   setSelectedDate,
   selectedCourtId,
-  setSelectedCourtId,
   goToRequestTab,
 }: ReportDownloadTabProps) => {
-  const { data: courtList = [] } = useQuery({
-    queryKey: ['courts', stadiumId],
-    queryFn: () => fetchCourts(stadiumId),
-  });
+  const { data: reportDates = [] } = useReportDates(stadiumId);
 
-  // 선택된 코트의 일정 목록
-  const { data: schedules = [] } = useQuery({
-    queryKey: ['downloadSchedules', selectedCourtId],
-    queryFn: () => fetchDownloadSchedules(selectedCourtId!),
-    enabled: selectedCourtId !== null,
-  });
-
-  // 리포트 있는 날짜만 캘린더에 하이라이트
-  const reportDates = schedules.map((s) => new Date(s.date));
+  const highlightDates = reportDates.filter((d) => d.hasReport).map((d) => new Date(d.date));
 
   return (
     <>
@@ -65,10 +43,19 @@ const ReportDownloadTab = ({
       <View style={styles.bannerWrapper}>
         <ReportDownBanner />
       </View>
-      <DatePicker type="download" selectedDate={selectedDate} onSelect={setSelectedDate} highlightDates={reportDates} />
+      <DatePicker
+        type="download"
+        selectedDate={selectedDate}
+        onSelect={setSelectedDate}
+        highlightDates={highlightDates}
+      />
       <View style={styles.gameInfoWrapper}>
-        <CourtSelector courtList={courtList} selectedCourtId={selectedCourtId} onPress={setSelectedCourtId} />
-        <ReportScheduleList selectedCourtId={selectedCourtId} selectedDate={selectedDate} onPress={goToRequestTab} />
+        <ReportScheduleList
+          stadiumId={stadiumId}
+          selectedCourtId={selectedCourtId}
+          selectedDate={selectedDate}
+          onPress={goToRequestTab}
+        />
       </View>
     </>
   );

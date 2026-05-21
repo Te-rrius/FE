@@ -11,6 +11,7 @@ import { router } from 'expo-router';
 import useAuthStore from '@/stores/authStore';
 
 interface ReportScheduleListProps {
+  stadiumId: number;
   selectedCourtId: number | null;
   selectedDate: Date;
   onPress: () => void;
@@ -131,6 +132,7 @@ const styles = StyleSheet.create({
     lineHeight: hp(20),
     letterSpacing: wp(-0.35),
   },
+
   scheduleCount: {
     color: '#767676',
     fontFamily: 'Pretendard400',
@@ -138,6 +140,7 @@ const styles = StyleSheet.create({
     lineHeight: hp(18),
     letterSpacing: wp(-0.3),
   },
+
   scheduleCardActive: {
     borderColor: '#4048F7',
   },
