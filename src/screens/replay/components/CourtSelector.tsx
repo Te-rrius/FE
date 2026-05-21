@@ -1,11 +1,15 @@
-import { CourtDto } from '@/constants/dummySchedule';
 import { hp, wp } from '@/utils/dimension';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import LocationIcon from '@/assets/images/replay/locationIcon.svg';
 
+interface Court {
+  courtId: number;
+  name: string;
+}
+
 interface CourtSelectorProps {
-  courtList?: CourtDto[];
+  courtList?: Court[];
   selectedCourtId?: number | null;
   onPress?: (courtId: number) => void;
 }
