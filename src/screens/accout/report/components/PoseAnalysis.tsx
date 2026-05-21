@@ -18,12 +18,33 @@ type PoseAnalysisProps = {
   report: ReportDetailResponse | undefined;
 };
 
-const VideoItem = ({ uri }: { uri: string }) => {
+type VideoItemProps = {
+  uri: string;
+  shoulderRotationAngle: number | null;
+  spineRotationAngle: number | null;
+  waistRotationAngle: number | null;
+};
+
+const VideoItem = ({ uri, shoulderRotationAngle, spineRotationAngle, waistRotationAngle }: VideoItemProps) => {
   const player = useVideoPlayer({ uri });
 
   return (
     <View style={styles.videoContainer}>
       <VideoView player={player} style={styles.video} contentFit="cover" />
+      <BlurView intensity={10} style={styles.overlay}>
+        <View>
+          <Text style={styles.labelText}>어깨 회전각</Text>
+          <Text style={styles.overlayValue}>{shoulderRotationAngle ?? '-'}°</Text>
+        </View>
+        <View>
+          <Text style={styles.labelText}>척추 회전각</Text>
+          <Text style={styles.overlayValue}>{spineRotationAngle ?? '-'}°</Text>
+        </View>
+        <View>
+          <Text style={styles.labelText}>허리 회전각</Text>
+          <Text style={styles.overlayValue}>{waistRotationAngle ?? '-'}°</Text>
+        </View>
+      </BlurView>
     </View>
   );
 };
@@ -34,8 +55,8 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
   const selectedPoseData = report
     ? {
         shoulderRotation: { value: report.shoulderRotationAngle, recommended: 70 },
-        spineRotation: { value: report.spineRotationAngle, recommended: 40 },
-        waistRotation: { value: report.waistRotationAngle, recommended: 55 },
+        spineRotation: { value: report.spineRotationAngle, recommended: 35 },
+        waistRotation: { value: report.waistRotationAngle, recommended: 40 },
       }
     : undefined;
 
@@ -56,7 +77,12 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
             <BlurView intensity={10} style={styles.overlay} />
           </View>
         ) : motionVideoUrl ? (
-          <VideoItem uri={motionVideoUrl} />
+          <VideoItem
+            uri={motionVideoUrl}
+            shoulderRotationAngle={report?.shoulderRotationAngle ?? null}
+            spineRotationAngle={report?.spineRotationAngle ?? null}
+            waistRotationAngle={report?.waistRotationAngle ?? null}
+          />
         ) : null}
         <View style={styles.allCard}>
           <View style={styles.generalCard}>
@@ -167,5 +193,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(12),
     overflow: 'hidden',
     gap: hp(8),
+  },
+
+  labelText: {
+    color: '#FFFFFF',
+    fontSize: wp(13),
+    fontFamily: 'Pretendard400',
+    lineHeight: hp(18.85),
+    letterSpacing: wp(-0.325),
+  },
+
+  overlayValue: {
+    color: '#fff',
+    fontSize: wp(18),
+    fontFamily: 'Pretendard600',
+    lineHeight: hp(25.2),
+    letterSpacing: wp(-0.45),
   },
 });
