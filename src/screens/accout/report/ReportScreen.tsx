@@ -5,6 +5,7 @@ import GameAnalysis from './components/GameAnalysis';
 import SceneAnalysis from './components/SceneAnalysis';
 import ReportInfo from './components/ReportInfo';
 import { useReportDetailQuery } from './services/useReportDetailQuery';
+import { useReportDownload } from './services/useReportDownload';
 import PageHeader from '@/components/layout/PageHeader';
 import Divider from '@/components/common/Divider';
 import { hp, wp } from '@/utils/dimension';
@@ -32,6 +33,7 @@ const ReportScreen = ({ matchVideoId }: ReportScreenProps) => {
   const target = selectedPlayer !== null ? PLAYER_TARGET[selectedPlayer] : null;
 
   const { data: report } = useReportDetailQuery(id, target);
+  const { mutate: downloadReport } = useReportDownload();
 
   return (
     <ScrollView>
@@ -40,7 +42,7 @@ const ReportScreen = ({ matchVideoId }: ReportScreenProps) => {
           rightContent={
             <Pressable
               style={[styles.headerDownContainer, selectedPlayer !== null && styles.headerDownContainerActive]}
-              // onPress={() => selectedPlayer !== null && }
+              onPress={() => downloadReport(id)}
               disabled={selectedPlayer === null}
             >
               <Text style={[styles.headerDownText, selectedPlayer !== null && styles.headerDownTextActive]}>
