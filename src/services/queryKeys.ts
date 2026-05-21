@@ -7,4 +7,6 @@ export const queryKeys = {
   schedule: (stadiumId: number, date?: string, courtNumber?: number) =>
     ['schedule', stadiumId, date, courtNumber] as const,
   reportDates: (stadiumId: number) => ['reportDates', stadiumId] as const,
+  reportTimes: (stadiumId: number, date?: string, courtNumber?: number) =>
+    ['reportTimes', stadiumId, date, courtNumber] as const,
 };

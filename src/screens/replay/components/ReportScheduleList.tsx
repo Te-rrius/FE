@@ -1,14 +1,13 @@
 import { StyleSheet, View } from 'react-native';
 import { Pressable, ScrollView, Text } from 'react-native';
 import { useState } from 'react';
-import { hp, wp } from '@/utils/dimension';
-import RequestReportInfo from './RequestReportInfo';
-
-import TimeIcon from '@/assets/images/replay/timeIcon.svg';
-import { DUMMY_SCHEDULES } from '@/constants/dummySchedule';
-import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import useAuthStore from '@/stores/authStore';
+import { useReportTimes } from '../services/useReportTimes';
+import RequestReportInfo from './RequestReportInfo';
+import { hp, wp } from '@/utils/dimension';
+
+import TimeIcon from '@/assets/images/replay/timeIcon.svg';
 
 interface ReportScheduleListProps {
   stadiumId: number;
@@ -18,40 +17,29 @@ interface ReportScheduleListProps {
 }
 
 const GAME_TYPE_LABEL = {
-  SINGLE: '단식 경기',
-  DOUBLE: '복식 경기',
+  SINGLES: '단식 경기',
+  DOUBLES: '복식 경기',
 } as const;
 
-// 수정 예정
-// ReportDownloadTab 중복 분리
-const fetchDownloadSchedules = async (courtId: number) =>
-  (DUMMY_SCHEDULES[courtId] ?? []).filter((s) => s.isRequested && s.reportId);
+const toDateString = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 
-const ReportScheduleList = ({ selectedCourtId, selectedDate, onPress }: ReportScheduleListProps) => {
+const formatTime = (time: string): string => time.slice(0, 5);
+
+const ReportScheduleList = ({ stadiumId, selectedCourtId, selectedDate, onPress }: ReportScheduleListProps) => {
   const { token, openLoginModal } = useAuthStore();
+  const [selectedVideoId, setSelectedVideoId] = useState<number | null>(null);
 
-  // 선택된 리포트
-  const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
-
-  // 로컬 시간 기준 포맷팅
-  const toDateString = (date: Date) => {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const d = String(date.getDate()).padStart(2, '0');
-    return `${y}-${m}-${d}`;
-  };
-
-  const { data: allSchedules = [] } = useQuery({
-    queryKey: ['downloadSchedules', selectedCourtId],
-    queryFn: () => fetchDownloadSchedules(selectedCourtId!),
-    enabled: selectedCourtId !== null,
+  const { data: times = [] } = useReportTimes(stadiumId, {
+    date: toDateString(selectedDate),
+    courtNumber: selectedCourtId ?? undefined,
   });
 
-  // 선택된 날짜에 해당하는 리포트만 필터링
-  const scheduleList = allSchedules.filter((s) => s.date === toDateString(selectedDate));
-
-  // 리포트 존재 시에만 목록 렌더링
-  const hasAnyReport = scheduleList.length > 0;
+  const hasAnyReport = times.length > 0;
 
   return (
     <View style={styles.wrapper}>
@@ -62,22 +50,24 @@ const ReportScheduleList = ({ selectedCourtId, selectedDate, onPress }: ReportSc
       {hasAnyReport && (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.row}>
-            {scheduleList.map((schedule) => (
+            {times.map((item) => (
               <Pressable
-                key={schedule.scheduleId}
-                style={[styles.scheduleCard, selectedScheduleId === schedule.scheduleId && styles.scheduleCardActive]}
+                key={item.matchVideoId}
+                style={[styles.scheduleCard, selectedVideoId === item.matchVideoId && styles.scheduleCardActive]}
                 onPress={() => {
                   if (!token) {
                     router.replace('/');
                     openLoginModal();
                     return;
                   }
-                  setSelectedScheduleId(schedule.scheduleId);
-                  router.push({ pathname: '/report/[reportId]', params: { reportId: schedule.reportId } });
+                  setSelectedVideoId(item.matchVideoId);
+                  router.push({ pathname: '/report/[reportId]', params: { reportId: item.matchVideoId } });
                 }}
               >
-                <Text style={styles.scheduleHours}>{schedule.hours}</Text>
-                <Text style={styles.scheduleCount}>{GAME_TYPE_LABEL[schedule.gameType]}</Text>
+                <Text style={styles.scheduleHours}>
+                  {formatTime(item.startTime)} ~ {formatTime(item.endTime)}
+                </Text>
+                <Text style={styles.scheduleCount}>{GAME_TYPE_LABEL[item.matchType]}</Text>
               </Pressable>
             ))}
           </View>
@@ -91,15 +81,9 @@ const ReportScheduleList = ({ selectedCourtId, selectedDate, onPress }: ReportSc
 export default ReportScheduleList;
 
 const styles = StyleSheet.create({
-  wrapper: {
-    gap: hp(8),
-  },
+  wrapper: { gap: hp(8) },
 
-  titleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: wp(6),
-  },
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: wp(6) },
 
   titleText: {
     color: '#5C5C5C',
@@ -109,10 +93,7 @@ const styles = StyleSheet.create({
     letterSpacing: wp(-0.35),
   },
 
-  row: {
-    flexDirection: 'row',
-    gap: wp(10),
-  },
+  row: { flexDirection: 'row', gap: wp(10) },
 
   scheduleCard: {
     alignSelf: 'flex-start',
@@ -141,7 +122,5 @@ const styles = StyleSheet.create({
     letterSpacing: wp(-0.3),
   },
 
-  scheduleCardActive: {
-    borderColor: '#4048F7',
-  },
+  scheduleCardActive: { borderColor: '#4048F7' },
 });
