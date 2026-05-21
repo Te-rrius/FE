@@ -10,50 +10,41 @@ import RequestStep1Icon from '@/assets/images/common/requestStep1Icon.svg';
 import RequestStep2Icon from '@/assets/images/common/requestStep2Icon.svg';
 import RequestScheduleList from './RequestScheduleList';
 import ScheduleIcon from '@/assets/images/replay/scheduleIcon.svg';
-import { useState } from 'react';
-import Dropdown from '@/components/common/Dropdown';
-import LocationIcon from '@/assets/images/replay/locationIcon.svg';
-import { useQuery } from '@tanstack/react-query';
-import { DUMMY_COURTS } from '@/constants/dummySchedule';
+// import LocationIcon from '@/assets/images/replay/locationIcon.svg';
+import { useSchedule } from '../services/useSchedule';
 
 const REQUEST_STEPS = [RequestStep1Icon, RequestStep2Icon];
 
+/** 날짜 → "YYYY-MM-DD" */
+const toDateString = (date: Date): string => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+};
+
 interface RequestReportTabProps {
   stadiumId: number;
+  stadiumName: string;
   selectedDate: Date;
   setSelectedDate: (date: Date) => void;
   selectedCourtId: number | null;
   setSelectedCourtId: (courtId: number | null) => void;
 }
 
-// 수정 예정
-// StadiumDetailScreen ReportDownloadTab 중복 분리 예정
-const fetchCourts = async (id: number) => DUMMY_COURTS[id] ?? [];
-
 const RequestReportTab = ({
   stadiumId,
+  stadiumName,
   selectedDate,
-  setSelectedDate,
   selectedCourtId,
-  setSelectedCourtId,
+  setSelectedDate,
 }: RequestReportTabProps) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  // 해당 구장의 코트 목록
-  const { data: courtList = [] } = useQuery({
-    queryKey: ['courts', stadiumId],
-    queryFn: () => fetchCourts(stadiumId),
+  const { data: scheduleData } = useSchedule(stadiumId, {
+    date: toDateString(selectedDate),
+    courtNumber: selectedCourtId ?? undefined,
   });
 
-  const selectedCourt = courtList.find((c) => c.courtId === selectedCourtId);
-
-  const selectDropdownHandler = (name: string) => {
-    const court = courtList.find((c) => c.name === name);
-    if (court) {
-      setSelectedCourtId(court.courtId);
-      setIsDropdownOpen(false);
-    }
-  };
+  const times = scheduleData?.times ?? [];
 
   return (
     <>
@@ -64,7 +55,7 @@ const RequestReportTab = ({
       <View style={styles.bannerWrapper}>
         <ReportRequestBanner />
       </View>
-      <View style={styles.titleRow}>
+      {/* <View style={styles.titleRow}>
         <LocationIcon />
         <Text style={styles.titleText}>구역명</Text>
       </View>
@@ -77,7 +68,7 @@ const RequestReportTab = ({
           setIsDropdownOpen={setIsDropdownOpen}
           selectDropdownHandler={selectDropdownHandler}
         />
-      </View>
+      </View> */}
       <View style={styles.wrapper}>
         <View style={styles.titleRow}>
           <ScheduleIcon />
@@ -86,9 +77,11 @@ const RequestReportTab = ({
         <DatePicker type="request" selectedDate={selectedDate} onSelect={setSelectedDate} />
         <View style={styles.timeList}>
           <RequestScheduleList
-            selectedCourtId={selectedCourtId}
+            times={times}
+            stadiumId={stadiumId}
+            stadiumName={stadiumName}
             selectedDate={selectedDate}
-            courtName={selectedCourt?.name ?? ''}
+            selectedCourtId={selectedCourtId}
           />
         </View>
       </View>
@@ -123,12 +116,12 @@ const styles = StyleSheet.create({
     paddingTop: hp(20),
   },
 
-  courtNameWrapper: {
-    paddingTop: hp(24),
-    paddingBottom: hp(8),
-    paddingHorizontal: wp(20),
-    gap: hp(32),
-  },
+  // courtNameWrapper: {
+  //   paddingTop: hp(24),
+  //   paddingBottom: hp(8),
+  //   paddingHorizontal: wp(20),
+  //   gap: hp(32),
+  // },
 
   timeList: {
     paddingHorizontal: wp(20),

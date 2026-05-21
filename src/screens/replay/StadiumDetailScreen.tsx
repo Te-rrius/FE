@@ -1,58 +1,34 @@
 import Tab from '@/components/common/Tab';
 import Header from '@/components/layout/Header';
 import { hp, wp } from '@/utils/dimension';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import ReportDownloadTab from './components/ReportDownloadTab';
 import RequestReportTab from './components/RequestReportTab';
-import { useQuery } from '@tanstack/react-query';
-import { DUMMY_STADIUMS } from '@/constants/dummyStadium';
-import { DUMMY_COURTS } from '@/constants/dummySchedule';
+import { useLocalSearchParams } from 'expo-router';
 
-interface StadiumDetailProps {
-  stadiumId: string | string[];
-}
+const StadiumDetailScreen = () => {
+  const { stadiumId, name, imageUrl, address } = useLocalSearchParams<{
+    stadiumId: string;
+    name: string;
+    imageUrl: string;
+    address: string;
+  }>();
 
-// 수정 예정
-// 구장 상세 정보
-const fetchStadiumDetail = async (id: number) => DUMMY_STADIUMS.find((s) => s.stadiumId === id) ?? null;
-
-const fetchCourts = async (id: number) => DUMMY_COURTS[id] ?? [];
-
-const StadiumDetailScreen = ({ stadiumId }: StadiumDetailProps) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTab, setSelectedTab] = useState('분석 리포트 다운');
-
-  const id = Array.isArray(stadiumId) ? Number(stadiumId[0]) : Number(stadiumId);
-
-  const { data: stadium } = useQuery({
-    queryKey: ['stadium', id],
-    queryFn: () => fetchStadiumDetail(id),
-  });
-
-  const { data: reportCourts = [] } = useQuery({
-    queryKey: ['courts', id],
-    queryFn: () => fetchCourts(id),
-  }); // 해당 구장 코트 목록
-
-  // 코트 목록 로드 후 첫 번째 코트를 기본 선택값으로 설정
   const [selectedCourtId, setSelectedCourtId] = useState<number | null>(null);
-  useEffect(() => {
-    if (reportCourts.length > 0) {
-      setSelectedCourtId(reportCourts[0].courtId);
-    }
-  }, [reportCourts]);
 
-  if (!stadium) return null;
+  const id = Number(stadiumId);
 
   return (
     <ScrollView>
       <Header />
-      <Image source={{ uri: stadium.image }} style={styles.stadiumImg} />
+      <Image source={{ uri: imageUrl }} style={styles.stadiumImg} />
       <View style={styles.stadiumDetailContainer}>
         <View style={styles.stadiumInfo}>
-          <Text style={styles.nameText}>{stadium.name}</Text>
-          <Text style={styles.locationText}>{stadium.location}</Text>
+          <Text style={styles.nameText}>{name}</Text>
+          <Text style={styles.locationText}>{address}</Text>
         </View>
         <Tab
           tabs={[

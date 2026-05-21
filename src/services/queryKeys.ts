@@ -4,4 +4,6 @@ export const queryKeys = {
   user: ['user'] as const,
   myReports: (sort: string) => ['myReports', sort] as const,
   reportDetail: (matchVideoId: number, target: string | null) => ['reportDetail', matchVideoId, target] as const,
+  schedule: (stadiumId: number, date?: string, courtNumber?: number) =>
+    ['schedule', stadiumId, date, courtNumber] as const,
 };

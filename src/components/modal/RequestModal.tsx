@@ -1,32 +1,40 @@
-import { ScheduleDto } from '@/constants/dummySchedule';
-import { hp, wp } from '@/utils/dimension';
 import { Modal, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
 import ButtonGroup from '../common/ButtonGroup';
 import useAuthStore from '@/stores/authStore';
+import { hp, wp } from '@/utils/dimension';
+import { ScheduleTimeResponse } from '@/types/stadium/stadiumDetail';
 
 import LocationIcon from '@/assets/images/replay/locationIcon.svg';
 import ScheduleIcon from '@/assets/images/replay/scheduleIcon.svg';
 import LineIcon from '@/assets/images/modal/lineIcon.svg';
-import { router } from 'expo-router';
 
 interface RequestModalProps {
-  schedule: ScheduleDto;
-  courtName: string;
+  item: ScheduleTimeResponse;
+  stadiumName: string;
+  selectedDate: Date;
   onClose: () => void;
-  onConfirm: (scheduleId: number) => void;
+  onConfirm: () => void;
 }
 
-const formatDate = (date: string) => date.replace(/-/g, '.');
+const formatDate = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}.${month}.${day}`;
+};
 
-const RequestModal = ({ schedule, courtName, onClose, onConfirm }: RequestModalProps) => {
+const formatTime = (time: string): string => time.slice(0, 5);
+
+const RequestModal = ({ item, selectedDate, stadiumName, onClose, onConfirm }: RequestModalProps) => {
   const { token } = useAuthStore();
 
   const handleRequest = () => {
     if (!token) {
       onClose();
     } else {
-      // 신청 로직
-      onConfirm(schedule.scheduleId);
+      // 신청 로직 추가 예정
+      onConfirm();
       router.push('/replay/request-complete');
     }
   };
@@ -45,13 +53,15 @@ const RequestModal = ({ schedule, courtName, onClose, onConfirm }: RequestModalP
             <View style={styles.infoContainer}>
               <View style={styles.infoTitle}>
                 <LocationIcon />
-                <Text style={styles.infoText}>{courtName}</Text>
+                <Text style={styles.infoText}>{stadiumName}</Text>
               </View>
               <View style={styles.infoTitle}>
                 <ScheduleIcon />
-                <Text style={styles.infoText}>{formatDate(schedule.date)}</Text>
+                <Text style={styles.infoText}>{formatDate(selectedDate)}</Text>
                 <LineIcon />
-                <Text style={styles.infoText}>{schedule.hours}</Text>
+                <Text style={styles.infoText}>
+                  {formatTime(item.startTime)} ~ {formatTime(item.endTime)}
+                </Text>
               </View>
             </View>
           </View>

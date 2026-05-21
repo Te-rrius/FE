@@ -24,10 +24,20 @@ const StadiumList = ({ stadiumList }: StadiumListProps) => {
   return (
     <View style={styles.listGridContainer}>
       {stadiumList.map((stadium) => (
-        <View key={stadium.name} style={styles.cardWrapper}>
+        <View key={stadium.stadiumId} style={styles.cardWrapper}>
           <Pressable
             style={styles.cardContainer}
-            onPress={() => router.push({ pathname: '/stadium/[stadiumId]', params: { stadiumId: stadium.name } })}
+            onPress={() =>
+              router.push({
+                pathname: '/stadium/[stadiumId]',
+                params: {
+                  stadiumId: stadium.stadiumId,
+                  name: stadium.name,
+                  imageUrl: stadium.imageUrl,
+                  address: stadium.address,
+                },
+              })
+            }
           >
             <Image source={{ uri: stadium.imageUrl }} style={styles.stadiumImg} resizeMode="cover" />
             <LinearGradient colors={['transparent', 'rgba(17, 17, 17, 0.80)']} style={styles.imgCover} />
