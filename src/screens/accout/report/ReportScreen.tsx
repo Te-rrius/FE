@@ -16,6 +16,7 @@ import InactiveDownloadIcon from '@/assets/images/report/inactiveDownloadIcon.sv
 import SelectArrowIcon from '@/assets/images/report/selectArrowIcon.svg';
 import Player1Icon from '@/assets/images/report/player1Icon.svg';
 import Player2Icon from '@/assets/images/report/player2Icon.svg';
+import DefaultProfileIcon from '@/assets/images/report/defaultProfileIcon.svg';
 
 const PLAYER_TARGET: Record<1 | 2, PlayerTarget> = {
   1: 'PLAYER_ONE',
@@ -28,6 +29,7 @@ type ReportScreenProps = {
 
 const ReportScreen = ({ matchVideoId }: ReportScreenProps) => {
   const [selectedPlayer, setSelectedPlayer] = useState<1 | 2 | null>(null);
+  const PlayerIcon = selectedPlayer === 1 ? Player1Icon : selectedPlayer === 2 ? Player2Icon : DefaultProfileIcon;
 
   const id = Number(Array.isArray(matchVideoId) ? matchVideoId[0] : matchVideoId);
   const target = selectedPlayer !== null ? PLAYER_TARGET[selectedPlayer] : null;
@@ -79,6 +81,7 @@ const ReportScreen = ({ matchVideoId }: ReportScreenProps) => {
         <Divider />
         <View style={styles.reportInfoWrapper}>
           <ReportInfo
+            ProfileIcon={PlayerIcon}
             date={report?.matchDate ?? ''}
             startTime={report?.startTime}
             endTime={report?.endTime}
