@@ -67,7 +67,7 @@ export function getComment(key: RotationKey, detail: PoseDetail): string {
 
   if (isOver) {
     if (status === '개선 필요') return `${diff}°나 초과됐어요. 회전 범위를 크게 줄여야 해요.`;
-    return `${diff}°만큼 과도해요. 회전을 조금 줄여보세요.`;
+    return `${diff}°만큼 과도해요. 회전을 조금 줄여 보세요.`;
   }
 
   return '';

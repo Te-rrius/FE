@@ -1,14 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { hp, wp } from '@/utils/dimension';
+import { LinearGradient } from 'expo-linear-gradient';
+import { SvgProps } from 'react-native-svg';
+import { formatTime } from '@/utils/date';
 
 import GrayCalendarIcon from '@/assets/images/report/grayCalendarIcon.svg';
 import GrayLocationIcon from '@/assets/images/report/grayLocationIcon.svg';
 import LineIcon from '@/assets/images/modal/lineIcon.svg';
-import DefaultProfileIcon from '@/assets/images/report/defaultProfileIcon.svg';
-
-import { hp, wp } from '@/utils/dimension';
-import { LinearGradient } from 'expo-linear-gradient';
 
 interface ReportInfoProps {
+  ProfileIcon: React.ComponentType<SvgProps>;
   date: string;
   startTime: string | undefined;
   endTime: string | undefined;
@@ -16,10 +17,8 @@ interface ReportInfoProps {
   selectedPlayer: 1 | 2 | null;
 }
 
-const formatTime = (time: string) => time.slice(0, 5);
-
-const ReportInfo = ({ date, startTime, endTime, stadiumName, selectedPlayer }: ReportInfoProps) => {
-  const timeText = startTime && endTime ? `${formatTime(startTime)}~${formatTime(endTime)}` : '-';
+const ReportInfo = ({ ProfileIcon, date, startTime, endTime, stadiumName, selectedPlayer }: ReportInfoProps) => {
+  const timeText = startTime && endTime ? `${formatTime(startTime)} - ${formatTime(endTime)}` : '-';
 
   const content = (
     <>
@@ -60,7 +59,7 @@ const ReportInfo = ({ date, startTime, endTime, stadiumName, selectedPlayer }: R
         </LinearGradient>
       )}
       <View style={styles.profileIcon}>
-        <DefaultProfileIcon />
+        <ProfileIcon width={wp(80)} height={hp(80)} />
         <View style={styles.profileBorder} />
       </View>
     </View>

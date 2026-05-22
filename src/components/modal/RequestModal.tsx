@@ -1,34 +1,45 @@
-import { ScheduleDto } from '@/constants/dummySchedule';
-import { hp, wp } from '@/utils/dimension';
 import { Modal, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
 import ButtonGroup from '../common/ButtonGroup';
+import { useReportRequest } from '@/screens/replay/services/useReportRequest';
+import { ScheduleTimeResponse } from '@/types/stadium/stadiumDetail';
+import { hp, wp } from '@/utils/dimension';
 import useAuthStore from '@/stores/authStore';
+import { formatDateWithDot, formatTime } from '@/utils/date';
 
 import LocationIcon from '@/assets/images/replay/locationIcon.svg';
 import ScheduleIcon from '@/assets/images/replay/scheduleIcon.svg';
 import LineIcon from '@/assets/images/modal/lineIcon.svg';
-import { router } from 'expo-router';
 
 interface RequestModalProps {
-  schedule: ScheduleDto;
-  courtName: string;
+  item: ScheduleTimeResponse;
+  stadiumId: number;
+  stadiumName: string;
+  selectedDate: Date;
   onClose: () => void;
-  onConfirm: (scheduleId: number) => void;
+  onConfirm: () => void;
 }
 
-const formatDate = (date: string) => date.replace(/-/g, '.');
-
-const RequestModal = ({ schedule, courtName, onClose, onConfirm }: RequestModalProps) => {
+const RequestModal = ({ item, stadiumId, stadiumName, selectedDate, onClose, onConfirm }: RequestModalProps) => {
   const { token } = useAuthStore();
+
+  const { mutate: requestReport } = useReportRequest();
 
   const handleRequest = () => {
     if (!token) {
       onClose();
-    } else {
-      // 신청 로직
-      onConfirm(schedule.scheduleId);
-      router.push('/replay/request-complete');
+      return;
     }
+
+    requestReport(
+      { stadiumId, matchVideoId: item.matchVideoId },
+      {
+        onSuccess: () => {
+          onConfirm();
+          router.push('/replay/request-complete');
+        },
+      },
+    );
   };
 
   return (
@@ -41,17 +52,19 @@ const RequestModal = ({ schedule, courtName, onClose, onConfirm }: RequestModalP
             제작 완료 시 <Text style={styles.strongText}>알림톡</Text>을 보내드립니다!
           </Text>
           <View style={styles.reportInfoContainer}>
-            <Text style={styles.containerTitle}>신청한 하이라이트 영상</Text>
+            <Text style={styles.containerTitle}>신청한 분석 리포트</Text>
             <View style={styles.infoContainer}>
               <View style={styles.infoTitle}>
                 <LocationIcon />
-                <Text style={styles.infoText}>{courtName}</Text>
+                <Text style={styles.infoText}>{stadiumName}</Text>
               </View>
               <View style={styles.infoTitle}>
                 <ScheduleIcon />
-                <Text style={styles.infoText}>{formatDate(schedule.date)}</Text>
+                <Text style={styles.infoText}>{formatDateWithDot(selectedDate)}</Text>
                 <LineIcon />
-                <Text style={styles.infoText}>{schedule.hours}</Text>
+                <Text style={styles.infoText}>
+                  {formatTime(item.startTime)} ~ {formatTime(item.endTime)}
+                </Text>
               </View>
             </View>
           </View>

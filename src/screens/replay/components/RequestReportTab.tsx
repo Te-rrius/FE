@@ -1,59 +1,59 @@
+import { StyleSheet, Text, View } from 'react-native';
+import RequestScheduleList from './RequestScheduleList';
+import { useSchedule } from '../services/useSchedule';
 import DatePicker from '@/components/common/DatePicker';
 import DetailToggle from '@/components/common/DetailToggle';
 import Divider from '@/components/common/Divider';
 import StepScroll from '@/components/common/StepScroll';
-import { StyleSheet, Text, View } from 'react-native';
 import { hp, wp } from '@/utils/dimension';
+import { toDateString } from '@/utils/date';
 
 import ReportRequestBanner from '@/assets/images/banner/reportRequestBanner.svg';
 import RequestStep1Icon from '@/assets/images/common/requestStep1Icon.svg';
 import RequestStep2Icon from '@/assets/images/common/requestStep2Icon.svg';
-import RequestScheduleList from './RequestScheduleList';
 import ScheduleIcon from '@/assets/images/replay/scheduleIcon.svg';
-import { useState } from 'react';
 import Dropdown from '@/components/common/Dropdown';
 import LocationIcon from '@/assets/images/replay/locationIcon.svg';
-import { useQuery } from '@tanstack/react-query';
-import { DUMMY_COURTS } from '@/constants/dummySchedule';
+import { useState } from 'react';
+import { useStadiumCourts } from '../services/useStadiumCourts';
 
 const REQUEST_STEPS = [RequestStep1Icon, RequestStep2Icon];
 
 interface RequestReportTabProps {
   stadiumId: number;
+  stadiumName: string;
   selectedDate: Date;
   setSelectedDate: (date: Date) => void;
   selectedCourtId: number | null;
   setSelectedCourtId: (courtId: number | null) => void;
 }
 
-// 수정 예정
-// StadiumDetailScreen ReportDownloadTab 중복 분리 예정
-const fetchCourts = async (id: number) => DUMMY_COURTS[id] ?? [];
-
 const RequestReportTab = ({
   stadiumId,
+  stadiumName,
   selectedDate,
-  setSelectedDate,
   selectedCourtId,
+  setSelectedDate,
   setSelectedCourtId,
 }: RequestReportTabProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // 해당 구장의 코트 목록
-  const { data: courtList = [] } = useQuery({
-    queryKey: ['courts', stadiumId],
-    queryFn: () => fetchCourts(stadiumId),
+  const { data: courtList = [] } = useStadiumCourts(stadiumId);
+
+  const selectedCourt = courtList.find((c) => c.courtId === selectedCourtId) ?? null;
+
+  const selectDropdownHandler = (option: string) => {
+    const court = courtList.find((c) => c.name === option);
+    setSelectedCourtId(court?.courtId ?? null);
+    setIsDropdownOpen(false);
+  };
+
+  const { data: scheduleData } = useSchedule(stadiumId, {
+    date: toDateString(selectedDate),
+    courtNumber: selectedCourtId ?? undefined,
   });
 
-  const selectedCourt = courtList.find((c) => c.courtId === selectedCourtId);
-
-  const selectDropdownHandler = (name: string) => {
-    const court = courtList.find((c) => c.name === name);
-    if (court) {
-      setSelectedCourtId(court.courtId);
-      setIsDropdownOpen(false);
-    }
-  };
+  const times = scheduleData?.times ?? [];
 
   return (
     <>
@@ -76,6 +76,7 @@ const RequestReportTab = ({
           isDropdownOpen={isDropdownOpen}
           setIsDropdownOpen={setIsDropdownOpen}
           selectDropdownHandler={selectDropdownHandler}
+          courtText="코트"
         />
       </View>
       <View style={styles.wrapper}>
@@ -86,9 +87,11 @@ const RequestReportTab = ({
         <DatePicker type="request" selectedDate={selectedDate} onSelect={setSelectedDate} />
         <View style={styles.timeList}>
           <RequestScheduleList
-            selectedCourtId={selectedCourtId}
+            times={times}
+            stadiumId={stadiumId}
+            stadiumName={stadiumName}
             selectedDate={selectedDate}
-            courtName={selectedCourt?.name ?? ''}
+            selectedCourtId={selectedCourtId}
           />
         </View>
       </View>

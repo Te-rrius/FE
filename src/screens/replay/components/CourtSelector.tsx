@@ -1,11 +1,15 @@
-import { CourtDto } from '@/constants/dummySchedule';
 import { hp, wp } from '@/utils/dimension';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import LocationIcon from '@/assets/images/replay/locationIcon.svg';
 
+interface Court {
+  courtId: number;
+  name: string;
+}
+
 interface CourtSelectorProps {
-  courtList?: CourtDto[];
+  courtList?: Court[];
   selectedCourtId?: number | null;
   onPress?: (courtId: number) => void;
 }
@@ -26,7 +30,7 @@ const CourtSelector = ({ courtList = [], selectedCourtId, onPress }: CourtSelect
               onPress={() => onPress?.(court.courtId)}
             >
               <Text style={[styles.courtName, selectedCourtId === court.courtId && styles.courtNameActive]}>
-                {court.name}
+                {court.name}코트
               </Text>
             </Pressable>
           ))}

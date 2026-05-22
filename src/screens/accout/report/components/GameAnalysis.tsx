@@ -81,7 +81,12 @@ const GameAnalysis = ({ player, report }: { player: 1 | 2 | null; report: Report
                 <View style={{ flex: 100 - report.secondServeSuccessRate }} />
               </View>
               <View style={styles.serveRow}>
-                <ServeDataCard title="서브 최고 속도" icon={<ServeMaxSpeedIcon />} value={report.maxSpeed} />
+                <ServeDataCard
+                  title="서브 최고 속도"
+                  unit="km/h"
+                  icon={<ServeMaxSpeedIcon />}
+                  value={report.maxSpeed}
+                />
                 <View style={{ flex: 90 }} />
               </View>
             </>

@@ -19,6 +19,10 @@ const MyReportScreen = () => {
 
   const { data: reports = [] } = useMyReportsQuery(SORT_LABEL[selected]);
 
+  const uniqueReports = reports.filter(
+    (report, index, self) => index === self.findIndex((r) => r.matchVideoId === report.matchVideoId),
+  );
+
   return (
     <View style={styles.container}>
       <PageHeader title="내 리포트" />
@@ -46,7 +50,7 @@ const MyReportScreen = () => {
           />
 
           <View style={styles.listWrapper}>
-            {reports.map((report) => (
+            {uniqueReports.map((report) => (
               <ReportList
                 key={report.reportId}
                 date={report.matchDate}
