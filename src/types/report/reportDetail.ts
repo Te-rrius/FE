@@ -14,6 +14,7 @@ export interface ReportDetailResponse {
   startTime: string;
   endTime: string;
   stadiumName: string;
+  courtNumber: number;
   target: PlayerTarget;
   targetName: string;
   shotType: string;
