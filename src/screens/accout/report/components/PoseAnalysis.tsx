@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { BlurView } from 'expo-blur';
@@ -5,6 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import ReportTitle from './ReportTitle';
 import PoseAnalysisCard from './PoseAnalysisCard';
 import AnalysisStateCard from './AnalysisStateCard';
+import PoseButton from './PoseButton';
 import { hp, wp } from '@/utils/dimension';
 import { getComment, getTotalScore } from '@/utils/postAnalysisComment';
 import { ReportDetailResponse } from '@/types/report/reportDetail';
@@ -12,6 +14,16 @@ import { ReportDetailResponse } from '@/types/report/reportDetail';
 import PoseAnalysisIcon from '@/assets/images/report/poseAnalysisIcon.svg';
 import ShotIcon from '@/assets/images/report/shotIcon.svg';
 import ScoreIcon from '@/assets/images/report/scoreIcon.svg';
+
+const POSE_KEYS = ['forehand', 'backhand', 'serve', 'smash'] as const;
+type PoseKey = (typeof POSE_KEYS)[number];
+
+const POSE_LABEL: Record<PoseKey, string> = {
+  forehand: '포핸드',
+  backhand: '백핸드',
+  serve: '서브',
+  smash: '스매시',
+};
 
 type PoseAnalysisProps = {
   player: 1 | 2 | null;
@@ -50,6 +62,9 @@ const VideoItem = ({ uri, shoulderRotationAngle, spineRotationAngle, waistRotati
 };
 
 const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
+  // 자세 영상 여러 개일 때 수정 예정
+  const [selectedPoseKey, setSelectedPoseKey] = useState<PoseKey>('forehand');
+
   const motionVideoUrl = report?.materials.find((m) => m.materialType === 'MOTION')?.videoUrl;
 
   const selectedPoseData = report
@@ -66,6 +81,17 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
     <View style={styles.container}>
       <ReportTitle icon={<PoseAnalysisIcon />} title="경기 자세 분석" />
       <View style={styles.allPose}>
+        {/* 버튼 선택만 가능하고 이동 불가 추후 수정 예정 */}
+        <View style={styles.poseWrapper}>
+          {POSE_KEYS.map((key) => (
+            <PoseButton
+              key={key}
+              text={POSE_LABEL[key]}
+              selected={selectedPoseKey === key}
+              onPress={() => setSelectedPoseKey(key)}
+            />
+          ))}
+        </View>
         {!player ? (
           <View style={styles.videoContainer}>
             <LinearGradient
@@ -130,6 +156,11 @@ const styles = StyleSheet.create({
 
   allPose: {
     gap: hp(12),
+  },
+
+  poseWrapper: {
+    flexDirection: 'row',
+    gap: wp(8),
   },
 
   allCard: {
