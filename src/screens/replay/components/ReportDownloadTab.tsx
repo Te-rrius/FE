@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import ReportScheduleList from './ReportScheduleList';
 import CourtSelector from './CourtSelector';
 import { useReportDates } from '../services/useReportDates';
+import { useStadiumCourts } from '../services/useStadiumCourts';
 import DatePicker from '@/components/common/DatePicker';
 import DetailToggle from '@/components/common/DetailToggle';
 import Divider from '@/components/common/Divider';
@@ -12,7 +13,6 @@ import DownStep1Icon from '@/assets/images/common/downStep1Icon.svg';
 import DownStep2Icon from '@/assets/images/common/pngIcon/downStep2Icon.png';
 import DownStep3Icon from '@/assets/images/common/pngIcon/downStep3Icon.png';
 import ReportDownBanner from '@/assets/images/banner/reportDownBanner.svg';
-import { useStadiumCourts } from '../services/useStadiumCourts';
 
 const DOWN_STEPS = [DownStep1Icon, DownStep2Icon, DownStep3Icon];
 
@@ -34,7 +34,7 @@ const ReportDownloadTab = ({
   goToRequestTab,
 }: ReportDownloadTabProps) => {
   const { data: courtList = [] } = useStadiumCourts(stadiumId);
-  const { data: reportDates = [] } = useReportDates(stadiumId);
+  const { data: reportDates = [] } = useReportDates(stadiumId, selectedCourtId ?? undefined);
 
   const highlightDates = reportDates.filter((d) => d.hasReport).map((d) => new Date(d.date));
 
