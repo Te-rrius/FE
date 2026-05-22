@@ -30,7 +30,7 @@ const CourtSelector = ({ courtList = [], selectedCourtId, onPress }: CourtSelect
               onPress={() => onPress?.(court.courtId)}
             >
               <Text style={[styles.courtName, selectedCourtId === court.courtId && styles.courtNameActive]}>
-                {court.name}
+                {court.name}코트
               </Text>
             </Pressable>
           ))}

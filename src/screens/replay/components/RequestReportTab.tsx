@@ -12,7 +12,10 @@ import ReportRequestBanner from '@/assets/images/banner/reportRequestBanner.svg'
 import RequestStep1Icon from '@/assets/images/common/requestStep1Icon.svg';
 import RequestStep2Icon from '@/assets/images/common/requestStep2Icon.svg';
 import ScheduleIcon from '@/assets/images/replay/scheduleIcon.svg';
-// import LocationIcon from '@/assets/images/replay/locationIcon.svg';
+import Dropdown from '@/components/common/Dropdown';
+import LocationIcon from '@/assets/images/replay/locationIcon.svg';
+import { useState } from 'react';
+import { useStadiumCourts } from '../services/useStadiumCourts';
 
 const REQUEST_STEPS = [RequestStep1Icon, RequestStep2Icon];
 
@@ -31,7 +34,20 @@ const RequestReportTab = ({
   selectedDate,
   selectedCourtId,
   setSelectedDate,
+  setSelectedCourtId,
 }: RequestReportTabProps) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const { data: courtList = [] } = useStadiumCourts(stadiumId);
+
+  const selectedCourt = courtList.find((c) => c.courtId === selectedCourtId) ?? null;
+
+  const selectDropdownHandler = (option: string) => {
+    const court = courtList.find((c) => c.name === option);
+    setSelectedCourtId(court?.courtId ?? null);
+    setIsDropdownOpen(false);
+  };
+
   const { data: scheduleData } = useSchedule(stadiumId, {
     date: toDateString(selectedDate),
     courtNumber: selectedCourtId ?? undefined,
@@ -48,7 +64,7 @@ const RequestReportTab = ({
       <View style={styles.bannerWrapper}>
         <ReportRequestBanner />
       </View>
-      {/* <View style={styles.titleRow}>
+      <View style={styles.titleRow}>
         <LocationIcon />
         <Text style={styles.titleText}>구역명</Text>
       </View>
@@ -60,8 +76,9 @@ const RequestReportTab = ({
           isDropdownOpen={isDropdownOpen}
           setIsDropdownOpen={setIsDropdownOpen}
           selectDropdownHandler={selectDropdownHandler}
+          courtText="코트"
         />
-      </View> */}
+      </View>
       <View style={styles.wrapper}>
         <View style={styles.titleRow}>
           <ScheduleIcon />
@@ -109,12 +126,12 @@ const styles = StyleSheet.create({
     paddingTop: hp(20),
   },
 
-  // courtNameWrapper: {
-  //   paddingTop: hp(24),
-  //   paddingBottom: hp(8),
-  //   paddingHorizontal: wp(20),
-  //   gap: hp(32),
-  // },
+  courtNameWrapper: {
+    paddingTop: hp(24),
+    paddingBottom: hp(8),
+    paddingHorizontal: wp(20),
+    gap: hp(32),
+  },
 
   timeList: {
     paddingHorizontal: wp(20),

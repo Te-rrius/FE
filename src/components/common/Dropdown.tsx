@@ -13,6 +13,7 @@ interface DropdownProps {
   width?: number;
   paddingHorizontal?: number;
   paddingVertical?: number;
+  courtText?: string;
 }
 
 const Dropdown = ({
@@ -25,6 +26,7 @@ const Dropdown = ({
   width,
   paddingHorizontal,
   paddingVertical,
+  courtText,
 }: DropdownProps) => {
   const toggleDropdownHandler = () => {
     if (disabled) {
@@ -45,7 +47,10 @@ const Dropdown = ({
         ]}
         onPress={toggleDropdownHandler}
       >
-        <Text style={styles.selectedOptionText}>{selectedText}</Text>
+        <Text style={styles.selectedOptionText}>
+          {selectedText}
+          {courtText}
+        </Text>
 
         <DropdownIcon style={{ transform: [{ rotate: isDropdownOpen ? '180deg' : '0deg' }] }} />
       </Pressable>
@@ -53,7 +58,10 @@ const Dropdown = ({
         <ScrollView style={styles.optionList}>
           {dropdownList.map((option) => (
             <Pressable key={option} style={styles.optionItem} onPress={() => selectDropdownHandler(option)}>
-              <Text style={[styles.optionText, selectedText === option && styles.selectedOptionText]}>{option}</Text>
+              <Text style={[styles.optionText, selectedText === option && styles.selectedOptionText]}>
+                {option}
+                {courtText}
+              </Text>
             </Pressable>
           ))}
         </ScrollView>
