@@ -1,14 +1,15 @@
 import { Modal, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import ButtonGroup from '../common/ButtonGroup';
+import { useReportRequest } from '@/screens/replay/services/useReportRequest';
 import { ScheduleTimeResponse } from '@/types/stadium/stadiumDetail';
 import { hp, wp } from '@/utils/dimension';
 import useAuthStore from '@/stores/authStore';
+import { formatDateWithDot, formatTime } from '@/utils/date';
 
 import LocationIcon from '@/assets/images/replay/locationIcon.svg';
 import ScheduleIcon from '@/assets/images/replay/scheduleIcon.svg';
 import LineIcon from '@/assets/images/modal/lineIcon.svg';
-import { useReportRequest } from '@/screens/replay/services/useReportRequest';
 
 interface RequestModalProps {
   item: ScheduleTimeResponse;
@@ -18,15 +19,6 @@ interface RequestModalProps {
   onClose: () => void;
   onConfirm: () => void;
 }
-
-const formatDate = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}.${month}.${day}`;
-};
-
-const formatTime = (time: string): string => time.slice(0, 5);
 
 const RequestModal = ({ item, stadiumId, stadiumName, selectedDate, onClose, onConfirm }: RequestModalProps) => {
   const { token } = useAuthStore();
@@ -68,7 +60,7 @@ const RequestModal = ({ item, stadiumId, stadiumName, selectedDate, onClose, onC
               </View>
               <View style={styles.infoTitle}>
                 <ScheduleIcon />
-                <Text style={styles.infoText}>{formatDate(selectedDate)}</Text>
+                <Text style={styles.infoText}>{formatDateWithDot(selectedDate)}</Text>
                 <LineIcon />
                 <Text style={styles.infoText}>
                   {formatTime(item.startTime)} ~ {formatTime(item.endTime)}

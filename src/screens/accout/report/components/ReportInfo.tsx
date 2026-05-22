@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { hp, wp } from '@/utils/dimension';
+import { LinearGradient } from 'expo-linear-gradient';
+import { SvgProps } from 'react-native-svg';
+import { formatTime } from '@/utils/date';
 
 import GrayCalendarIcon from '@/assets/images/report/grayCalendarIcon.svg';
 import GrayLocationIcon from '@/assets/images/report/grayLocationIcon.svg';
 import LineIcon from '@/assets/images/modal/lineIcon.svg';
-
-import { hp, wp } from '@/utils/dimension';
-import { LinearGradient } from 'expo-linear-gradient';
-import { SvgProps } from 'react-native-svg';
 
 interface ReportInfoProps {
   ProfileIcon: React.ComponentType<SvgProps>;
@@ -16,8 +16,6 @@ interface ReportInfoProps {
   stadiumName: string | undefined;
   selectedPlayer: 1 | 2 | null;
 }
-
-const formatTime = (time: string) => time.slice(0, 5);
 
 const ReportInfo = ({ ProfileIcon, date, startTime, endTime, stadiumName, selectedPlayer }: ReportInfoProps) => {
   const timeText = startTime && endTime ? `${formatTime(startTime)} - ${formatTime(endTime)}` : '-';

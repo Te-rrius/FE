@@ -6,7 +6,7 @@ import useAuthStore from '@/stores/authStore';
 import { useReportTimes } from '../services/useReportTimes';
 import RequestReportInfo from './RequestReportInfo';
 import { hp, wp } from '@/utils/dimension';
-import { toDateString } from '@/utils/date';
+import { formatTime, toDateString } from '@/utils/date';
 
 import TimeIcon from '@/assets/images/replay/timeIcon.svg';
 
@@ -21,8 +21,6 @@ const GAME_TYPE_LABEL = {
   SINGLES: '단식 경기',
   DOUBLES: '복식 경기',
 } as const;
-
-const formatTime = (time: string): string => time.slice(0, 5);
 
 const ReportScheduleList = ({ stadiumId, selectedCourtId, selectedDate, onPress }: ReportScheduleListProps) => {
   const { token, openLoginModal } = useAuthStore();

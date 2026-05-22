@@ -4,6 +4,7 @@ import { useState } from 'react';
 import RequestModal from '@/components/modal/RequestModal';
 import useAuthStore from '@/stores/authStore';
 import { ScheduleTimeResponse } from '@/types/stadium/stadiumDetail';
+import { formatAmPm, formatTime } from '@/utils/date';
 
 interface RequestScheduleListProps {
   times: ScheduleTimeResponse[];
@@ -12,13 +13,6 @@ interface RequestScheduleListProps {
   selectedDate: Date;
   selectedCourtId: number | null;
 }
-
-const formatAmPm = (time: string): string => {
-  const hour = parseInt(time.split(':')[0]);
-  return hour < 12 ? '오전' : '오후';
-};
-
-const formatTime = (time: string): string => time.slice(0, 5);
 
 const RequestScheduleList = ({
   times,
