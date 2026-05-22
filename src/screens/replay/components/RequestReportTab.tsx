@@ -1,26 +1,20 @@
+import { StyleSheet, Text, View } from 'react-native';
+import RequestScheduleList from './RequestScheduleList';
+import { useSchedule } from '../services/useSchedule';
 import DatePicker from '@/components/common/DatePicker';
 import DetailToggle from '@/components/common/DetailToggle';
 import Divider from '@/components/common/Divider';
 import StepScroll from '@/components/common/StepScroll';
-import { StyleSheet, Text, View } from 'react-native';
 import { hp, wp } from '@/utils/dimension';
+import { toDateString } from '@/utils/date';
 
 import ReportRequestBanner from '@/assets/images/banner/reportRequestBanner.svg';
 import RequestStep1Icon from '@/assets/images/common/requestStep1Icon.svg';
 import RequestStep2Icon from '@/assets/images/common/requestStep2Icon.svg';
-import RequestScheduleList from './RequestScheduleList';
 import ScheduleIcon from '@/assets/images/replay/scheduleIcon.svg';
 // import LocationIcon from '@/assets/images/replay/locationIcon.svg';
-import { useSchedule } from '../services/useSchedule';
 
 const REQUEST_STEPS = [RequestStep1Icon, RequestStep2Icon];
-
-const toDateString = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
 
 interface RequestReportTabProps {
   stadiumId: number;

@@ -6,6 +6,7 @@ import useAuthStore from '@/stores/authStore';
 import { useReportTimes } from '../services/useReportTimes';
 import RequestReportInfo from './RequestReportInfo';
 import { hp, wp } from '@/utils/dimension';
+import { toDateString } from '@/utils/date';
 
 import TimeIcon from '@/assets/images/replay/timeIcon.svg';
 
@@ -20,13 +21,6 @@ const GAME_TYPE_LABEL = {
   SINGLES: '단식 경기',
   DOUBLES: '복식 경기',
 } as const;
-
-const toDateString = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
 
 const formatTime = (time: string): string => time.slice(0, 5);
 
@@ -53,7 +47,7 @@ const ReportScheduleList = ({ stadiumId, selectedCourtId, selectedDate, onPress 
             {times.map((item) => (
               <Pressable
                 key={item.matchVideoId}
-                style={[styles.scheduleCard, selectedVideoId === item.matchVideoId && styles.scheduleCardActive]}
+                style={styles.scheduleCard}
                 onPress={() => {
                   if (!token) {
                     router.replace('/');
@@ -61,7 +55,10 @@ const ReportScheduleList = ({ stadiumId, selectedCourtId, selectedDate, onPress 
                     return;
                   }
                   setSelectedVideoId(item.matchVideoId);
-                  router.push({ pathname: '/report/[reportId]', params: { reportId: item.matchVideoId } });
+                  router.push({
+                    pathname: '/report/[matchVideoId]',
+                    params: { matchVideoId: item.matchVideoId },
+                  });
                 }}
               >
                 <Text style={styles.scheduleHours}>
@@ -121,6 +118,4 @@ const styles = StyleSheet.create({
     lineHeight: hp(18),
     letterSpacing: wp(-0.3),
   },
-
-  scheduleCardActive: { borderColor: '#4048F7' },
 });
