@@ -15,12 +15,11 @@ import { useSchedule } from '../services/useSchedule';
 
 const REQUEST_STEPS = [RequestStep1Icon, RequestStep2Icon];
 
-/** 날짜 → "YYYY-MM-DD" */
 const toDateString = (date: Date): string => {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, '0');
-  const d = String(date.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 };
 
 interface RequestReportTabProps {
