@@ -8,15 +8,7 @@ interface ReportRequestParams {
 }
 
 // 리포트 신청
-export const useReportRequest = (date?: string, courtNumber?: number) => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+export const useReportRequest = () =>
+  useMutation({
     mutationFn: ({ stadiumId, matchVideoId }: ReportRequestParams) => postReportRequest(stadiumId, matchVideoId),
-    onSuccess: (_, { stadiumId }) => {
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.schedule(stadiumId, date, courtNumber),
-      });
-    },
   });
-};
