@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import ReportScheduleList from './ReportScheduleList';
 import CourtSelector from './CourtSelector';
@@ -35,6 +36,12 @@ const ReportDownloadTab = ({
 }: ReportDownloadTabProps) => {
   const { data: courtList = [] } = useStadiumCourts(stadiumId);
   const { data: reportDates = [] } = useReportDates(stadiumId, selectedCourtId ?? undefined);
+
+  useEffect(() => {
+    if (courtList.length > 0 && selectedCourtId === null) {
+      setSelectedCourtId(courtList[0].courtId);
+    }
+  }, [courtList]);
 
   const highlightDates = reportDates.filter((d) => d.hasReport).map((d) => new Date(d.date));
 
