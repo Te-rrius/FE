@@ -60,7 +60,7 @@ const RequestModal = ({ item, stadiumId, stadiumName, selectedDate, onClose, onC
             제작 완료 시 <Text style={styles.strongText}>알림톡</Text>을 보내드립니다!
           </Text>
           <View style={styles.reportInfoContainer}>
-            <Text style={styles.containerTitle}>신청한 하이라이트 영상</Text>
+            <Text style={styles.containerTitle}>신청한 분석 리포트</Text>
             <View style={styles.infoContainer}>
               <View style={styles.infoTitle}>
                 <LocationIcon />

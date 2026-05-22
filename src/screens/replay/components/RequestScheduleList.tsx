@@ -7,7 +7,7 @@ import { ScheduleTimeResponse } from '@/types/stadium/stadiumDetail';
 
 interface RequestScheduleListProps {
   times: ScheduleTimeResponse[];
-  stadiumId: number; // 추가
+  stadiumId: number;
   stadiumName: string;
   selectedDate: Date;
   selectedCourtId: number | null;
