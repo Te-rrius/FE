@@ -48,7 +48,7 @@ export function getComment(key: RotationKey, detail: PoseDetail): string {
   const status = getStatus(detail);
   const diff = Math.abs(Math.round(recommended - value));
 
-  if (value <= 0) return '반대 방향으로 회전되고 있어요. 방향을 확인해보세요.';
+  if (value <= 0) return '반대 방향으로 회전되고 있어요. 방향을 확인해 보세요.';
 
   const rate = (value / recommended) * 100;
   const isUnder = rate < 93;
@@ -61,8 +61,8 @@ export function getComment(key: RotationKey, detail: PoseDetail): string {
   if (status === '양호') return `이상적인 ${label}이에요!`;
 
   if (isUnder) {
-    if (status === '개선 필요') return `${diff}° 부족해요. ${bodyPart} 더 틀어보세요.`;
-    return `${diff}° 부족해요. ${bodyPart} 더 틀어보세요.`;
+    if (status === '개선 필요') return `${diff}° 부족해요. ${bodyPart} 더 틀어 보세요.`;
+    return `${diff}° 부족해요. ${bodyPart} 더 틀어 보세요.`;
   }
 
   if (isOver) {
