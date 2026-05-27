@@ -15,13 +15,6 @@ import PoseAnalysisIcon from '@/assets/images/report/poseAnalysisIcon.svg';
 import ShotIcon from '@/assets/images/report/shotIcon.svg';
 import ScoreIcon from '@/assets/images/report/scoreIcon.svg';
 
-const SHOT_TYPE_TO_LABEL: Record<string, string> = {
-  FOREHAND: '포핸드',
-  BACKHAND: '백핸드',
-  SERVE: '서브',
-  SMASH: '스매시',
-};
-
 type PoseAnalysisProps = {
   player: 1 | 2 | null;
   report: ReportDetailResponse | undefined;
@@ -59,17 +52,19 @@ const VideoItem = ({ uri, shoulderRotationAngle, spineRotationAngle, waistRotati
 };
 
 const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
-  const availableShotTypes = [...new Set(report?.motionAnalyses.map((m) => m.shotType) ?? [])];
+  const availableShots = [
+    ...new Map(report?.motionAnalyses.map((m) => [m.shotType, m.shotTypeName]) ?? []).entries(),
+  ].map(([shotType, shotTypeName]) => ({ shotType, shotTypeName }));
 
   const [selectedShotType, setSelectedShotType] = useState<string | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const flatListRef = useRef<FlatList<MotionAnalysis>>(null);
 
   useEffect(() => {
-    if (availableShotTypes.length > 0 && selectedShotType === null) {
-      setSelectedShotType(availableShotTypes[0]);
+    if (availableShots.length > 0 && selectedShotType === null) {
+      setSelectedShotType(availableShots[0].shotType);
     }
-  }, [availableShotTypes]);
+  }, [availableShots]);
 
   const handleShotTypeChange = (shotType: string) => {
     setSelectedShotType(shotType);
@@ -95,10 +90,10 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
       <ReportTitle icon={<PoseAnalysisIcon />} title="경기 자세 분석" />
       <View style={styles.allPose}>
         <View style={styles.poseWrapper}>
-          {availableShotTypes.map((shotType) => (
+          {availableShots.map(({ shotType, shotTypeName }) => (
             <PoseButton
               key={shotType}
-              text={SHOT_TYPE_TO_LABEL[shotType] ?? shotType}
+              text={shotTypeName}
               selected={selectedShotType === shotType}
               onPress={() => handleShotTypeChange(shotType)}
             />
