@@ -65,17 +65,25 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
   // 자세 영상 여러 개일 때 수정 예정
   const [selectedPoseKey, setSelectedPoseKey] = useState<PoseKey>('forehand');
 
-  const motionVideoUrl = report?.materials.find((m) => m.materialType === 'MOTION')?.videoUrl;
+  // 변경
+  const POSE_KEY_TO_SHOT_TYPE: Record<PoseKey, string> = {
+    forehand: 'FOREHAND',
+    backhand: 'BACKHAND',
+    serve: 'SERVE',
+    smash: 'SMASH',
+  };
 
-  const selectedPoseData = report
+  const selectedMotion = report?.motionAnalyses.find((m) => m.shotType === POSE_KEY_TO_SHOT_TYPE[selectedPoseKey]);
+
+  const selectedPoseData = selectedMotion
     ? {
-        shoulderRotation: { value: report.shoulderRotationAngle, recommended: 70 },
-        spineRotation: { value: report.spineRotationAngle, recommended: 35 },
-        waistRotation: { value: report.waistRotationAngle, recommended: 40 },
+        shoulderRotation: { value: selectedMotion.shoulderRotationAngle, recommended: 70 },
+        spineRotation: { value: selectedMotion.spineRotationAngle, recommended: 35 },
+        waistRotation: { value: selectedMotion.waistRotationAngle, recommended: 40 },
       }
     : undefined;
 
-  const totalScore = selectedPoseData ? getTotalScore(selectedPoseData) : null;
+  const totalScore = selectedMotion?.score ?? null;
 
   return (
     <View style={styles.container}>
@@ -102,17 +110,17 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
             />
             <BlurView intensity={10} style={styles.overlay} />
           </View>
-        ) : motionVideoUrl ? (
+        ) : selectedMotion ? (
           <VideoItem
-            uri={motionVideoUrl}
-            shoulderRotationAngle={report?.shoulderRotationAngle ?? null}
-            spineRotationAngle={report?.spineRotationAngle ?? null}
-            waistRotationAngle={report?.waistRotationAngle ?? null}
+            uri={selectedMotion.videoUrl}
+            shoulderRotationAngle={selectedMotion.shoulderRotationAngle}
+            spineRotationAngle={selectedMotion.spineRotationAngle}
+            waistRotationAngle={selectedMotion.waistRotationAngle}
           />
         ) : null}
         <View style={styles.allCard}>
           <View style={styles.generalCard}>
-            <PoseAnalysisCard title="샷 유형" analysisText={report?.shotTypeName ?? '-'} icon={<ShotIcon />} />
+            <PoseAnalysisCard title="샷 유형" analysisText={selectedMotion?.shotTypeName ?? '-'} icon={<ShotIcon />} />
             <PoseAnalysisCard
               title="종합 점수"
               analysisText={totalScore != null ? `${totalScore.toFixed(1)}점` : '-'}
@@ -139,7 +147,7 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
           />
           <View style={styles.upgradeContainer}>
             <Text style={styles.upgradeTitle}>개선 포인트</Text>
-            <Text style={styles.upgradeText}>{report?.improvementPoint ?? '-'}</Text>
+            <Text style={styles.upgradeText}>{selectedMotion?.improvementPoint ?? '-'}</Text>
           </View>
         </View>
       </View>

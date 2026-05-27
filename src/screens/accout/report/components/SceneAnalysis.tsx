@@ -17,8 +17,8 @@ type SceneAnalysisProps = {
 };
 
 const SceneAnalysis = ({ player, report }: SceneAnalysisProps) => {
-  const winningUrl = report?.materials.find((m) => m.materialType === 'WINNING_SHOT')?.videoUrl;
-  const worstUrl = report?.materials.find((m) => m.materialType === 'WORST_SHOT')?.videoUrl;
+  const winningUrl = report?.highlightVideos.find((v) => v.videoType === 'WINNING_SHOT')?.videoUrl;
+  const worstUrl = report?.highlightVideos.find((v) => v.videoType === 'WORST_SHOT')?.videoUrl;
 
   const bestScene = useVideoPlayer(winningUrl ? { uri: winningUrl } : null);
   const worstScene = useVideoPlayer(worstUrl ? { uri: worstUrl } : null);

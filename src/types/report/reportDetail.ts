@@ -1,9 +1,25 @@
-// 리포트 상세 조회
 export type PlayerTarget = 'PLAYER_ONE' | 'PLAYER_TWO';
 
-export interface MaterialResponse {
-  materialType: 'MOTION' | 'WINNING_SHOT' | 'WORST_SHOT';
-  materialTypeName: string;
+export type ShotType = 'FOREHAND' | 'BACKHAND' | 'SERVE';
+
+export type HighlightVideoType = 'WINNING_SHOT' | 'WORST_SHOT';
+
+export interface MotionAnalysis {
+  motionAnalysisId: number;
+  videoUrl: string;
+  shotType: ShotType;
+  shotTypeName: string;
+  shoulderRotationAngle: number;
+  spineRotationAngle: number;
+  waistRotationAngle: number;
+  improvementPoint: string;
+  score: number;
+}
+
+export interface HighlightVideo {
+  highlightVideoId: number;
+  videoType: HighlightVideoType;
+  videoTypeName: string;
   videoUrl: string;
 }
 
@@ -17,19 +33,14 @@ export interface ReportDetailResponse {
   courtNumber: number;
   target: PlayerTarget;
   targetName: string;
-  shotType: string;
-  shotTypeName: string;
   maxSpeed: number;
-  shoulderRotationAngle: number;
-  spineRotationAngle: number;
-  waistRotationAngle: number;
   averageRallyCount: number;
   maxRallyCount: number;
   minRallyCount: number;
   totalShotCount: number;
-  improvementPoint: string;
   firstServeSuccessRate: number;
   secondServeSuccessRate: number;
   firstServeRate: number;
-  materials: MaterialResponse[];
+  motionAnalyses: MotionAnalysis[];
+  highlightVideos: HighlightVideo[];
 }
