@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { LinearGradient } from 'expo-linear-gradient';
 import ReportTitle from './ReportTitle';
 import { hp, wp } from '@/utils/dimension';
-import { ReportDetailResponse } from '@/types/report/reportDetail';
+import { HighlightVideo, ReportDetailResponse } from '@/types/report/reportDetail';
 
 import SceneAnalysisIcon from '@/assets/images/report/sceneAnalysisIcon.svg';
 import BestSceneIcon from '@/assets/images/report/bestSceneIcon.svg';
@@ -16,85 +16,99 @@ type SceneAnalysisProps = {
   report: ReportDetailResponse | undefined;
 };
 
-const SceneAnalysis = ({ player, report }: SceneAnalysisProps) => {
-  const winningUrl = report?.highlightVideos.find((v) => v.videoType === 'WINNING_SHOT')?.videoUrl;
-  const worstUrl = report?.highlightVideos.find((v) => v.videoType === 'WORST_SHOT')?.videoUrl;
+const VideoItem = ({ uri }: { uri: string }) => {
+  const player = useVideoPlayer({ uri });
+  const [playing, setPlaying] = useState(false);
 
-  const bestScene = useVideoPlayer(winningUrl ? { uri: winningUrl } : null);
-  const worstScene = useVideoPlayer(worstUrl ? { uri: worstUrl } : null);
-  const [bestPlaying, setBestPlaying] = useState(false);
-  const [worstPlaying, setWorstPlaying] = useState(false);
-
-  const onPress = (
-    videoPlayer: ReturnType<typeof useVideoPlayer>,
-    playing: boolean,
-    setPlaying: (v: boolean) => void,
-  ) => {
+  const handlePress = () => {
     if (playing) {
-      videoPlayer.pause();
+      player.pause();
     } else {
-      videoPlayer.play();
+      player.play();
     }
     setPlaying(!playing);
   };
 
   return (
+    <View style={styles.videoContainer}>
+      <VideoView player={player} style={styles.video} contentFit="cover" />
+      {!playing && (
+        <Pressable style={styles.playButton} onPress={handlePress}>
+          <PlayButtonIcon />
+        </Pressable>
+      )}
+    </View>
+  );
+};
+
+type SceneSectionProps = {
+  player: 1 | 2 | null;
+  videos: HighlightVideo[];
+  titleIcon: React.ReactNode;
+  titleText: React.ReactNode;
+};
+
+const SceneSection = ({ player, videos, titleIcon, titleText }: SceneSectionProps) => {
+  return (
+    <View style={styles.sceneWrapper}>
+      <View style={styles.sceneTitle}>
+        {titleIcon}
+        <Text style={styles.titleText}>{titleText}</Text>
+      </View>
+      {player !== null && videos.length > 0 ? (
+        <FlatList
+          data={videos}
+          keyExtractor={(item) => String(item.highlightVideoId)}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.list}
+          contentContainerStyle={styles.listContent}
+          snapToInterval={wp(350) + wp(12)}
+          snapToAlignment="start"
+          decelerationRate="fast"
+          renderItem={({ item }) => <VideoItem uri={item.videoUrl} />}
+        />
+      ) : (
+        <LinearGradient
+          colors={['#E9E9E9', '#FCFCFC']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={styles.placeholder}
+        >
+          <PlayButtonIcon />
+        </LinearGradient>
+      )}
+    </View>
+  );
+};
+
+const SceneAnalysis = ({ player, report }: SceneAnalysisProps) => {
+  const winningVideos = report?.highlightVideos.filter((v) => v.videoType === 'WINNING_SHOT') ?? [];
+  const worstVideos = report?.highlightVideos.filter((v) => v.videoType === 'WORST_SHOT') ?? [];
+
+  return (
     <View style={styles.container}>
       <ReportTitle icon={<SceneAnalysisIcon />} title="최고의 장면 / 아쉬운 장면" />
-      <View style={styles.sceneWrapper}>
-        <View style={styles.sceneTitle}>
-          <BestSceneIcon />
-          <Text style={styles.titleText}>
+      <SceneSection
+        player={player}
+        videos={winningVideos}
+        titleIcon={<BestSceneIcon />}
+        titleText={
+          <>
             <Text style={styles.bestText}>최고</Text>의 장면
-          </Text>
-        </View>
-        {player !== null && winningUrl ? (
-          <View style={styles.videoContainer}>
-            <VideoView player={bestScene} style={styles.video} contentFit="cover" />
-            {!bestPlaying && (
-              <Pressable style={styles.playButton} onPress={() => onPress(bestScene, bestPlaying, setBestPlaying)}>
-                <PlayButtonIcon />
-              </Pressable>
-            )}
-          </View>
-        ) : (
-          <LinearGradient
-            colors={['#E9E9E9', '#FCFCFC']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={styles.placeholder}
-          >
-            <PlayButtonIcon />
-          </LinearGradient>
-        )}
-      </View>
-      <View style={styles.sceneWrapper}>
-        <View style={styles.sceneTitle}>
-          <WorstSceneIcon />
-          <Text style={styles.titleText}>
+          </>
+        }
+      />
+      <SceneSection
+        player={player}
+        videos={worstVideos}
+        titleIcon={<WorstSceneIcon />}
+        titleText={
+          <>
             <Text style={styles.worstText}>아쉬운</Text> 장면
-          </Text>
-        </View>
-        {player !== null && worstUrl ? (
-          <View style={styles.videoContainer}>
-            <VideoView player={worstScene} style={styles.video} contentFit="cover" />
-            {!worstPlaying && (
-              <Pressable style={styles.playButton} onPress={() => onPress(worstScene, worstPlaying, setWorstPlaying)}>
-                <PlayButtonIcon />
-              </Pressable>
-            )}
-          </View>
-        ) : (
-          <LinearGradient
-            colors={['#E9E9E9', '#FCFCFC']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={styles.placeholder}
-          >
-            <PlayButtonIcon />
-          </LinearGradient>
-        )}
-      </View>
+          </>
+        }
+      />
     </View>
   );
 };
@@ -135,8 +149,6 @@ const styles = StyleSheet.create({
   video: {
     width: wp(350),
     height: hp(195),
-    borderRadius: 12,
-    overflow: 'hidden',
   },
 
   videoContainer: {
@@ -150,6 +162,15 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  list: {
+    marginHorizontal: -wp(20),
+  },
+
+  listContent: {
+    paddingHorizontal: wp(20),
+    gap: wp(12),
   },
 
   placeholder: {
