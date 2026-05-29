@@ -61,10 +61,15 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
   const flatListRef = useRef<FlatList<MotionAnalysis>>(null);
 
   useEffect(() => {
-    if (availableShots.length > 0 && selectedShotType === null) {
-      setSelectedShotType(availableShots[0].shotType);
+    if (availableShots.length > 0) {
+      const isValid = availableShots.some((s) => s.shotType === selectedShotType);
+      if (!isValid) {
+        setSelectedShotType(availableShots[0].shotType);
+      }
+    } else {
+      setSelectedShotType(null);
     }
-  }, [availableShots]);
+  }, [availableShots, selectedShotType]);
 
   const handleShotTypeChange = (shotType: string) => {
     setSelectedShotType(shotType);
