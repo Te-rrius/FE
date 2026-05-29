@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { FlatList, StyleSheet, Text, View, ViewToken } from 'react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -8,22 +8,12 @@ import PoseAnalysisCard from './PoseAnalysisCard';
 import AnalysisStateCard from './AnalysisStateCard';
 import PoseButton from './PoseButton';
 import { hp, wp } from '@/utils/dimension';
-import { getComment, getTotalScore } from '@/utils/postAnalysisComment';
-import { ReportDetailResponse } from '@/types/report/reportDetail';
+import { getComment } from '@/utils/postAnalysisComment';
+import { MotionAnalysis, ReportDetailResponse } from '@/types/report/reportDetail';
 
 import PoseAnalysisIcon from '@/assets/images/report/poseAnalysisIcon.svg';
 import ShotIcon from '@/assets/images/report/shotIcon.svg';
 import ScoreIcon from '@/assets/images/report/scoreIcon.svg';
-
-const POSE_KEYS = ['forehand', 'backhand', 'serve', 'smash'] as const;
-type PoseKey = (typeof POSE_KEYS)[number];
-
-const POSE_LABEL: Record<PoseKey, string> = {
-  forehand: '포핸드',
-  backhand: '백핸드',
-  serve: '서브',
-  smash: '스매시',
-};
 
 type PoseAnalysisProps = {
   player: 1 | 2 | null;
@@ -62,33 +52,63 @@ const VideoItem = ({ uri, shoulderRotationAngle, spineRotationAngle, waistRotati
 };
 
 const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
-  // 자세 영상 여러 개일 때 수정 예정
-  const [selectedPoseKey, setSelectedPoseKey] = useState<PoseKey>('forehand');
+  const availableShots = [
+    ...new Map(report?.motionAnalyses.map((m) => [m.shotType, m.shotTypeName]) ?? []).entries(),
+  ].map(([shotType, shotTypeName]) => ({ shotType, shotTypeName }));
 
-  const motionVideoUrl = report?.materials.find((m) => m.materialType === 'MOTION')?.videoUrl;
+  const [selectedShotType, setSelectedShotType] = useState<string | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const flatListRef = useRef<FlatList<MotionAnalysis>>(null);
 
-  const selectedPoseData = report
+  useEffect(() => {
+    if (availableShots.length > 0) {
+      const isValid = availableShots.some((s) => s.shotType === selectedShotType);
+      if (!isValid) {
+        setSelectedShotType(availableShots[0].shotType);
+      }
+    } else {
+      setSelectedShotType(null);
+    }
+  }, [availableShots, selectedShotType]);
+
+  const handleShotTypeChange = (shotType: string) => {
+    setSelectedShotType(shotType);
+    setActiveIndex(0);
+    flatListRef.current?.scrollToOffset({ offset: 0, animated: false });
+  };
+
+  const selectedMotions = report?.motionAnalyses.filter((m) => m.shotType === selectedShotType) ?? [];
+  const activeMotion = selectedMotions[activeIndex];
+
+  const selectedPoseData = activeMotion
     ? {
-        shoulderRotation: { value: report.shoulderRotationAngle, recommended: 70 },
-        spineRotation: { value: report.spineRotationAngle, recommended: 35 },
-        waistRotation: { value: report.waistRotationAngle, recommended: 40 },
+        shoulderRotation: { value: activeMotion.shoulderRotationAngle, recommended: 70 },
+        spineRotation: { value: activeMotion.spineRotationAngle, recommended: 35 },
+        waistRotation: { value: activeMotion.waistRotationAngle, recommended: 40 },
       }
     : undefined;
 
-  const totalScore = selectedPoseData ? getTotalScore(selectedPoseData) : null;
+  const totalScore = activeMotion?.score ?? null;
+
+  const onViewableItemsChanged = useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
+    if (viewableItems[0]?.index != null) {
+      setActiveIndex(viewableItems[0].index);
+    }
+  }).current;
+
+  const viewabilityConfig = useRef({ itemVisiblePercentThreshold: 50 }).current;
 
   return (
     <View style={styles.container}>
       <ReportTitle icon={<PoseAnalysisIcon />} title="경기 자세 분석" />
       <View style={styles.allPose}>
-        {/* 버튼 선택만 가능하고 이동 불가 추후 수정 예정 */}
         <View style={styles.poseWrapper}>
-          {POSE_KEYS.map((key) => (
+          {availableShots.map(({ shotType, shotTypeName }) => (
             <PoseButton
-              key={key}
-              text={POSE_LABEL[key]}
-              selected={selectedPoseKey === key}
-              onPress={() => setSelectedPoseKey(key)}
+              key={shotType}
+              text={shotTypeName}
+              selected={selectedShotType === shotType}
+              onPress={() => handleShotTypeChange(shotType)}
             />
           ))}
         </View>
@@ -102,17 +122,33 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
             />
             <BlurView intensity={10} style={styles.overlay} />
           </View>
-        ) : motionVideoUrl ? (
-          <VideoItem
-            uri={motionVideoUrl}
-            shoulderRotationAngle={report?.shoulderRotationAngle ?? null}
-            spineRotationAngle={report?.spineRotationAngle ?? null}
-            waistRotationAngle={report?.waistRotationAngle ?? null}
+        ) : selectedMotions.length > 0 ? (
+          <FlatList
+            ref={flatListRef}
+            data={selectedMotions}
+            keyExtractor={(item) => String(item.motionAnalysisId)}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            snapToInterval={wp(350) + wp(12)}
+            snapToAlignment="start"
+            decelerationRate="fast"
+            style={styles.list}
+            contentContainerStyle={styles.listContent}
+            onViewableItemsChanged={onViewableItemsChanged}
+            viewabilityConfig={viewabilityConfig}
+            renderItem={({ item }) => (
+              <VideoItem
+                uri={item.videoUrl}
+                shoulderRotationAngle={item.shoulderRotationAngle}
+                spineRotationAngle={item.spineRotationAngle}
+                waistRotationAngle={item.waistRotationAngle}
+              />
+            )}
           />
         ) : null}
         <View style={styles.allCard}>
           <View style={styles.generalCard}>
-            <PoseAnalysisCard title="샷 유형" analysisText={report?.shotTypeName ?? '-'} icon={<ShotIcon />} />
+            <PoseAnalysisCard title="샷 유형" analysisText={activeMotion?.shotTypeName ?? '-'} icon={<ShotIcon />} />
             <PoseAnalysisCard
               title="종합 점수"
               analysisText={totalScore != null ? `${totalScore.toFixed(1)}점` : '-'}
@@ -139,7 +175,7 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
           />
           <View style={styles.upgradeContainer}>
             <Text style={styles.upgradeTitle}>개선 포인트</Text>
-            <Text style={styles.upgradeText}>{report?.improvementPoint ?? '-'}</Text>
+            <Text style={styles.upgradeText}>{activeMotion?.improvementPoint ?? '-'}</Text>
           </View>
         </View>
       </View>
@@ -161,6 +197,15 @@ const styles = StyleSheet.create({
   poseWrapper: {
     flexDirection: 'row',
     gap: wp(8),
+  },
+
+  list: {
+    marginHorizontal: -wp(20),
+  },
+
+  listContent: {
+    paddingHorizontal: wp(20),
+    gap: wp(12),
   },
 
   allCard: {

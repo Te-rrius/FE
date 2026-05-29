@@ -14,10 +14,19 @@ interface ReportInfoProps {
   startTime: string | undefined;
   endTime: string | undefined;
   stadiumName: string | undefined;
+  courtNumber: number | undefined;
   selectedPlayer: 1 | 2 | null;
 }
 
-const ReportInfo = ({ ProfileIcon, date, startTime, endTime, stadiumName, selectedPlayer }: ReportInfoProps) => {
+const ReportInfo = ({
+  ProfileIcon,
+  date,
+  startTime,
+  endTime,
+  stadiumName,
+  courtNumber,
+  selectedPlayer,
+}: ReportInfoProps) => {
   const timeText = startTime && endTime ? `${formatTime(startTime)} - ${formatTime(endTime)}` : '-';
 
   const content = (
@@ -36,8 +45,8 @@ const ReportInfo = ({ ProfileIcon, date, startTime, endTime, stadiumName, select
           <GrayLocationIcon />
           <View style={styles.infoDetailWrapper}>
             <Text style={styles.infoDetailText}>{stadiumName ?? '-'}</Text>
-            {/* <LineIcon />
-            <Text style={styles.infoDetailText}>{courtName}</Text> */}
+            <LineIcon />
+            <Text style={styles.infoDetailText}>{courtNumber ?? '-'}코트</Text>
           </View>
         </View>
       </View>

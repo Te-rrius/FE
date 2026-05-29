@@ -86,6 +86,7 @@ const ReportScreen = ({ matchVideoId }: ReportScreenProps) => {
             startTime={report?.startTime}
             endTime={report?.endTime}
             stadiumName={report?.stadiumName}
+            courtNumber={report?.courtNumber}
             selectedPlayer={selectedPlayer}
           />
         </View>
