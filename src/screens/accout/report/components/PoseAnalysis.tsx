@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View, ViewToken } from 'react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -90,6 +90,14 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
 
   const totalScore = activeMotion?.score ?? null;
 
+  const onViewableItemsChanged = useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
+    if (viewableItems[0]?.index != null) {
+      setActiveIndex(viewableItems[0].index);
+    }
+  }).current;
+
+  const viewabilityConfig = useRef({ itemVisiblePercentThreshold: 50 }).current;
+
   return (
     <View style={styles.container}>
       <ReportTitle icon={<PoseAnalysisIcon />} title="경기 자세 분석" />
@@ -126,12 +134,8 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
             decelerationRate="fast"
             style={styles.list}
             contentContainerStyle={styles.listContent}
-            onViewableItemsChanged={({ viewableItems }) => {
-              if (viewableItems[0]?.index != null) {
-                setActiveIndex(viewableItems[0].index);
-              }
-            }}
-            viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
+            onViewableItemsChanged={onViewableItemsChanged}
+            viewabilityConfig={viewabilityConfig}
             renderItem={({ item }) => (
               <VideoItem
                 uri={item.videoUrl}
