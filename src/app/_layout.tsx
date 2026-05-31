@@ -45,11 +45,11 @@ const RootLayout = () => {
           <View style={[styles.overlay, styles.bottom]}>
             <AgreeModal />
           </View>
-        ) : (
+        ) : showLoginModal ? (
           <View style={[styles.overlay, styles.center]}>
             <LoginModal />
           </View>
-        )}
+        ) : null}
       </Modal>
     </QueryClientProvider>
   );
