@@ -15,7 +15,6 @@ const LoginModal = () => {
       const accessToken = await openKakaoLogin();
       if (!accessToken) return;
       login(accessToken);
-      closeLoginModal();
     } catch (e) {
       console.error('카카오 로그인 실패', e);
     }

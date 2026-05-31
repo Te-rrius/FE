@@ -13,11 +13,11 @@ const KAKAOKEY = process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY;
 const queryClient = new QueryClient();
 
 const RootLayout = () => {
+  const { showLoginModal, showAgreeModal } = useAuthStore();
+
   useEffect(() => {
     initializeKakaoSDK(KAKAOKEY);
   }, []);
-
-  const { showLoginModal, showAgreeModal } = useAuthStore();
 
   const [fontsLoaded] = useFonts({
     'KBLJump-B': require('@/assets/fonts/KBLJump_B.ttf'),
@@ -40,16 +40,16 @@ const RootLayout = () => {
         }}
       />
 
-      <Modal visible={showLoginModal} transparent>
-        <View style={[styles.overlay, styles.center]}>
-          <LoginModal />
-        </View>
-      </Modal>
-
-      <Modal visible={showAgreeModal} transparent>
-        <View style={[styles.overlay, styles.bottom]}>
-          <AgreeModal />
-        </View>
+      <Modal visible={showLoginModal || showAgreeModal} transparent>
+        {showAgreeModal ? (
+          <View style={[styles.overlay, styles.bottom]}>
+            <AgreeModal />
+          </View>
+        ) : (
+          <View style={[styles.overlay, styles.center]}>
+            <LoginModal />
+          </View>
+        )}
       </Modal>
     </QueryClientProvider>
   );

@@ -23,7 +23,7 @@ const useAuthStore = create<AuthStore>()(
       showLoginModal: false,
       showAgreeModal: false,
       returnPath: '/',
-      login: (token: string) => set({ token, showLoginModal: false }),
+      login: (token: string) => set({ token, showLoginModal: false, showAgreeModal: true }),
       isLoggingOut: false,
       logout: () => {
         useAuthStore.persist.clearStorage();
