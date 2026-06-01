@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
 
   videoContainer: {
     width: wp(350),
-    aspectRatio: 9 / 16,
+    aspectRatio: 4 / 3,
     backgroundColor: '#000',
     borderRadius: 12,
     overflow: 'hidden',
