@@ -36,15 +36,17 @@ const VideoItem = ({ uri, shoulderRotationAngle, spineRotationAngle, waistRotati
       <BlurView intensity={10} style={styles.overlay}>
         <View>
           <Text style={styles.labelText}>어깨 회전각</Text>
-          <Text style={styles.overlayValue}>{shoulderRotationAngle ?? '-'}°</Text>
+          <Text style={styles.overlayValue}>
+            {shoulderRotationAngle != null ? Math.round(shoulderRotationAngle) : '-'}°
+          </Text>
         </View>
         <View>
           <Text style={styles.labelText}>척추 회전각</Text>
-          <Text style={styles.overlayValue}>{spineRotationAngle ?? '-'}°</Text>
+          <Text style={styles.overlayValue}>{spineRotationAngle != null ? Math.round(spineRotationAngle) : '-'}°</Text>
         </View>
         <View>
           <Text style={styles.labelText}>허리 회전각</Text>
-          <Text style={styles.overlayValue}>{waistRotationAngle ?? '-'}°</Text>
+          <Text style={styles.overlayValue}>{waistRotationAngle != null ? Math.round(waistRotationAngle) : '-'}°</Text>
         </View>
       </BlurView>
     </View>
