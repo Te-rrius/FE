@@ -84,9 +84,18 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
 
   const selectedPoseData = activeMotion
     ? {
-        shoulderRotation: { value: activeMotion.shoulderRotationAngle, recommended: 70 },
-        spineRotation: { value: activeMotion.spineRotationAngle, recommended: 35 },
-        waistRotation: { value: activeMotion.waistRotationAngle, recommended: 40 },
+        shoulderRotation: {
+          value: Math.round(activeMotion.shoulderRotationAngle ?? 0),
+          recommended: 5,
+        },
+        spineRotation: {
+          value: Math.round(activeMotion.spineRotationAngle ?? 0),
+          recommended: 45,
+        },
+        waistRotation: {
+          value: Math.round(activeMotion.waistRotationAngle ?? 0),
+          recommended: 30,
+        },
       }
     : undefined;
 
