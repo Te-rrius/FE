@@ -10,6 +10,7 @@ import PoseButton from './PoseButton';
 import { hp, wp } from '@/utils/dimension';
 import { getComment } from '@/utils/postAnalysisComment';
 import { MotionAnalysis, ReportDetailResponse } from '@/types/report/reportDetail';
+import { getPoseRecommended } from '@/utils/poseRecommended';
 
 import PoseAnalysisIcon from '@/assets/images/report/poseAnalysisIcon.svg';
 import ShotIcon from '@/assets/images/report/shotIcon.svg';
@@ -83,20 +84,23 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
   const activeMotion = selectedMotions[activeIndex];
 
   const selectedPoseData = activeMotion
-    ? {
-        shoulderRotation: {
-          value: Math.round(activeMotion.shoulderRotationAngle ?? 0),
-          recommended: 5,
-        },
-        spineRotation: {
-          value: Math.round(activeMotion.spineRotationAngle ?? 0),
-          recommended: 45,
-        },
-        waistRotation: {
-          value: Math.round(activeMotion.waistRotationAngle ?? 0),
-          recommended: 30,
-        },
-      }
+    ? (() => {
+        const recommended = getPoseRecommended(activeMotion.shotType);
+        return {
+          shoulderRotation: {
+            value: Math.round(activeMotion.shoulderRotationAngle ?? 0),
+            recommended: recommended.shoulderRotation,
+          },
+          spineRotation: {
+            value: Math.round(activeMotion.spineRotationAngle ?? 0),
+            recommended: recommended.spineRotation,
+          },
+          waistRotation: {
+            value: Math.round(activeMotion.waistRotationAngle ?? 0),
+            recommended: recommended.waistRotation,
+          },
+        };
+      })()
     : undefined;
 
   const totalScore = activeMotion?.score ?? null;
