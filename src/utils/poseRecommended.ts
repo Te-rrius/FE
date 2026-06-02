@@ -1,10 +1,12 @@
+import { ShotType } from '@/types/report/reportDetail';
+
 type PoseRecommended = {
   shoulderRotation: number;
   spineRotation: number;
   waistRotation: number;
 };
 
-const POSE_RECOMMENDED: Record<string, PoseRecommended> = {
+const POSE_RECOMMENDED: Partial<Record<ShotType, PoseRecommended>> = {
   FOREHAND: {
     shoulderRotation: 16,
     spineRotation: 10,
@@ -24,5 +26,5 @@ const DEFAULT_POSE_RECOMMENDED: PoseRecommended = {
   waistRotation: 30,
 };
 
-export const getPoseRecommended = (shotType: string): PoseRecommended =>
+export const getPoseRecommended = (shotType: ShotType): PoseRecommended =>
   POSE_RECOMMENDED[shotType] ?? DEFAULT_POSE_RECOMMENDED;

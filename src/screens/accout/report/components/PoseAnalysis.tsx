@@ -38,16 +38,20 @@ const VideoItem = ({ uri, shoulderRotationAngle, spineRotationAngle, waistRotati
         <View>
           <Text style={styles.labelText}>어깨 회전각</Text>
           <Text style={styles.overlayValue}>
-            {shoulderRotationAngle != null ? Math.round(shoulderRotationAngle) : '-'}°
+            {shoulderRotationAngle != null ? `${Math.round(shoulderRotationAngle)}°` : '-'}
           </Text>
         </View>
         <View>
           <Text style={styles.labelText}>척추 회전각</Text>
-          <Text style={styles.overlayValue}>{spineRotationAngle != null ? Math.round(spineRotationAngle) : '-'}°</Text>
+          <Text style={styles.overlayValue}>
+            {spineRotationAngle != null ? `${Math.round(spineRotationAngle)}°` : '-'}
+          </Text>
         </View>
         <View>
           <Text style={styles.labelText}>허리 회전각</Text>
-          <Text style={styles.overlayValue}>{waistRotationAngle != null ? Math.round(waistRotationAngle) : '-'}°</Text>
+          <Text style={styles.overlayValue}>
+            {waistRotationAngle != null ? `${Math.round(waistRotationAngle)}°` : '-'}
+          </Text>
         </View>
       </BlurView>
     </View>
@@ -83,25 +87,25 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
   const selectedMotions = report?.motionAnalyses.filter((m) => m.shotType === selectedShotType) ?? [];
   const activeMotion = selectedMotions[activeIndex];
 
-  const selectedPoseData = activeMotion
-    ? (() => {
-        const recommended = getPoseRecommended(activeMotion.shotType);
-        return {
+  const recommended = activeMotion ? getPoseRecommended(activeMotion.shotType) : undefined;
+
+  const selectedPoseData =
+    activeMotion && recommended
+      ? {
           shoulderRotation: {
-            value: Math.round(activeMotion.shoulderRotationAngle ?? 0),
+            value: Math.round(activeMotion.shoulderRotationAngle),
             recommended: recommended.shoulderRotation,
           },
           spineRotation: {
-            value: Math.round(activeMotion.spineRotationAngle ?? 0),
+            value: Math.round(activeMotion.spineRotationAngle),
             recommended: recommended.spineRotation,
           },
           waistRotation: {
-            value: Math.round(activeMotion.waistRotationAngle ?? 0),
+            value: Math.round(activeMotion.waistRotationAngle),
             recommended: recommended.waistRotation,
           },
-        };
-      })()
-    : undefined;
+        }
+      : undefined;
 
   const totalScore = activeMotion?.score ?? null;
 
