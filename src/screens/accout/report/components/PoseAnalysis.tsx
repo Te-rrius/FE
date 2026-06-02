@@ -10,6 +10,7 @@ import PoseButton from './PoseButton';
 import { hp, wp } from '@/utils/dimension';
 import { getComment } from '@/utils/postAnalysisComment';
 import { MotionAnalysis, ReportDetailResponse } from '@/types/report/reportDetail';
+import { getPoseRecommended } from '@/utils/poseRecommended';
 
 import PoseAnalysisIcon from '@/assets/images/report/poseAnalysisIcon.svg';
 import ShotIcon from '@/assets/images/report/shotIcon.svg';
@@ -36,15 +37,21 @@ const VideoItem = ({ uri, shoulderRotationAngle, spineRotationAngle, waistRotati
       <BlurView intensity={10} style={styles.overlay}>
         <View>
           <Text style={styles.labelText}>어깨 회전각</Text>
-          <Text style={styles.overlayValue}>{shoulderRotationAngle ?? '-'}°</Text>
+          <Text style={styles.overlayValue}>
+            {shoulderRotationAngle != null ? `${Math.round(shoulderRotationAngle)}°` : '-'}
+          </Text>
         </View>
         <View>
           <Text style={styles.labelText}>척추 회전각</Text>
-          <Text style={styles.overlayValue}>{spineRotationAngle ?? '-'}°</Text>
+          <Text style={styles.overlayValue}>
+            {spineRotationAngle != null ? `${Math.round(spineRotationAngle)}°` : '-'}
+          </Text>
         </View>
         <View>
           <Text style={styles.labelText}>허리 회전각</Text>
-          <Text style={styles.overlayValue}>{waistRotationAngle ?? '-'}°</Text>
+          <Text style={styles.overlayValue}>
+            {waistRotationAngle != null ? `${Math.round(waistRotationAngle)}°` : '-'}
+          </Text>
         </View>
       </BlurView>
     </View>
@@ -80,13 +87,25 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
   const selectedMotions = report?.motionAnalyses.filter((m) => m.shotType === selectedShotType) ?? [];
   const activeMotion = selectedMotions[activeIndex];
 
-  const selectedPoseData = activeMotion
-    ? {
-        shoulderRotation: { value: activeMotion.shoulderRotationAngle, recommended: 70 },
-        spineRotation: { value: activeMotion.spineRotationAngle, recommended: 35 },
-        waistRotation: { value: activeMotion.waistRotationAngle, recommended: 40 },
-      }
-    : undefined;
+  const recommended = activeMotion ? getPoseRecommended(activeMotion.shotType) : undefined;
+
+  const selectedPoseData =
+    activeMotion && recommended
+      ? {
+          shoulderRotation: {
+            value: Math.round(activeMotion.shoulderRotationAngle),
+            recommended: recommended.shoulderRotation,
+          },
+          spineRotation: {
+            value: Math.round(activeMotion.spineRotationAngle),
+            recommended: recommended.spineRotation,
+          },
+          waistRotation: {
+            value: Math.round(activeMotion.waistRotationAngle),
+            recommended: recommended.waistRotation,
+          },
+        }
+      : undefined;
 
   const totalScore = activeMotion?.score ?? null;
 
@@ -244,7 +263,7 @@ const styles = StyleSheet.create({
 
   videoContainer: {
     width: wp(350),
-    aspectRatio: 9 / 16,
+    aspectRatio: 4 / 3,
     backgroundColor: '#000',
     borderRadius: 12,
     overflow: 'hidden',
