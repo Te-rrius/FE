@@ -45,7 +45,9 @@ const AnalysisStateCard = ({ title, value, recommended, maxValue = 100, comment 
           </View>
           <Text style={styles.valueText}>
             <Text style={styles.valueBold}>{value !== null ? `${value.toFixed(1)}°` : ''}</Text>
-            {value !== null && <Text style={styles.recommendedText}>{`/권장 ${recommended?.toFixed(1)}°`}</Text>}
+            {value !== null && recommended !== null && (
+              <Text style={styles.recommendedText}>{`/권장 ${recommended.toFixed(1)}°`}</Text>
+            )}
           </Text>
         </View>
         <Text style={styles.comment}>{comment}</Text>
