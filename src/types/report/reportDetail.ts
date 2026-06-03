@@ -12,6 +12,12 @@ export interface MotionAnalysis {
   shoulderRotationAngle: number;
   spineRotationAngle: number;
   waistRotationAngle: number;
+  shoulderReferenceValue: number;
+  shoulderFeedback: string;
+  spineReferenceValue: number;
+  spineFeedback: string;
+  waistReferenceValue: number;
+  waistFeedback: string;
   improvementPoint: string;
   score: number;
 }
