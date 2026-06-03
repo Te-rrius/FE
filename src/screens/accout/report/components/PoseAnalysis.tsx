@@ -8,10 +8,7 @@ import PoseAnalysisCard from './PoseAnalysisCard';
 import AnalysisStateCard from './AnalysisStateCard';
 import PoseButton from './PoseButton';
 import { hp, wp } from '@/utils/dimension';
-import { getComment } from '@/utils/postAnalysisComment';
 import { MotionAnalysis, ReportDetailResponse } from '@/types/report/reportDetail';
-import { getPoseRecommended } from '@/utils/poseRecommended';
-
 import PoseAnalysisIcon from '@/assets/images/report/poseAnalysisIcon.svg';
 import ShotIcon from '@/assets/images/report/shotIcon.svg';
 import ScoreIcon from '@/assets/images/report/scoreIcon.svg';
@@ -38,19 +35,19 @@ const VideoItem = ({ uri, shoulderRotationAngle, spineRotationAngle, waistRotati
         <View>
           <Text style={styles.labelText}>어깨 회전각</Text>
           <Text style={styles.overlayValue}>
-            {shoulderRotationAngle != null ? `${Math.round(shoulderRotationAngle)}°` : '-'}
+            {shoulderRotationAngle != null ? `${shoulderRotationAngle.toFixed(1)}°` : '-'}
           </Text>
         </View>
         <View>
           <Text style={styles.labelText}>척추 회전각</Text>
           <Text style={styles.overlayValue}>
-            {spineRotationAngle != null ? `${Math.round(spineRotationAngle)}°` : '-'}
+            {spineRotationAngle != null ? `${spineRotationAngle.toFixed(1)}°` : '-'}
           </Text>
         </View>
         <View>
           <Text style={styles.labelText}>허리 회전각</Text>
           <Text style={styles.overlayValue}>
-            {waistRotationAngle != null ? `${Math.round(waistRotationAngle)}°` : '-'}
+            {waistRotationAngle != null ? `${waistRotationAngle.toFixed(1)}°` : '-'}
           </Text>
         </View>
       </BlurView>
@@ -87,25 +84,25 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
   const selectedMotions = report?.motionAnalyses.filter((m) => m.shotType === selectedShotType) ?? [];
   const activeMotion = selectedMotions[activeIndex];
 
-  const recommended = activeMotion ? getPoseRecommended(activeMotion.shotType) : undefined;
-
-  const selectedPoseData =
-    activeMotion && recommended
-      ? {
-          shoulderRotation: {
-            value: Math.round(activeMotion.shoulderRotationAngle),
-            recommended: recommended.shoulderRotation,
-          },
-          spineRotation: {
-            value: Math.round(activeMotion.spineRotationAngle),
-            recommended: recommended.spineRotation,
-          },
-          waistRotation: {
-            value: Math.round(activeMotion.waistRotationAngle),
-            recommended: recommended.waistRotation,
-          },
-        }
-      : undefined;
+  const selectedPoseData = activeMotion
+    ? {
+        shoulderRotation: {
+          value: activeMotion.shoulderRotationAngle,
+          recommended: activeMotion.shoulderReferenceValue,
+          feedback: activeMotion.shoulderFeedback,
+        },
+        spineRotation: {
+          value: activeMotion.spineRotationAngle,
+          recommended: activeMotion.spineReferenceValue,
+          feedback: activeMotion.spineFeedback,
+        },
+        waistRotation: {
+          value: activeMotion.waistRotationAngle,
+          recommended: activeMotion.waistReferenceValue,
+          feedback: activeMotion.waistFeedback,
+        },
+      }
+    : undefined;
 
   const totalScore = activeMotion?.score ?? null;
 
@@ -178,19 +175,19 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
             title="어깨 회전"
             value={selectedPoseData?.shoulderRotation.value ?? null}
             recommended={selectedPoseData?.shoulderRotation.recommended ?? null}
-            comment={selectedPoseData ? getComment('shoulderRotation', selectedPoseData.shoulderRotation) : ''}
+            comment={selectedPoseData?.shoulderRotation.feedback ?? ''}
           />
           <AnalysisStateCard
             title="척추 회전"
             value={selectedPoseData?.spineRotation.value ?? null}
             recommended={selectedPoseData?.spineRotation.recommended ?? null}
-            comment={selectedPoseData ? getComment('spineRotation', selectedPoseData.spineRotation) : ''}
+            comment={selectedPoseData?.spineRotation.feedback ?? ''}
           />
           <AnalysisStateCard
             title="허리 회전"
             value={selectedPoseData?.waistRotation.value ?? null}
             recommended={selectedPoseData?.waistRotation.recommended ?? null}
-            comment={selectedPoseData ? getComment('waistRotation', selectedPoseData.waistRotation) : ''}
+            comment={selectedPoseData?.waistRotation.feedback ?? ''}
           />
           <View style={styles.upgradeContainer}>
             <Text style={styles.upgradeTitle}>개선 포인트</Text>
