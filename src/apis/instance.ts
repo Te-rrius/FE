@@ -12,7 +12,7 @@ export const instance = axios.create({
 });
 
 // 토큰 자동 첨부
-instance.interceptors.request.use(config => {
+instance.interceptors.request.use((config) => {
   const token = useAuthStore.getState().token;
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
@@ -20,8 +20,8 @@ instance.interceptors.request.use(config => {
 
 // 토큰 만료 처리
 instance.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     if (error.response?.status === 401) {
       useAuthStore.getState().logout();
       router.replace('/');
