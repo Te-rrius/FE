@@ -43,35 +43,35 @@ export function getStatus({ value, recommended }: PoseDetail): PoseStatus {
 }
 
 // 문구
-export function getComment(key: RotationKey, detail: PoseDetail): string {
-  const { value, recommended } = detail;
-  const status = getStatus(detail);
-  const diff = Math.abs(Math.round(recommended - value));
+// export function getComment(key: RotationKey, detail: PoseDetail): string {
+//   const { value, recommended } = detail;
+//   const status = getStatus(detail);
+//   const diff = Math.abs(Math.round(recommended - value));
 
-  if (value <= 0) return '반대 방향으로 회전되고 있어요. 방향을 확인해 보세요.';
+//   if (value <= 0) return '반대 방향으로 회전되고 있어요. 방향을 확인해 보세요.';
 
-  const rate = (value / recommended) * 100;
-  const isUnder = rate < 93;
-  const isOver = rate > 107;
+//   const rate = (value / recommended) * 100;
+//   const isUnder = rate < 93;
+//   const isOver = rate > 107;
 
-  const label = ROTATION_LABEL[key];
+//   const label = ROTATION_LABEL[key];
 
-  const bodyPart = key === 'shoulderRotation' ? '어깨를' : key === 'spineRotation' ? '상체를' : '허리를';
+//   const bodyPart = key === 'shoulderRotation' ? '어깨를' : key === 'spineRotation' ? '상체를' : '허리를';
 
-  if (status === '양호') return `이상적인 ${label}이에요!`;
+//   if (status === '양호') return `이상적인 ${label}이에요!`;
 
-  if (isUnder) {
-    if (status === '개선 필요') return `${diff}° 부족해요. ${bodyPart} 더 틀어 보세요.`;
-    return `${diff}° 부족해요. ${bodyPart} 더 틀어 보세요.`;
-  }
+//   if (isUnder) {
+//     if (status === '개선 필요') return `${diff}° 부족해요. ${bodyPart} 더 틀어 보세요.`;
+//     return `${diff}° 부족해요. ${bodyPart} 더 틀어 보세요.`;
+//   }
 
-  if (isOver) {
-    if (status === '개선 필요') return `${diff}°나 초과됐어요. 회전 범위를 크게 줄여야 해요.`;
-    return `${diff}°만큼 과도해요. 회전을 조금 줄여 보세요.`;
-  }
+//   if (isOver) {
+//     if (status === '개선 필요') return `${diff}°나 초과됐어요. 회전 범위를 크게 줄여야 해요.`;
+//     return `${diff}°만큼 과도해요. 회전을 조금 줄여 보세요.`;
+//   }
 
-  return '';
-}
+//   return '';
+// }
 
 // 종합 점수
 export function getTotalScore(pose: PoseData): number {
