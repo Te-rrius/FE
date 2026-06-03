@@ -104,7 +104,6 @@
 ```
 📱 Mobile Expo App (iOS / Android)
     │  카카오 로그인 · JWT (AsyncStorage)
-    │
     ├─ Expo Router        (파일 기반 라우팅)
     ├─ TanStack Query     (서버 상태 · 캐싱)
     ├─ Zustand            (전역 클라이언트 상태)
@@ -122,40 +121,15 @@
 FE/
 └─ src/
    ├─ app/                    # Expo Router 파일 기반 라우팅
-   │  ├─ (public)/            # 인증 불필요 (로그인, 경기장, 약관)
-   │  ├─ (private)/           # 인증 필요 (마이페이지, 리포트, 리플레이)
+   │  ├─ (public)/            # 인증 불필요
+   │  ├─ (private)/           # 인증 필요
    │  └─ _layout.tsx
-   ├─ screens/                # 각 라우트의 실제 화면 컴포넌트
-   ├─ components/             # 공통 · 도메인 컴포넌트
-   │  ├─ auth/
-   │  ├─ common/
-   │  ├─ layout/
-   │  └─ modal/
-   ├─ apis/                   # Axios 인스턴스 · API 함수
+   ├─ screens/                
+   ├─ components/    
+   ├─ apis/                 
    ├─ services/               # TanStack Query 키 관리
    ├─ stores/                 # Zustand 전역 상태
-   ├─ types/                  # TypeScript 타입 정의
-   ├─ utils/                  # 유틸 함수
-   └─ assets/                 # 이미지 · 폰트 · 영상
+   ├─ types/                 
+   ├─ utils/                  
+   └─ assets/                
 ```
-
----
-
-## 👥 팀 구성 (Frontend)
-
-<table>
-  <tr>
-    <td align="center" width="180">
-      <a href="https://github.com/a-neey">
-        <img src="https://github.com/a-neey.png" width="120" height="120" style="border-radius:50%" /><br/>
-        <b>예나</b>
-      </a>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">Frontend</td>
-  </tr>
-  <tr>
-    <td align="center"><a href="https://github.com/a-neey">@a-neey</a></td>
-  </tr>
-</table>
