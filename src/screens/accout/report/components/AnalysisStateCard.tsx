@@ -8,7 +8,8 @@ interface AnalysisStateCardProps {
   title: string;
   value: number | null;
   recommended: number | null;
-  maxValue?: number;
+  barReference: number | null; // 바 세로선 위치
+  barMax: number | null; // 바 최대값
   comment: string;
 }
 
@@ -18,12 +19,13 @@ const STATUS_CONFIG: Record<Status, { label: string; color: string; bg: string; 
   '개선 필요': { label: '개선 필요', color: '#DC2626', bg: '#FEE2E2', barColor: '#EF4444' },
 };
 
-const AnalysisStateCard = ({ title, value, recommended, maxValue = 100, comment }: AnalysisStateCardProps) => {
+const AnalysisStateCard = ({ title, value, recommended, barReference, barMax, comment }: AnalysisStateCardProps) => {
   const status = value !== null && recommended !== null ? getStatus({ value, recommended }) : null;
   const config = status ? STATUS_CONFIG[status] : null;
 
-  const fillRatio = value !== null ? Math.min(Math.max(value / maxValue, 0), 1) : 0;
-  const recommendedRatio = recommended !== null ? Math.min(Math.max(recommended / maxValue, 0), 1) : 0;
+  const max = barMax ?? 100;
+  const fillRatio = value !== null ? Math.min(Math.max(value / max, 0), 1) : 0;
+  const thumbRatio = recommended !== null ? Math.min(Math.max(recommended / max, 0), 1) : null;
 
   return (
     <View style={styles.container}>
@@ -41,7 +43,8 @@ const AnalysisStateCard = ({ title, value, recommended, maxValue = 100, comment 
           <View style={styles.barTrack}>
             <View style={[styles.barFill, { flex: fillRatio, backgroundColor: config?.barColor ?? '#E5E7EB' }]} />
             <View style={[styles.barFill, { flex: 1 - fillRatio, backgroundColor: '#E5E7EB' }]} />
-            {value !== null && <View style={[styles.thumb, { left: `${recommendedRatio * 100}%` as any }]} />}
+            {thumbRatio !== null && <View style={[styles.thumb, { left: `${thumbRatio * 100 - 10}%` as any }]} />}
+            {' '}
           </View>
           <Text style={styles.valueText}>
             <Text style={styles.valueBold}>{value !== null ? `${value.toFixed(1)}°` : ''}</Text>

@@ -7,15 +7,23 @@ interface ServeDataCardProps {
   title: string;
   icon?: React.ReactNode;
   value: number; // 퍼센트값 (너비 비율 + 표시값 동시에)
+  height?: number;
   unit?: string;
   status?: CardStatus;
 }
 
-const ServeDataCard = ({ title, icon, value, unit = '%', status = 'default' }: ServeDataCardProps) => {
+const ServeDataCard = ({ title, icon, value, height, unit = '%', status = 'default' }: ServeDataCardProps) => {
   const isActive = status === 'active';
 
   return (
-    <View style={[styles.container, isActive && styles.activeContainer, { flex: value }]}>
+    <View
+      style={[
+        styles.container,
+        isActive && styles.activeContainer,
+        height ? { height: hp(height) } : undefined,
+        { flex: value },
+      ]}
+    >
       <Text style={[styles.titleText, isActive && styles.activeText]}>{title}</Text>
       <View style={styles.bottom}>
         <View style={styles.iconWrapper}>{icon}</View>

@@ -25,13 +25,22 @@ type VideoItemProps = {
   waistRotationAngle: number | null;
 };
 
+// 샷 타입별 바 권장값 기준
+const BAR_MAX = {
+  FOREHAND: { shoulder: 41.3, spine: 13.7, waist: 24.1 },
+  BACKHAND: { shoulder: 29.5, spine: 14.8, waist: 34.4 },
+  SERVE: { shoulder: 73.5, spine: 17.0, waist: 75.4 },
+} as const;
+
+type ShotTypeKey = keyof typeof BAR_MAX;
+
 const VideoItem = ({ uri, shoulderRotationAngle, spineRotationAngle, waistRotationAngle }: VideoItemProps) => {
   const player = useVideoPlayer({ uri });
 
   return (
     <View style={styles.videoContainer}>
       <VideoView player={player} style={styles.video} contentFit="cover" />
-      <BlurView intensity={10} style={styles.overlay}>
+      {/* <BlurView intensity={10} style={styles.overlay}>
         <View>
           <Text style={styles.labelText}>어깨 회전각</Text>
           <Text style={styles.overlayValue}>
@@ -50,7 +59,7 @@ const VideoItem = ({ uri, shoulderRotationAngle, spineRotationAngle, waistRotati
             {waistRotationAngle != null ? `${waistRotationAngle.toFixed(1)}°` : '-'}
           </Text>
         </View>
-      </BlurView>
+      </BlurView> */}
     </View>
   );
 };
@@ -105,6 +114,9 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
     : undefined;
 
   const totalScore = activeMotion?.score ?? null;
+
+  const barRef = selectedShotType && selectedShotType in BAR_MAX ? BAR_MAX[selectedShotType as ShotTypeKey] : null;
+  const barMax = selectedShotType && selectedShotType in BAR_MAX ? BAR_MAX[selectedShotType as ShotTypeKey] : null;
 
   const onViewableItemsChanged = useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
     if (viewableItems[0]?.index != null) {
@@ -175,18 +187,24 @@ const PoseAnalysis = ({ player, report }: PoseAnalysisProps) => {
             title="어깨 회전"
             value={selectedPoseData?.shoulderRotation.value ?? null}
             recommended={selectedPoseData?.shoulderRotation.recommended ?? null}
+            barReference={barRef?.shoulder ?? null}
+            barMax={barMax?.shoulder ?? null}
             comment={selectedPoseData?.shoulderRotation.feedback ?? ''}
           />
           <AnalysisStateCard
             title="척추 회전"
             value={selectedPoseData?.spineRotation.value ?? null}
             recommended={selectedPoseData?.spineRotation.recommended ?? null}
+            barReference={barRef?.spine ?? null}
+            barMax={barMax?.spine ?? null}
             comment={selectedPoseData?.spineRotation.feedback ?? ''}
           />
           <AnalysisStateCard
             title="허리 회전"
             value={selectedPoseData?.waistRotation.value ?? null}
             recommended={selectedPoseData?.waistRotation.recommended ?? null}
+            barReference={barRef?.waist ?? null}
+            barMax={barMax?.waist ?? null}
             comment={selectedPoseData?.waistRotation.feedback ?? ''}
           />
           <View style={styles.upgradeContainer}>

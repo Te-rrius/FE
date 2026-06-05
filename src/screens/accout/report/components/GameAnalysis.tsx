@@ -99,6 +99,39 @@ const GameAnalysis = ({ player, report }: { player: 1 | 2 | null; report: Report
           )}
         </View>
       </View>
+      <View style={styles.dataContainer}>
+        <View style={styles.containerTitle}>
+          <View style={styles.titleLine} />
+          <Text style={styles.titleText}>샷 개수 분석</Text>
+        </View>
+        <View style={styles.serveGrid}>
+          {report ? (
+            <>
+              <View style={styles.serveRow}>
+                <ServeDataCard title="포핸드 개수" icon={<FirstServeIcon />} value={62} height={90} unit="개" />
+                <View style={{ flex: 100 - 62 }} />
+              </View>
+              <View style={styles.serveRow}>
+                <ServeDataCard
+                  title="백핸드 개수"
+                  icon={<SecondServeIcon />}
+                  value={37}
+                  height={90}
+                  status="active"
+                  unit="개"
+                />
+                <View style={{ flex: 100 - 37 }} />
+              </View>
+            </>
+          ) : (
+            <>
+              <View style={[styles.serveRow, { height: hp(111) }]} />
+              <View style={[styles.serveRow, { height: hp(111) }]} />
+              <View style={[styles.serveRow, { height: hp(111) }]} />
+            </>
+          )}
+        </View>
+      </View>
     </View>
   );
 };
